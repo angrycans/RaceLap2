@@ -1,0 +1,16 @@
+{
+  "name": "race-lap",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "17.0.35",
+    "execa": "^5.1.1",
+    "lerna": "^5.2.0"
+  }
+}

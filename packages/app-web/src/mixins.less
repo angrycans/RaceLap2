@@ -1,0 +1,8 @@
+// 多行文本省略
+.text-lines(@lineNum:1) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: @lineNum;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

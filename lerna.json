@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "version": "0.0.1",
+  "packages": [
+    "packages/*"
+  ],
+  "bootstrap": {
+    "npmClientArgs": [
+      "--no-package-lock"
+    ],
+    "forceLocal": true,
+    "ci": false
+  }
+}
