@@ -1,16 +1,17 @@
 import React, { type FC } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, type ViewStyle } from 'react-native';
 
 interface Props {
   title: string;
   subtitle?: string;
+  style?: ViewStyle;
 }
 
 export const Title: FC<Props> = props => {
-  const { title, subtitle } = props;
+  const { title, subtitle, style } = props;
 
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, style]}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.subtitle}>{subtitle}</Text>
     </View>

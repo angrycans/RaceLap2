@@ -8,6 +8,12 @@ import { bodyTextStyle } from '@/theme';
 interface Props extends TextProps {
   /** 是否加粗字体 */
   bold?: boolean;
+  /** 文字横向对齐方式 */
+  align?: TextStyle['textAlign'];
+  /** 文字大小 */
+  size?: TextStyle['fontSize'];
+  /** 文字行高 */
+  height?: TextStyle['lineHeight'];
   /** 通用文本 */
   body?: boolean;
   bodyStyle?: StyleProp<TextStyle>;
@@ -17,27 +23,43 @@ interface Props extends TextProps {
 
 export const Text: FC<Props> = ({
   bold,
+  align,
   body,
   bodyStyle,
   style,
   color,
+  size,
+  height,
   ...rest
 }) => {
   const {
     theme: { colors },
   } = useTheme();
   const styleOverwrite = useMemo(() => {
-    const fontWeight = bold ? '600' : '400';
-    const baseStyle: StyleProp<TextStyle> = {
+    const fontWeight = bold ? '600' : undefined;
+    const overwriteStyle: TextStyle = {
       fontWeight,
       // @ts-ignore
-      color: colors[color] || color || '#000',
+      color: colors[color] || color,
+      textAlign: align,
+      fontSize: size,
+      lineHeight: height,
     };
-    if (body) {
-      Object.assign(baseStyle, bodyTextStyle);
-    }
-    return [baseStyle, style || {}, bodyStyle || {}];
-  }, [bold, body, bodyStyle, style, colors, color]);
+
+    Object.keys(overwriteStyle).forEach(key => {
+      if (typeof overwriteStyle[key as keyof TextStyle] === 'undefined') {
+        delete overwriteStyle[key as keyof TextStyle];
+      }
+    });
+
+    return [
+      { color: '#000' },
+      body && bodyTextStyle,
+      style || {},
+      bodyStyle || {},
+      overwriteStyle,
+    ];
+  }, [bold, body, bodyStyle, style, colors, color, align, size, height]);
   return <TextBase style={styleOverwrite} {...rest} />;
 };
 
