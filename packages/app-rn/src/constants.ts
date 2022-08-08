@@ -8,6 +8,8 @@ export const enum RouteName {
   HOME = 'HOME',
   /** 连接设备 */
   CONNECT_DEVICE = 'CONNECT_DEVICE',
+  /** 记录详情页 */
+  RECORD_DETAIL = 'RECORD_DETAIL',
 }
 
 /** 本地持久化缓存键名 */

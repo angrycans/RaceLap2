@@ -1,13 +1,18 @@
-import React, { type FC } from 'react';
+import React, { type FC, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Icon, Button, useTheme } from '@rneui/themed';
-import { Text } from '@/components';
+import { Text, Row } from '@/components';
+import { ClrWifi3, ClrBattery75 } from '@/components/Icons/ColoredIcons/ic';
+import { ArrowUpAndDownCircleFill } from '@/components/Icons/MonoIcons';
 import { useNavigation } from '@/hooks';
 import { RouteName } from '@/constants';
 import Title from './Title';
 
+const { Col } = Row;
+
 export const DriverAndDevice: FC = () => {
   const { theme } = useTheme();
+  const [hasRecorder] = useState(false);
   const navigation = useNavigation();
   return (
     <>
@@ -32,7 +37,7 @@ export const DriverAndDevice: FC = () => {
             }
           />
           <Button
-            containerStyle={{ ...styles.btn, ...styles.btnNotFirst }}
+            containerStyle={[styles.btn, styles.btnNotFirst]}
             color="#F2F2F7"
             icon={
               <Icon
@@ -49,7 +54,7 @@ export const DriverAndDevice: FC = () => {
             }
           />
         </View>
-        <View style={{ ...styles.row, ...styles.overview }}>
+        <View style={[styles.row, styles.overview]}>
           <OverviewItem
             notFirst={false}
             title="公里"
@@ -63,34 +68,75 @@ export const DriverAndDevice: FC = () => {
         </View>
       </View>
       <View style={styles.cardWrapper}>
-        <View style={{ ...styles.row, ...styles.recorderTitle }}>
-          <Icon color="#FF9500" type="entypo" name="stopwatch" size={17} />
-          <Text color="#FF9500" style={styles.recorderTitleText}>
-            记录仪
-          </Text>
+        <View style={styles.row}>
+          <View style={[styles.row, styles.recorderTitle]}>
+            <Icon color="#FF9500" type="entypo" name="stopwatch" size={17} />
+            <Text color="#FF9500" style={styles.recorderTitleText}>
+              记录仪
+            </Text>
+          </View>
+          <Button type="clear" buttonStyle={styles.recorderInfo}>
+            <Text color="#D1D1D6" style={styles.recorderName}>
+              RaceLaper-13u49af1
+            </Text>
+            <Icon color="#34C759" type="feather" name="power" size={17} />
+          </Button>
         </View>
-        <View style={{ ...styles.row, ...styles.connectDeviceBtnWrapper }}>
-          <Button
-            color="#F2F2F7"
-            icon={
-              <Icon
-                color={theme.colors.primary}
-                type="antdesign"
-                name="pluscircleo"
-                size={17}
+        {hasRecorder ? (
+          <Row style={styles.recorder}>
+            <Col style={[styles.colItem, styles.colItemFirst]}>
+              <Text style={styles.recorderDeviceInfoTitle}>GPS</Text>
+              <View style={[styles.row, styles.recorderDeviceInfo]}>
+                <ClrWifi3 />
+                <Text style={styles.recorderDeviceInfoText}>好</Text>
+              </View>
+            </Col>
+            <Col style={[styles.colItem]}>
+              <Text style={styles.recorderDeviceInfoTitle}>电量</Text>
+              <View style={[styles.row, styles.recorderDeviceInfo]}>
+                <ClrBattery75 />
+                <Text style={styles.recorderDeviceInfoText}>75%</Text>
+              </View>
+            </Col>
+            <Col style={[styles.colItem]}>
+              <Text style={styles.recorderDeviceInfoTitle}>赛道</Text>
+              <Button
+                iconRight
+                type="clear"
+                buttonStyle={styles.racetrackSelectBtn}
+                title={
+                  <Text style={[styles.racetrack, styles.racetrackSelected]}>
+                    请选择赛道
+                  </Text>
+                }
+                icon={<ArrowUpAndDownCircleFill color="#AEAEB2" width={14} />}
               />
-            }
-            title={
-              <Text style={styles.connectDeviceBtnTitle} color="primary">
-                连接设备
-              </Text>
-            }
-            buttonStyle={styles.connectDeviceBtn}
-            onPress={() => {
-              navigation.navigate(RouteName.CONNECT_DEVICE);
-            }}
-          />
-        </View>
+            </Col>
+          </Row>
+        ) : (
+          <View style={[styles.row, styles.connectDeviceBtnWrapper]}>
+            <Button
+              color="#F2F2F7"
+              icon={
+                <Icon
+                  color={theme.colors.primary}
+                  type="antdesign"
+                  name="pluscircleo"
+                  size={17}
+                />
+              }
+              title={
+                <Text style={styles.connectDeviceBtnTitle} color="primary">
+                  连接设备
+                </Text>
+              }
+              buttonStyle={styles.connectDeviceBtn}
+              onPress={() => {
+                navigation.navigate(RouteName.CONNECT_DEVICE);
+              }}
+            />
+          </View>
+        )}
       </View>
     </>
   );
@@ -121,6 +167,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     marginTop: 12,
   },
+  recorder: {
+    marginTop: 12,
+  },
   recorderTitle: {
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -140,6 +189,51 @@ const styles = StyleSheet.create({
   },
   connectDeviceBtnTitle: {
     marginLeft: 10,
+  },
+  recorderInfo: {
+    paddingHorizontal: 0,
+    paddingRight: 2,
+  },
+  recorderName: {
+    marginRight: 6,
+    fontWeight: '400',
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  colItem: {
+    paddingHorizontal: 16,
+  },
+  colItemFirst: {
+    paddingLeft: 0,
+  },
+  recorderDeviceInfoTitle: {
+    fontWeight: '600',
+    fontSize: 13,
+    lineHeight: 18,
+    color: '#000',
+  },
+  recorderDeviceInfo: {
+    alignItems: 'center',
+    height: 28,
+  },
+  recorderDeviceInfoText: {
+    fontWeight: '600',
+    fontSize: 11,
+    lineHeight: 13,
+    color: '#8E8E93',
+  },
+  racetrackSelectBtn: {
+    padding: 0,
+    paddingHorizontal: 0,
+  },
+  racetrack: {
+    fontWeight: '600',
+    fontSize: 16,
+    // lineHeight: 28,
+    color: '#FF3B30',
+  },
+  racetrackSelected: {
+    color: '#AF52DE',
   },
 });
 

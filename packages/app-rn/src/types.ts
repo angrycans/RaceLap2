@@ -5,4 +5,5 @@ export interface RootStackParamList {
   [RouteName.USER_AGREEMENT]: undefined;
   [RouteName.HOME]: undefined;
   [RouteName.CONNECT_DEVICE]: undefined;
+  [RouteName.RECORD_DETAIL]: undefined;
 }

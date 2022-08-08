@@ -36,7 +36,7 @@ export const Text: FC<Props> = ({
     if (body) {
       Object.assign(baseStyle, bodyTextStyle);
     }
-    return Object.assign(baseStyle, style || {}, bodyStyle || {});
+    return [baseStyle, style || {}, bodyStyle || {}];
   }, [bold, body, bodyStyle, style, colors, color]);
   return <TextBase style={styleOverwrite} {...rest} />;
 };

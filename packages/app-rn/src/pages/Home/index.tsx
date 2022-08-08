@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useUserAgreement } from '@/hooks';
 import DriverAndDevice from './components/DriverAndDevice';
-import RacetrackAndRecorder from './components/RacetrackAndRecorder';
+import RacetrackAndRecord from './components/RacetrackAndRecord';
 
 export const Home: FC = () => {
   useUserAgreement();
@@ -19,7 +19,7 @@ export const Home: FC = () => {
         <ScrollView>
           <View style={styles.contentWrapper}>
             <DriverAndDevice />
-            <RacetrackAndRecorder />
+            <RacetrackAndRecord />
           </View>
         </ScrollView>
       </SafeAreaView>
