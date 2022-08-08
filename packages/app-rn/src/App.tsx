@@ -22,6 +22,7 @@ import UserAgreement from './pages/UserAgreement';
 import Home from './pages/Home';
 import ConnectDevice from './pages/ConnectDevice';
 import RecordDetail from './pages/RecordDetail';
+import RacetrackDetail from './pages/RacetrackDetail';
 
 const navigationTheme: Theme = {
   ...DefaultTheme,
@@ -39,6 +40,8 @@ const rneuiTheme = createTheme({
 });
 
 const Stack = createNativeStackNavigator();
+
+const shareBtnStyle = { paddingRight: 0 };
 
 const App: FC = () => {
   return (
@@ -67,13 +70,36 @@ const App: FC = () => {
           />
           <Stack.Screen
             options={{
+              title: '',
+              headerRight({ tintColor }) {
+                return (
+                  <Button
+                    type="clear"
+                    buttonStyle={shareBtnStyle}
+                    icon={
+                      <Icon
+                        type="entypo"
+                        name="share-alternative"
+                        color={tintColor}
+                        size={20}
+                      />
+                    }
+                  />
+                );
+              },
+            }}
+            name={RouteName.RACETRACK_DETAIL}
+            component={RacetrackDetail}
+          />
+          <Stack.Screen
+            options={{
               title: '记录',
               headerRight({ tintColor }) {
                 // console.log('props -->>', props);
                 return (
                   <Button
                     type="clear"
-                    buttonStyle={{ paddingRight: 0 }}
+                    buttonStyle={shareBtnStyle}
                     icon={
                       <Icon
                         type="entypo"

@@ -1,9 +1,8 @@
 import React, { type FC, useState, useMemo } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
-import { Text } from '@/components';
-import Title from './components/Title';
+import { Text, Title, Table } from '@/components';
+import type { Column, DataItemBase } from '@/components/Table';
 import Overview from './components/Overview';
-import Table, { type Column, type DataItemBase } from './components/Table';
 
 interface DataItem extends DataItemBase {
   /** 唯一标识 */

@@ -10,6 +10,8 @@ export const enum RouteName {
   CONNECT_DEVICE = 'CONNECT_DEVICE',
   /** 记录详情页 */
   RECORD_DETAIL = 'RECORD_DETAIL',
+  /** 赛道详情页 */
+  RACETRACK_DETAIL = 'RACETRACK_DETAIL',
 }
 
 /** 本地持久化缓存键名 */

@@ -14,7 +14,6 @@ import Title from './Title';
 
 export const RacetrackAndRecord: FC = () => {
   const navigation = useNavigation();
-
   return (
     <View style={styles.wrapper}>
       <Title title="赛道和记录" />
@@ -38,30 +37,43 @@ export const RacetrackAndRecord: FC = () => {
         </View>
         <ScrollView horizontal style={styles.racetrackList}>
           {Array.from({ length: 10 }).map((_, idx) => (
-            <ImageBackground
+            <Button
+              buttonStyle={[
+                styles.noStyleClearBtn,
+                styles.racetrackItem,
+                !!idx && styles.racetrackItemGap,
+              ]}
+              type="clear"
               key={idx}
-              style={[styles.racetrackItem, !!idx && styles.racetrackItemGap]}
-              source={{
-                uri: 'https://www.kindacode.com/wp-content/uploads/2022/03/blue-sky.jpeg',
-              }}>
-              {!idx ? (
-                <View style={styles.nearbyTag}>
-                  <Text style={styles.nearbyTagText}>附近</Text>
-                </View>
-              ) : (
-                <View />
-              )}
-              <Text numberOfLines={1} style={styles.racetrackName}>
-                南京励湾赛车场
-              </Text>
-            </ImageBackground>
+              onPress={() =>
+                navigation.navigate(RouteName.RACETRACK_DETAIL, {
+                  title: '南京励湾赛车场',
+                })
+              }>
+              <ImageBackground
+                style={[styles.racetrackItemContentWrapper]}
+                source={{
+                  uri: 'https://www.kindacode.com/wp-content/uploads/2022/03/blue-sky.jpeg',
+                }}>
+                {!idx ? (
+                  <View style={styles.nearbyTag}>
+                    <Text style={styles.nearbyTagText}>附近</Text>
+                  </View>
+                ) : (
+                  <View />
+                )}
+                <Text numberOfLines={1} style={styles.racetrackName}>
+                  南京励湾赛车场
+                </Text>
+              </ImageBackground>
+            </Button>
           ))}
         </ScrollView>
       </View>
       {Array.from({ length: 10 }).map((_, idx) => (
         <Button
           key={idx}
-          buttonStyle={styles.linkBtn}
+          buttonStyle={styles.noStyleClearBtn}
           type="clear"
           onPress={() => navigation.navigate(RouteName.RECORD_DETAIL)}>
           <View style={[styles.cardWrapper, styles.recordItem]}>
@@ -119,20 +131,21 @@ const styles = StyleSheet.create({
   racetrackList: {
     marginTop: 12,
   },
-  linkBtn: {
+  noStyleClearBtn: {
     margin: 0,
     padding: 0,
     paddingHorizontal: 0,
   },
-  racetrackItem: {
+  racetrackItemGap: {
+    marginLeft: 8,
+  },
+  racetrackItem: {},
+  racetrackItemContentWrapper: {
     width: 96,
     height: 96,
     borderRadius: 8,
     overflow: 'hidden',
     justifyContent: 'space-between',
-  },
-  racetrackItemGap: {
-    marginLeft: 8,
   },
   nearbyTag: {
     backgroundColor: '#34C759',

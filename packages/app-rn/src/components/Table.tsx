@@ -1,6 +1,6 @@
 import React, { cloneElement, isValidElement, useMemo } from 'react';
 import { View, StyleSheet, type ViewStyle } from 'react-native';
-import { Text } from '@/components';
+import { Text } from './Text';
 
 type Align = 'left' | 'right' | 'center';
 
