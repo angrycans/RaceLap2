@@ -11,7 +11,7 @@ import type { Column, DataItemBase } from '@/components/Table';
 interface DataItem extends DataItemBase {}
 export const RacetrackDetail: FC = () => {
   const navigation = useNavigation();
-  const route = useRoute(RouteName.RACETRACK_DETAIL);
+  const route = useRoute<RouteName.RACETRACK_DETAIL>();
   const [data] = useState<DataItem[]>(
     Array.from({ length: 3 }, (_, idx) => ({
       time: '-',

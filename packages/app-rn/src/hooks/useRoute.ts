@@ -4,7 +4,7 @@ import {
 } from '@react-navigation/native';
 import { RootStackParamList, RouteName } from '@/types';
 
-export function useRoute<Name extends RouteName>(_: Name) {
+export function useRoute<Name extends RouteName>() {
   return useRouteBase<RouteProp<RootStackParamList, Name>>();
 }
 
