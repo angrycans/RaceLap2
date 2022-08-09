@@ -2,7 +2,7 @@ import React, { type FC, useMemo, useState } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { useMount } from 'ahooks';
 import { useRoute, useNavigation } from '@/hooks';
-import { Title, Table, Text } from '@/components';
+import { Title, Table, Text, FocusAwareStatusBar } from '@/components';
 import { RouteName } from '@/constants';
 import ReaceTrackInfo from './components/RaceTrackInfo';
 import MyRecord from './components/MyRecord';
@@ -11,7 +11,7 @@ import type { Column, DataItemBase } from '@/components/Table';
 interface DataItem extends DataItemBase {}
 export const RacetrackDetail: FC = () => {
   const navigation = useNavigation();
-  const route = useRoute(RouteName.RACETRACK_DETAIL);
+  const route = useRoute<RouteName.RACETRACK_DETAIL>();
   const [data] = useState<DataItem[]>(
     Array.from({ length: 3 }, (_, idx) => ({
       time: '-',
@@ -58,6 +58,7 @@ export const RacetrackDetail: FC = () => {
 
   return (
     <ScrollView>
+      <FocusAwareStatusBar barStyle="dark-content" />
       <View style={styles.wrapper}>
         <ReaceTrackInfo />
         <Title style={styles.title} title="最快圈时" />

@@ -18,7 +18,7 @@ interface Props extends TextProps {
   body?: boolean;
   bodyStyle?: StyleProp<TextStyle>;
   /** 颜色 */
-  color?: keyof Colors | `#${string}`;
+  color?: keyof Colors | string;
 }
 
 export const Text: FC<Props> = ({

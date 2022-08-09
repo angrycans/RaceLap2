@@ -2,13 +2,13 @@ import React, { type FC } from 'react';
 import { View, Text } from 'react-native';
 import { FocusAwareStatusBar } from '@/components';
 
-export const UserAgreement: FC = () => {
+export const Setting: FC = () => {
   return (
     <View>
       <FocusAwareStatusBar barStyle="dark-content" />
-      <Text>UserAgreement</Text>
+      <Text>Setting</Text>
     </View>
   );
 };
 
-export default UserAgreement;
+export default Setting;

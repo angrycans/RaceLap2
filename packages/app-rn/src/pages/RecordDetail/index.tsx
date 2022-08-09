@@ -1,6 +1,6 @@
 import React, { type FC, useState, useMemo } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
-import { Text, Title, Table } from '@/components';
+import { Text, Title, Table, FocusAwareStatusBar } from '@/components';
 import type { Column, DataItemBase } from '@/components/Table';
 import Overview from './components/Overview';
 
@@ -120,6 +120,7 @@ export const RecordDetail: FC = () => {
 
   return (
     <ScrollView>
+      <FocusAwareStatusBar barStyle="dark-content" />
       <View style={styles.wrapper}>
         <Title title="9:14" subtitle="2022.06.30" />
         <Overview />

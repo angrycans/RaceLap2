@@ -1,11 +1,6 @@
 import React, { type FC } from 'react';
-import {
-  StatusBar,
-  View,
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-} from 'react-native';
+import { View, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
+import { FocusAwareStatusBar } from '@/components';
 import { useUserAgreement } from '@/hooks';
 import DriverAndDevice from './components/DriverAndDevice';
 import RacetrackAndRecord from './components/RacetrackAndRecord';
@@ -13,8 +8,8 @@ import RacetrackAndRecord from './components/RacetrackAndRecord';
 export const Home: FC = () => {
   useUserAgreement();
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+    <>
+      <FocusAwareStatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.container}>
         <ScrollView>
           <View style={styles.contentWrapper}>
@@ -23,7 +18,7 @@ export const Home: FC = () => {
           </View>
         </ScrollView>
       </SafeAreaView>
-    </View>
+    </>
   );
 };
 

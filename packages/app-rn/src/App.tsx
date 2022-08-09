@@ -23,6 +23,11 @@ import Home from './pages/Home';
 import ConnectDevice from './pages/ConnectDevice';
 import RecordDetail from './pages/RecordDetail';
 import RacetrackDetail from './pages/RacetrackDetail';
+import NewRacetrack from './pages/NewRacetrack';
+import SetDriverName from './pages/SetDriverName';
+import SelectCarrier from './pages/SelectCarrier';
+import SelectRacetrack from './pages/SelectRacetrack';
+import Setting from './pages/Setting';
 
 const navigationTheme: Theme = {
   ...DefaultTheme,
@@ -47,74 +52,122 @@ const App: FC = () => {
   return (
     <ThemeProvider theme={rneuiTheme}>
       <NavigationContainer theme={navigationTheme}>
-        <Stack.Navigator screenOptions={{ headerBackTitle: '返回' }}>
-          <Stack.Screen
-            options={{ headerShown: false }}
-            name={RouteName.HOME}
-            component={Home}
-          />
-          <Stack.Screen
-            options={{ headerShown: false }}
-            name={RouteName.STARTUP}
-            component={Startup}
-          />
-          <Stack.Screen
-            options={{ title: '用户协议' }}
-            name={RouteName.USER_AGREEMENT}
-            component={UserAgreement}
-          />
-          <Stack.Screen
-            options={{ headerShown: false }}
-            name={RouteName.CONNECT_DEVICE}
-            component={ConnectDevice}
-          />
-          <Stack.Screen
-            options={{
-              title: '',
-              headerRight({ tintColor }) {
-                return (
-                  <Button
-                    type="clear"
-                    buttonStyle={shareBtnStyle}
-                    icon={
-                      <Icon
-                        type="entypo"
-                        name="share-alternative"
-                        color={tintColor}
-                        size={20}
-                      />
-                    }
-                  />
-                );
+        <Stack.Navigator>
+          <Stack.Group
+            screenOptions={{
+              headerBackTitle: '返回',
+              headerShadowVisible: false,
+              headerStyle: {
+                backgroundColor: '#e5e5e5',
               },
-            }}
-            name={RouteName.RACETRACK_DETAIL}
-            component={RacetrackDetail}
-          />
-          <Stack.Screen
-            options={{
-              title: '记录',
-              headerRight({ tintColor }) {
-                // console.log('props -->>', props);
-                return (
-                  <Button
-                    type="clear"
-                    buttonStyle={shareBtnStyle}
-                    icon={
-                      <Icon
-                        type="entypo"
-                        name="share-alternative"
-                        color={tintColor}
-                        size={20}
-                      />
-                    }
-                  />
-                );
+            }}>
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name={RouteName.HOME}
+              component={Home}
+            />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name={RouteName.STARTUP}
+              component={Startup}
+            />
+            <Stack.Screen
+              options={{
+                title: '用户协议',
+                headerShadowVisible: true,
+                headerStyle: {
+                  backgroundColor: '#fff',
+                },
+              }}
+              name={RouteName.USER_AGREEMENT}
+              component={UserAgreement}
+            />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name={RouteName.CONNECT_DEVICE}
+              component={ConnectDevice}
+            />
+            <Stack.Screen
+              options={{ title: '设置' }}
+              name={RouteName.SETTING}
+              component={Setting}
+            />
+            <Stack.Screen
+              options={{
+                title: '',
+                headerRight({ tintColor }) {
+                  return (
+                    <Button
+                      type="clear"
+                      buttonStyle={shareBtnStyle}
+                      icon={
+                        <Icon
+                          type="entypo"
+                          name="share-alternative"
+                          color={tintColor}
+                          size={20}
+                        />
+                      }
+                    />
+                  );
+                },
+              }}
+              name={RouteName.RACETRACK_DETAIL}
+              component={RacetrackDetail}
+            />
+            <Stack.Screen
+              options={{
+                title: '记录',
+                headerRight({ tintColor }) {
+                  // console.log('props -->>', props);
+                  return (
+                    <Button
+                      type="clear"
+                      buttonStyle={shareBtnStyle}
+                      icon={
+                        <Icon
+                          type="entypo"
+                          name="share-alternative"
+                          color={tintColor}
+                          size={20}
+                        />
+                      }
+                    />
+                  );
+                },
+              }}
+              name={RouteName.RECORD_DETAIL}
+              component={RecordDetail}
+            />
+          </Stack.Group>
+          <Stack.Group
+            screenOptions={{
+              presentation: 'modal',
+              headerShadowVisible: false,
+              headerStyle: {
+                backgroundColor: '#e5e5e5',
               },
-            }}
-            name={RouteName.RECORD_DETAIL}
-            component={RecordDetail}
-          />
+            }}>
+            <Stack.Screen
+              options={{
+                presentation: 'fullScreenModal',
+              }}
+              name={RouteName.NEW_RACETRACK}
+              component={NewRacetrack}
+            />
+            <Stack.Screen
+              name={RouteName.SET_DRIVER_NAME}
+              component={SetDriverName}
+            />
+            <Stack.Screen
+              name={RouteName.SELECT_CARRIER}
+              component={SelectCarrier}
+            />
+            <Stack.Screen
+              name={RouteName.SELECT_RACETRACK}
+              component={SelectRacetrack}
+            />
+          </Stack.Group>
         </Stack.Navigator>
       </NavigationContainer>
     </ThemeProvider>

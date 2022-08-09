@@ -1,9 +1,14 @@
 import React, { type FC, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Icon, Button, useTheme } from '@rneui/themed';
+import { Icon, Button } from '@rneui/themed';
 import { Text, Row } from '@/components';
 import { ClrWifi3, ClrBattery75 } from '@/components/Icons/ColoredIcons/ic';
-import { ArrowUpAndDownCircleFill } from '@/components/Icons/MonoIcons';
+import {
+  ArrowUpAndDownCircleFill,
+  PersonCropCircle,
+  QuestionmarkCircle,
+  PlusCircle,
+} from '@/components/Icons/MonoIcons';
 import { useNavigation } from '@/hooks';
 import { RouteName } from '@/constants';
 import Title from './Title';
@@ -11,8 +16,7 @@ import Title from './Title';
 const { Col } = Row;
 
 export const DriverAndDevice: FC = () => {
-  const { theme } = useTheme();
-  const [hasRecorder] = useState(false);
+  const [hasRecorder] = useState(true);
   const navigation = useNavigation();
   return (
     <>
@@ -22,36 +26,24 @@ export const DriverAndDevice: FC = () => {
           <Button
             containerStyle={styles.btn}
             color="#F2F2F7"
-            icon={
-              <Icon
-                type="font-awesome"
-                color={theme.colors.primary}
-                name="user-circle-o"
-                size={17}
-              />
-            }
+            icon={<PersonCropCircle width={22} />}
             title={
               <Text style={styles.btnTitle} color="primary" bold>
                 未命名车手
               </Text>
             }
+            onPress={() => navigation.navigate(RouteName.SET_DRIVER_NAME)}
           />
           <Button
             containerStyle={[styles.btn, styles.btnNotFirst]}
             color="#F2F2F7"
-            icon={
-              <Icon
-                type="antdesign"
-                color={theme.colors.primary}
-                name="questioncircleo"
-                size={17}
-              />
-            }
+            icon={<QuestionmarkCircle width={22} />}
             title={
               <Text style={styles.btnTitle} color="primary" bold>
                 未选择载具
               </Text>
             }
+            onPress={() => navigation.navigate(RouteName.SELECT_CARRIER)}
           />
         </View>
         <View style={[styles.row, styles.overview]}>
@@ -110,6 +102,7 @@ export const DriverAndDevice: FC = () => {
                   </Text>
                 }
                 icon={<ArrowUpAndDownCircleFill color="#AEAEB2" width={14} />}
+                onPress={() => navigation.navigate(RouteName.SELECT_RACETRACK)}
               />
             </Col>
           </Row>
@@ -117,14 +110,7 @@ export const DriverAndDevice: FC = () => {
           <View style={[styles.row, styles.connectDeviceBtnWrapper]}>
             <Button
               color="#F2F2F7"
-              icon={
-                <Icon
-                  color={theme.colors.primary}
-                  type="antdesign"
-                  name="pluscircleo"
-                  size={17}
-                />
-              }
+              icon={<PlusCircle width={17} />}
               title={
                 <Text style={styles.connectDeviceBtnTitle} color="primary">
                   连接设备
@@ -161,7 +147,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   btnTitle: {
-    marginLeft: 10,
+    marginLeft: 8,
   },
   overview: {
     justifyContent: 'flex-start',

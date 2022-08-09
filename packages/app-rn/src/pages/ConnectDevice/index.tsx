@@ -3,7 +3,7 @@ import { View, StyleSheet, SafeAreaView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { Button } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
-import { Text } from '@/components';
+import { Text, FocusAwareStatusBar } from '@/components';
 import { PersonalHotspotCircleFill } from '@/components/Icons/MonoIcons';
 import CustomHeader from './components/CustomHeader';
 import LoopCircle from './components/LoopCircle';
@@ -22,6 +22,7 @@ export const ConnectDevice: FC = () => {
       locations={[0.042, 0.483, 1]}
       style={styles.wrapper}>
       <SafeAreaView style={styles.wrapper}>
+        <FocusAwareStatusBar barStyle="dark-content" />
         <CustomHeader />
         <View style={[styles.wrapper, styles.contentWrapper]}>
           <Text style={styles.tips} color="#fff">

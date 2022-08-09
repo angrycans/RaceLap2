@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { Button, Icon } from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Text } from '@/components';
+import { Text, FocusAwareStatusBar } from '@/components';
 import { bodyTextStyle } from '@/theme';
 import { useNavigation } from '@/hooks';
 import { RouteName, AsyncStorageKey } from '@/constants';
@@ -18,6 +18,7 @@ export const Startup: FC = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
+      <FocusAwareStatusBar barStyle="light-content" />
       <ImageBackground
         source={require('../../assets/images/bg_startup.png')}
         resizeMode="cover"

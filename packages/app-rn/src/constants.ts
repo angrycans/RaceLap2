@@ -12,6 +12,16 @@ export const enum RouteName {
   RECORD_DETAIL = 'RECORD_DETAIL',
   /** 赛道详情页 */
   RACETRACK_DETAIL = 'RACETRACK_DETAIL',
+  /** 新增赛道 */
+  NEW_RACETRACK = 'NEW_RACETRACK',
+  /** 设置车手名称 */
+  SET_DRIVER_NAME = 'SET_DRIVER_NAME',
+  /** 选择载具 */
+  SELECT_CARRIER = 'SELECT_CARRIER',
+  /** 选择赛道 */
+  SELECT_RACETRACK = 'SELECT_RACETRACK',
+  /** 设置 */
+  SETTING = 'SETTING',
 }
 
 /** 本地持久化缓存键名 */

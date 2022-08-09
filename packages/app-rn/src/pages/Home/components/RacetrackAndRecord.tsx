@@ -33,6 +33,7 @@ export const RacetrackAndRecord: FC = () => {
             buttonStyle={styles.plusBtn}
             type="clear"
             icon={<PlusCircle width={20} />}
+            onPress={() => navigation.navigate(RouteName.NEW_RACETRACK)}
           />
         </View>
         <ScrollView horizontal style={styles.racetrackList}>
