@@ -61,9 +61,6 @@ export const Col: FC<PropsWithChildren<ColProps>> = ({ children, style }) => {
     () => [colStyles.container].concat(style!).filter(Boolean),
     [style],
   );
-
-  console.log('containerStyle', containerStyle);
-
   return <View style={containerStyle}>{children}</View>;
 };
 

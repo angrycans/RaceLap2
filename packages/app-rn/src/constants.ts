@@ -1,3 +1,5 @@
+export { WebRouteName } from '@race-lap/app-helper';
+
 /** 路由名称 */
 export const enum RouteName {
   /** 启动页 */

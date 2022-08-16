@@ -1,3 +1,6 @@
+# react-native webview source
+web.bundle/
+
 # pnpm
 pnpm-lock.yaml
 

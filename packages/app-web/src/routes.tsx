@@ -37,7 +37,7 @@ const convertRoutes = (routes: MyRouteConfig[]): RouteObject[] => {
 
 const routeConfig: MyRouteConfig[] = [
   // 登录相关无需Layout 特殊处理
-  { path: '/', element: <Navigate to="/home" replace /> },
+  // { path: '/', element: <Navigate to="/home" replace /> },
   {
     element: <Layout />,
     children: [

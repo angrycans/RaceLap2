@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
   },
   reaceTrackImg: {
     height: 154,
-    width: 358,
     borderRadius: 12,
   },
   row: {

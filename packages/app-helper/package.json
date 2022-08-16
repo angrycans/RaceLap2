@@ -1,0 +1,32 @@
+{
+  "name": "@race-lap/app-helper",
+  "version": "0.0.1",
+  "description": "> TODO: description",
+  "author": "OF3808 <hannianqi@qianmi.com>",
+  "homepage": "https://github.com/angrycans/RaceLap2#readme",
+  "license": "MIT",
+  "private": true,
+  "main": "dist/index.js",
+  "monoInfo": {
+    "type": "module"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angrycans/RaceLap2.git"
+  },
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "npm run clean && tsc",
+    "clean": "rimraf dist"
+  },
+  "bugs": {
+    "url": "https://github.com/angrycans/RaceLap2/issues"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "typescript": "^4.7.4"
+  }
+}

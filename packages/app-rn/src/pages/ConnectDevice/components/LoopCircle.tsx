@@ -2,8 +2,8 @@ import React, { type FC, useRef, useEffect, useMemo } from 'react';
 import { View, Animated, StyleSheet } from 'react-native';
 
 const MAGIC_CYCLE_NUM = 4;
-const START = 0.2;
-const END = 1;
+const START = 0.6;
+const END = 1.2;
 
 export const LoopCircle: FC = () => {
   const anims = useMemo(
@@ -24,13 +24,13 @@ export const LoopCircle: FC = () => {
               toValue: END,
               duration: 500,
               useNativeDriver: true,
-              delay: 100 * idx,
+              delay: 300 * idx,
             }).start(() => {
               Animated.timing(anim, {
                 toValue: START,
                 duration: 500,
                 useNativeDriver: true,
-                delay: 100,
+                delay: 300,
               }).start(resolve);
             });
           });

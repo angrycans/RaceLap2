@@ -16,7 +16,7 @@ import Title from './Title';
 const { Col } = Row;
 
 export const DriverAndDevice: FC = () => {
-  const [hasRecorder] = useState(true);
+  const [hasRecorder] = useState(false);
   const navigation = useNavigation();
   return (
     <>

@@ -5,8 +5,9 @@
   "private": true,
   "main": "index.js",
   "homepage": "./",
+  "monoInfo": {},
   "scripts": {
-    "start": "cross-env PORT=10086 craco start",
+    "start": "cross-env PORT=12345 craco start",
     "build": "cross-env craco build",
     "clean": "rimraf build"
   },
@@ -14,7 +15,7 @@
   "author": "OF3808",
   "license": "ISC",
   "dependencies": {
-    "ahooks": "^3.5.0",
+    "@race-lap/app-helper": "*",
     "antd-mobile": "^5.19.0",
     "axios": "0.27.2",
     "classnames": "^2.3.1",

@@ -28,6 +28,9 @@ import SetDriverName from './pages/SetDriverName';
 import SelectCarrier from './pages/SelectCarrier';
 import SelectRacetrack from './pages/SelectRacetrack';
 import Setting from './pages/Setting';
+import { initialize } from '@race-lap/app-helper/dist/native';
+
+initialize();
 
 const navigationTheme: Theme = {
   ...DefaultTheme,
@@ -119,7 +122,6 @@ const App: FC = () => {
               options={{
                 title: '记录',
                 headerRight({ tintColor }) {
-                  // console.log('props -->>', props);
                   return (
                     <Button
                       type="clear"

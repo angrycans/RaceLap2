@@ -2,16 +2,22 @@
 
 // https://github.com/gsoft-inc/craco/blob/master/packages/craco/README.md#configuration-overview
 
+/**
+ * webpack config
+ * @typedef { import('webpack').Configuration } Configuration
+ */
+
 const CracoLessPlugin = require('@dr2009/craco-less');
 const path = require('path');
 const webpack = require('webpack');
 const { whenProd, whenDev } = require('@craco/craco');
 const CSS_MODULE_LOCAL_IDENT_NAME = '[local]___[hash:base64:5]';
 
-/**
- * @returns { import('@craco/craco').CracoConfig }
- */
 module.exports = () => {
+  if (process.env.NODE_ENV === 'production') {
+    process.env.BUILD_PATH = 'web.bundle';
+  }
+
   return {
     typescript: { enableTypeChecking: false },
     eslint: {
@@ -26,6 +32,7 @@ module.exports = () => {
         ...whenDev(() => [new webpack.DefinePlugin({ __DEV__: true })], []),
         ...whenProd(() => [new webpack.DefinePlugin({ __DEV__: false })], []),
       ],
+      /** @type { (webpackConfig: Configuration, opts: { env: string, paths: import('react-scripts/config/paths') }) => Configuration } */
       configure: (webpackConfig, { env, paths }) => {
         return webpackConfig;
       },
