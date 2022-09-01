@@ -1,0 +1,1 @@
+export { syncWebBundle } from './syncWebBundle';

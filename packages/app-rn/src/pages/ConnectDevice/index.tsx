@@ -3,16 +3,56 @@ import { View, StyleSheet, SafeAreaView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { Button } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
+import WifiManager from 'react-native-wifi-reborn';
 import { Text, FocusAwareStatusBar } from '@/components';
 import { PersonalHotspotCircleFill } from '@/components/Icons/MonoIcons';
 import CustomHeader from './components/CustomHeader';
 import LoopCircle from './components/LoopCircle';
+import { useMount } from 'ahooks';
 
 interface Device {}
+
+// WifiManager.connectToProtectedSSID(ssid, password, isWep).then(
+//   () => {
+//     console.log('Connected successfully!');
+//   },
+//   () => {
+//     console.log('Connection failed!');
+//   },
+// );
 
 export const ConnectDevice: FC = () => {
   const navigation = useNavigation();
   const [deviceList] = useState<Device[]>([]);
+
+  useMount(async () => {
+    // WifiManager.getCurrentWifiSSID().then(
+    //   ssid => {
+    //     console.log('Your current connected wifi SSID is ' + ssid);
+    //   },
+    //   err => {
+    //     console.log('Cannot get current SSID!!~=');
+    //     console.log(err);
+    //   },
+    // );
+
+    // console.log('WifiManager --->', WifiManager);
+
+    // console.log(
+    //   'connectToProtectedSSIDPrefix --->',
+    //   connectToProtectedSSIDPrefix,
+    // );
+
+    await WifiManager.connectToProtectedSSIDPrefix(
+      'RaceLap',
+      '88888888',
+      false,
+    );
+
+    // WifiManager.loadWifiList(list => {
+    //   console.log(list);
+    // });
+  });
 
   return (
     <LinearGradient

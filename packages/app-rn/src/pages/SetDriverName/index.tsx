@@ -39,7 +39,7 @@ export const SetDriverName: FC = () => {
     <>
       <FocusAwareStatusBar barStyle="light-content" />
       <Navigator
-        title="新增赛道"
+        title="车手"
         headerLeft={HeaderLeft}
         headerRight={HeaderRight}
       />

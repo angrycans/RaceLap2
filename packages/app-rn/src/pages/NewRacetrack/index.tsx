@@ -3,7 +3,7 @@ import { View, StyleSheet, TextInput } from 'react-native';
 import { Button, useTheme } from '@rneui/themed';
 import type { HeaderBackButtonProps } from '@react-navigation/elements';
 import { useNavigation } from '@/hooks';
-import { WebRouteName } from '@/constants';
+// import { WebRouteName } from '@/constants';
 import { Navigator, Text, FocusAwareStatusBar, WebView } from '@/components';
 import {
   TrackEndLine,
@@ -117,7 +117,8 @@ export const NewRacetrack: FC = () => {
           value={racetrackName}
           onChangeText={setRacetrackName}
         />
-        <WebView style={styles.map} page={WebRouteName.NEW_RACETRACK} />
+        {/* <WebView style={styles.map} page={WebRouteName.NEW_RACETRACK} /> */}
+        <WebView style={styles.map} page="" />
         {selectionsContent}
       </View>
     </>

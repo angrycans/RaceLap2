@@ -9,6 +9,7 @@
  */
 
 import React, { type FC } from 'react';
+import SQLite from 'react-native-sqlite-storage';
 import {
   NavigationContainer,
   DefaultTheme,
@@ -29,8 +30,24 @@ import SelectCarrier from './pages/SelectCarrier';
 import SelectRacetrack from './pages/SelectRacetrack';
 import Setting from './pages/Setting';
 import { initialize } from '@race-lap/app-helper/dist/native';
+import { syncWebBundle } from './tasks';
+import { useMount } from 'ahooks';
+import RNFS from 'react-native-fs';
 
-initialize();
+const path = RNFS.DocumentDirectoryPath + '/test.txt';
+
+console.log(path);
+
+// // write the file
+// RNFS.writeFile(path, 'Lorem ipsum dolor sit amet', 'utf8')
+//   .then(success => {
+//     console.log('FILE WRITTEN!');
+//   })
+//   .catch(err => {
+//     console.log(err.message);
+//   });
+
+initialize({ sqlite: SQLite });
 
 const navigationTheme: Theme = {
   ...DefaultTheme,
@@ -52,6 +69,10 @@ const Stack = createNativeStackNavigator();
 const shareBtnStyle = { paddingRight: 0 };
 
 const App: FC = () => {
+  useMount(async () => {
+    await syncWebBundle();
+  });
+
   return (
     <ThemeProvider theme={rneuiTheme}>
       <NavigationContainer theme={navigationTheme}>
