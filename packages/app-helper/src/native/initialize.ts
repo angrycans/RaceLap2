@@ -1,9 +1,11 @@
-import { SQLite } from './types';
-import { initDB } from './utils';
+import type { SQLite, RNFS } from './types';
+import { initDB, initFS } from './utils';
 
 interface Options {
   /** sqlite 对象 */
   sqlite: SQLite;
+  /** rn file system */
+  fs: RNFS;
 }
 
 /**
@@ -11,5 +13,8 @@ interface Options {
  * @param opts
  */
 export function initialize(opts: Options) {
-  initDB(opts.sqlite)
+  initDB(opts.sqlite);
+  initFS(opts.fs);
 }
+
+

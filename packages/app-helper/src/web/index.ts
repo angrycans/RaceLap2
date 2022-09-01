@@ -1,6 +1,5 @@
-import type { NSRacetrack } from './apis';
+import type { NSRacetrack, RNFS } from './apis';
 import { createBridge } from './bridge';
-
 
 export interface Apis {
   /** 赛道 */
@@ -8,3 +7,4 @@ export interface Apis {
 };
 
 export const apis = createBridge({}) as any as Apis;
+export const fs = createBridge({}) as any as RNFS;

@@ -47,7 +47,7 @@ console.log(path);
 //     console.log(err.message);
 //   });
 
-initialize({ sqlite: SQLite });
+initialize({ sqlite: SQLite, fs: RNFS });
 
 const navigationTheme: Theme = {
   ...DefaultTheme,

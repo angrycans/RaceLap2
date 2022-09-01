@@ -1,14 +1,11 @@
 import type { WebView, } from './types';
 import type { ApiRes } from '../types';
-import { apis } from '.';
 import { getPropertyByPath, isErrorLike } from '../utils';
 import { BRIDGE_CALLBACK_NAME } from '../constants';
+import { apis } from '.';
+import { getFS } from './utils';
 
 const webViewWeakSet = new WeakSet<WebView>();
-
-const remoteApi = {
-  ...apis
-}
 
 interface MsgJSONObj {
   /** 调用 ID */
@@ -23,7 +20,7 @@ function sendApiRes(webViewInstance: WebView, apiRes: ApiRes, id: string | null 
   webViewInstance.injectJavaScript(`window.${BRIDGE_CALLBACK_NAME}(${JSON.stringify({
     id,
     res: apiRes
-  })})`)
+  })})`);
 }
 
 /**
@@ -31,6 +28,10 @@ function sendApiRes(webViewInstance: WebView, apiRes: ApiRes, id: string | null 
  * @param webViewInstance
  */
 export function enableWebview(webViewInstance: WebView) {
+  const remoteApi = {
+    ...apis,
+    ...getFS(),
+  }
   if (!webViewWeakSet.has(webViewInstance)) {
     webViewWeakSet.add(webViewInstance);
   }
