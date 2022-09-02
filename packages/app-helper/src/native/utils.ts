@@ -1,33 +1,27 @@
-import type { SQLite, NSSQLite, RNFS } from './types';
+import type { NSSQLite, RNFS } from './types';
 
-let sqlite: SQLite | null = null;
+let initDBTask: Promise<NSSQLite.SQLiteDatabase> | null = null;
 let fs: RNFS | null = null;
-let openDBRask: Promise<NSSQLite.SQLiteDatabase> | null = null;
 
 /**
  * 初始化 DB
- * @param sqliteInstance
+ * @param readyTask
  */
-export function initDB(sqliteInstance: SQLite) {
-  sqlite = sqliteInstance;
+export function initNativeDB(readyTask: Promise<NSSQLite.SQLiteDatabase>) {
+  initDBTask = readyTask;
 }
 
 /** 获取 DB 实例 */
-export function getDB() {
-  if (!sqlite) throw new Error(`Have To Call initialize Before !`);
-  if (openDBRask) return openDBRask;
-  else {
-    sqlite.enablePromise(true);
-    openDBRask = sqlite.openDatabase({ name: 'raceLap', location: 'default' })
-    return openDBRask;
-  }
+export async function getDB() {
+  if (!initDBTask) throw new Error(`Have To Call initialize Before !`);
+  return initDBTask;
 }
 
 /**
  * 初始化 DB
  * @param sqliteInstance
  */
-export function initFS(rnfs: RNFS) {
+export function initNativeFS(rnfs: RNFS) {
   fs = rnfs;
 }
 

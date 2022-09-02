@@ -1,11 +1,15 @@
 import * as racetrack from './racetrack';
+import * as user from './user';
 
 type NSRacetrack = typeof racetrack;
+type NSUser = typeof user;
 
 export {
-  racetrack
+  user,
+  racetrack,
 }
 
 export type {
-  NSRacetrack
+  NSRacetrack,
+  NSUser
 }

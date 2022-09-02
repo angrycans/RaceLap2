@@ -1,11 +1,11 @@
-import type { SQLite, RNFS } from './types';
-import { initDB, initFS } from './utils';
+import type { NSSQLite, RNFS } from './types';
+import { initNativeDB, initNativeFS } from './utils';
 
 interface Options {
-  /** sqlite 对象 */
-  sqlite: SQLite;
   /** rn file system */
   fs: RNFS;
+  /** 数据库初始化完毕 */
+  initDBTask: Promise<NSSQLite.SQLiteDatabase>;
 }
 
 /**
@@ -13,8 +13,8 @@ interface Options {
  * @param opts
  */
 export function initialize(opts: Options) {
-  initDB(opts.sqlite);
-  initFS(opts.fs);
+  initNativeDB(opts.initDBTask);
+  initNativeFS(opts.fs);
 }
 
 

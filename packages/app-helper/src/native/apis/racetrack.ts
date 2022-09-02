@@ -9,6 +9,9 @@ export async function getList(): Promise<ApiRes> {
   try {
     const db = await getDB();
     const [result] = await db.executeSql('select * from Racetrack');
+
+    console.log('getList -->', result.rows.raw())
+
     return {
       errCode: 0,
       errMsg: '',

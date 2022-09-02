@@ -2,12 +2,14 @@ import type { HeaderBackButtonProps } from '@react-navigation/elements';
 import React, { type FC, useState, useRef, useMemo } from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
 import { Button } from '@rneui/themed';
-import { useNavigation } from '@/hooks';
+import { apis } from '@race-lap/app-helper/dist/native';
+import { useNavigation, useAuth } from '@/hooks';
 import { Navigator, FocusAwareStatusBar } from '@/components';
 
 export const SetDriverName: FC = () => {
   const [driverName, setDriverName] = useState('');
   const navigationRef = useRef(useNavigation());
+  const { refresh } = useAuth();
   const { HeaderLeft, HeaderRight } = useMemo(
     () => ({
       HeaderLeft() {
@@ -25,14 +27,16 @@ export const SetDriverName: FC = () => {
             type="clear"
             disabled={!driverName.length}
             title="完成"
-            onPress={() => {
-              console.log('driverName -->', driverName);
+            onPress={async () => {
+              await apis.user.save({ name: driverName });
+              await refresh();
+              navigationRef.current.goBack();
             }}
           />
         );
       },
     }),
-    [driverName],
+    [driverName, refresh],
   );
 
   return (

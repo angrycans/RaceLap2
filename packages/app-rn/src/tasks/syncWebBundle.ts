@@ -21,9 +21,13 @@ export async function syncWebBundle() {
     let needDownload = true;
 
     if (await RNFS.exists(cachedWebBundlePath)) {
-      const res = await fetch(webBundleDownloadUrl);
-      console.log(webBundleDownloadUrl, res.headers.get('content-md5'));
-      needDownload = false;
+      // TODO: MD5 如何计算
+      // const res = await fetch(webBundleDownloadUrl);
+      // console.log(webBundleDownloadUrl, res.headers.get('content-md5'));
+
+      // 临时使用文件大小比较
+      const { size } = await RNFS.stat(cachedWebBundlePath);
+      needDownload = webBundleRemoteInfo.size !== size;
     }
 
     if (needDownload) {
@@ -34,14 +38,12 @@ export async function syncWebBundle() {
         fromUrl: webBundleDownloadUrl,
         toFile: cachedWebBundlePath,
       }).promise;
+
+      if (await RNFS.exists(webBundlePath)) {
+        await RNFS.unlink(webBundlePath);
+      }
+
+      await unzip(cachedWebBundlePath, RNFS.DocumentDirectoryPath);
     }
-
-    if (await RNFS.exists(webBundlePath)) {
-      await RNFS.unlink(webBundlePath);
-    }
-
-    await unzip(cachedWebBundlePath, RNFS.DocumentDirectoryPath);
-
-    console.log('complete');
   }
 }

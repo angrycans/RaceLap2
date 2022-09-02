@@ -3,7 +3,7 @@ import { functionSimulationHandle } from './middlewares/function-simulation-hand
 import { commonApplyHandle } from './middlewares/common-apply-handle';
 import { eventChannelHandle } from './middlewares/event-channel-handle';
 
-export const createBridge = (api: Record<string, any>) => {
+export function createBridge<T extends Record<string, any>>(api: Record<string, any>): T {
   // 创建模拟对象
   const noop = () => { };
 

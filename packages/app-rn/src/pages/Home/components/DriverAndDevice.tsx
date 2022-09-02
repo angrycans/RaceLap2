@@ -9,7 +9,7 @@ import {
   QuestionmarkCircle,
   PlusCircle,
 } from '@/components/Icons/MonoIcons';
-import { useNavigation } from '@/hooks';
+import { useNavigation, useAuth } from '@/hooks';
 import { RouteName } from '@/constants';
 import Title from './Title';
 
@@ -18,6 +18,7 @@ const { Col } = Row;
 export const DriverAndDevice: FC = () => {
   const [hasRecorder] = useState(false);
   const navigation = useNavigation();
+  const { auth } = useAuth();
   return (
     <>
       <Title title="车手和设备" icon={<Icon name="settings" />} />
@@ -29,10 +30,12 @@ export const DriverAndDevice: FC = () => {
             icon={<PersonCropCircle width={22} />}
             title={
               <Text style={styles.btnTitle} color="primary" bold>
-                未命名车手
+                {auth?.name || '未命名车手'}
               </Text>
             }
-            onPress={() => navigation.navigate(RouteName.SET_DRIVER_NAME)}
+            onPress={() =>
+              !auth && navigation.navigate(RouteName.SET_DRIVER_NAME)
+            }
           />
           <Button
             containerStyle={[styles.btn, styles.btnNotFirst]}

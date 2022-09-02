@@ -1,10 +1,6 @@
-import type { NSRacetrack, BridgeFS } from './apis';
+import type { BridgeFS } from '../native/createBridgeFS';
+import type { Apis } from './apis';
 import { createBridge } from './bridge';
 
-export interface Apis {
-  /** 赛道 */
-  racetrack: NSRacetrack;
-};
-
-export const apis = createBridge({}) as any as Apis;
-export const fs = createBridge({}) as any as BridgeFS;
+export const apis = createBridge<Apis>({});
+export const fs = createBridge<BridgeFS>({});

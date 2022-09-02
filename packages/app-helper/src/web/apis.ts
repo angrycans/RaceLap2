@@ -1,2 +1,8 @@
-export type { NSRacetrack } from '../native/apis';
-export type { BridgeFS } from '../native/createBridgeFS';
+import type { NSRacetrack, NSUser } from '../native/apis';
+
+export interface Apis {
+  /** 赛道 */
+  racetrack: NSRacetrack;
+  /** 用户 */
+  user: NSUser
+};
