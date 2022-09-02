@@ -3,7 +3,7 @@ import type { ApiRes } from '../types';
 import { getPropertyByPath, isErrorLike } from '../utils';
 import { BRIDGE_CALLBACK_NAME } from '../constants';
 import { apis } from '.';
-import { getFS } from './utils';
+import { createBridgeFS } from './createBridgeFS';
 
 const webViewWeakSet = new WeakSet<WebView>();
 
@@ -30,7 +30,7 @@ function sendApiRes(webViewInstance: WebView, apiRes: ApiRes, id: string | null 
 export function enableWebview(webViewInstance: WebView) {
   const remoteApi = {
     ...apis,
-    ...getFS(),
+    ...createBridgeFS(),
   }
   if (!webViewWeakSet.has(webViewInstance)) {
     webViewWeakSet.add(webViewInstance);

@@ -1,2 +1,2 @@
 export type { NSRacetrack } from '../native/apis';
-export type { RNFS } from '../native/types';
+export type { BridgeFS } from '../native/createBridgeFS';

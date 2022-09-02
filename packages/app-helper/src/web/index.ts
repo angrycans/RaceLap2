@@ -1,4 +1,4 @@
-import type { NSRacetrack, RNFS } from './apis';
+import type { NSRacetrack, BridgeFS } from './apis';
 import { createBridge } from './bridge';
 
 export interface Apis {
@@ -7,4 +7,4 @@ export interface Apis {
 };
 
 export const apis = createBridge({}) as any as Apis;
-export const fs = createBridge({}) as any as RNFS;
+export const fs = createBridge({}) as any as BridgeFS;
