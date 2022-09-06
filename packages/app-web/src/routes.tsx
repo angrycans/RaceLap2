@@ -1,5 +1,6 @@
 import { lazy, Suspense, type FC } from 'react';
 import { Navigate, Outlet, type RouteObject } from 'react-router-dom';
+import { WebRouteName } from '@race-lap/app-helper';
 import AppLayout from './layouts/AppLayout';
 import PageNotFound from './views/NotFound';
 
@@ -38,6 +39,7 @@ const convertRoutes = (routes: MyRouteConfig[]): RouteObject[] => {
 const routeConfig: MyRouteConfig[] = [
   // 登录相关无需Layout 特殊处理
   { path: '/', name: '测试首页', component: () => import('./views/TestEntry'), },
+  { path: `/${WebRouteName.NEW_RACETRACK}`, name: '测试首页', component: () => import('./views/NewRacetrack'), },
   {
     element: <Layout />,
     children: [

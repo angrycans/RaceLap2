@@ -1,0 +1,86 @@
+import type { Record, ApiRes } from '../../types';
+import { getDB } from '../utils';
+import { isErrorLike } from '../../utils';
+import { DBTableName } from '../../constants';
+
+interface SaveRecordParam extends Partial<Record> { }
+
+/**
+ * 保存用户信息
+ * @param params
+ */
+export async function save(params: SaveRecordParam): Promise<ApiRes<void>> {
+  try {
+    const { id, ...rest } = params;
+    const recordInfoEntries = Object.entries(rest).filter(([, value]) => typeof value !== 'undefined');
+    const recordInfokeys = recordInfoEntries.map(([key]) => key);
+    const recordInfoValues = recordInfoEntries.map(([, value]) => value);
+    const db = await getDB();
+    if (recordInfokeys.length) {
+      if (typeof id === 'undefined') {
+        // 新增用户
+        await db.executeSql(
+          `INSERT INTO ${DBTableName.RECORD} (${recordInfokeys.join(',')}) VALUES(${recordInfoValues.map(() => '?').join(',')})`,
+          recordInfoValues
+        );
+      } else {
+        // 更新用户信息
+        await db.executeSql(
+          `UPDATE ${DBTableName.RECORD} SET ${recordInfokeys.map(key => `${key} = ?`).join(',')} WHERE id = ${id}`,
+          recordInfoValues
+        );
+      }
+    }
+    return {
+      errCode: 0,
+      errMsg: '',
+      data: null,
+    };
+  } catch (err) {
+    console.log(err)
+    return {
+      errCode: 1,
+      errMsg:
+        (isErrorLike(err) ? err.message : String(err)) ||
+        'Save Record Info Failed !',
+      data: null,
+    };
+  }
+}
+
+interface GetRecordListParam extends Partial<Pick<Record, 'id'>> { }
+
+/**
+ * 获取记录列表
+ * @param param
+ */
+export async function getList(params: GetRecordListParam = {}): Promise<ApiRes<Record[]>> {
+  try {
+    const recordInfoEntries = Object.entries(params).filter(([, value]) => typeof value !== 'undefined');
+    const recordInfokeys = recordInfoEntries.map(([key]) => key);
+    const recordInfoValues = recordInfoEntries.map(([, value]) => value);
+    const hasCondition = !!recordInfokeys.length;
+    const db = await getDB();
+
+    // 更新用户信息
+    const [result] = await db.executeSql(
+      `SELECT * FROM ${DBTableName.RECORD}${hasCondition ? ' WHERE' : ''} ${recordInfokeys.map(key => `${key} = ?`).join(' AND ')} `,
+      recordInfoValues
+    );
+
+    return {
+      errCode: 0,
+      errMsg: '',
+      data: result.rows.raw(),
+    };
+  } catch (err) {
+    console.log(err)
+    return {
+      errCode: 1,
+      errMsg:
+        (isErrorLike(err) ? err.message : String(err)) ||
+        'Get Record List Failed !',
+      data: null,
+    };
+  }
+}

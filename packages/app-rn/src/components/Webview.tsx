@@ -3,8 +3,9 @@ import type { WebViewSource } from 'react-native-webview/lib/WebViewTypes';
 import { WebView, WebViewProps } from 'react-native-webview';
 import RNFS from 'react-native-fs';
 import { WebRouteName } from '@/constants';
+import { getStorageRootPath } from '@/utils';
 import { enableWebview } from '@race-lap/app-helper/dist/native';
-// import { Text } from '@/components';
+import { Text } from '@/components';
 
 declare const WEBVIEW_BASE_URL: string;
 
@@ -14,6 +15,7 @@ interface Props extends WebViewProps {
 }
 
 const ORIGIN_WHITELIST = ['http://', 'https://', 'file://'];
+const storageRootPath = getStorageRootPath();
 
 export const Webview: FC<Props> = props => {
   const { page, source: sourceFromProps, ...rest } = props;
@@ -26,7 +28,7 @@ export const Webview: FC<Props> = props => {
       sourceFromProps || {
         uri: `${
           !WEBVIEW_BASE_URL.startsWith('http://')
-            ? `file://${RNFS.DocumentDirectoryPath}`
+            ? `file://${storageRootPath}`
             : ''
         }${WEBVIEW_BASE_URL}#/${page}`,
       },
@@ -38,7 +40,7 @@ export const Webview: FC<Props> = props => {
       webviewBridgeRef.current = enableWebview(webviewInstanceRef.current);
     }
     return () => webviewBridgeRef.current?.disbale();
-  });
+  }, []);
 
   return (
     <>
@@ -50,7 +52,7 @@ export const Webview: FC<Props> = props => {
         allowFileAccess
         javaScriptEnabled
         allowFileAccessFromFileURLs
-        allowingReadAccessToURL={RNFS.DocumentDirectoryPath}
+        allowingReadAccessToURL={storageRootPath}
         allowUniversalAccessFromFileURLs
         originWhitelist={ORIGIN_WHITELIST}
         source={source}
@@ -61,8 +63,8 @@ export const Webview: FC<Props> = props => {
         }}
         {...rest}
       />
-      {/* <Text>{source.uri}</Text>
-      <Text selectable>{RNFS.DocumentDirectoryPath}</Text> */}
+      <Text>{source.uri}</Text>
+      <Text selectable>{storageRootPath}</Text>
     </>
   );
 };

@@ -7,6 +7,7 @@ interface SaveUserParam extends Partial<User> { }
 
 /**
  * 保存用户信息
+ * @param params
  */
 export async function save(params: SaveUserParam): Promise<ApiRes<void>> {
   try {
@@ -78,7 +79,7 @@ export async function getList(params: GetUserListParam = {}): Promise<ApiRes<Use
       errCode: 1,
       errMsg:
         (isErrorLike(err) ? err.message : String(err)) ||
-        'Save User Info Failed !',
+        'Get User List Failed !',
       data: null,
     };
   }

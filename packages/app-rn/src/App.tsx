@@ -9,7 +9,6 @@
  */
 
 import React, { type FC } from 'react';
-import SQLite from 'react-native-sqlite-storage';
 import {
   NavigationContainer,
   DefaultTheme,
@@ -19,6 +18,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ThemeProvider, createTheme, Icon, Button } from '@rneui/themed';
 import { initialize } from '@race-lap/app-helper/dist/native';
 import RNFS from 'react-native-fs';
+import { useMount } from 'ahooks';
 import { RouteName } from './constants';
 import Startup from './pages/Startup';
 import UserAgreement from './pages/UserAgreement';
@@ -32,13 +32,13 @@ import SelectCarrier from './pages/SelectCarrier';
 import SelectRacetrack from './pages/SelectRacetrack';
 import Setting from './pages/Setting';
 import { AppProvider } from './context';
-import { syncWebBundle, initDB, initDBTask } from './tasks';
+import { syncWebBundle, initDB, initDBTask, initAMap } from './tasks';
 
 initialize({ initDBTask, fs: RNFS });
 
 // Init Task
 (async () => {
-  await Promise.all([initDB(), syncWebBundle()]);
+  await Promise.all([initDB(), syncWebBundle(), initAMap()]);
 })();
 
 const navigationTheme: Theme = {
@@ -61,6 +61,10 @@ const Stack = createNativeStackNavigator();
 const shareBtnStyle = { paddingRight: 0 };
 
 const App: FC = () => {
+  useMount(async () => {
+    // await Promise.all([initDB(), syncWebBundle(), initAMap()]);
+  });
+
   return (
     <AppProvider>
       <ThemeProvider theme={rneuiTheme}>

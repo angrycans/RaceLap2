@@ -11,7 +11,7 @@ export interface RootStackParamList extends ParamListBase {
   [RouteName.NEW_RACETRACK]: undefined;
   [RouteName.SET_DRIVER_NAME]: undefined;
   [RouteName.SELECT_CARRIER]: undefined;
-  [RouteName.SELECT_RACETRACK]: undefined;
+  [RouteName.SELECT_RACETRACK]: { id: number | null };
   [RouteName.SETTING]: undefined;
   [RouteName.RACETRACK_DETAIL]: {
     /** 标题 */

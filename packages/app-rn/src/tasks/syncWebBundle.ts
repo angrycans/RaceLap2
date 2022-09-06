@@ -1,49 +1,61 @@
-import { github } from '@/apis';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { unzip } from 'react-native-zip-archive';
 import RNFS from 'react-native-fs';
+import { github } from '@/apis';
+import { AsyncStorageKey } from '@/constants';
+import { getStorageRootPath } from '@/utils';
+
+const storageRootPath = getStorageRootPath();
 
 /**
  * 同步 web.bundle
  */
 export async function syncWebBundle() {
-  const release = await github.getLatestRelease();
-  const webBundleRemoteInfo = release.assets.find(item =>
-    item.name.startsWith('web.bundle'),
-  );
-  if (webBundleRemoteInfo) {
-    const webBundleDownloadUrl = webBundleRemoteInfo.browser_download_url;
-    const webBundlePath = `${RNFS.DocumentDirectoryPath}/web.bundle`;
-    const webBundleCachePath = `${RNFS.DocumentDirectoryPath}/caches`;
-    const cachedWebBundlePath = `${webBundleCachePath}/${webBundleRemoteInfo.name.replace(
-      /_/g,
-      '',
-    )}-web.bundle.zip`;
-    let needDownload = true;
+  const webBundlePath = `${storageRootPath}/web.bundle`;
+  try {
+    const [release, checkContent] = await Promise.all([
+      github.getLatestRelease(),
+      AsyncStorage.getItem(AsyncStorageKey.WEB_BUNDLE_CHECK_CONTENT),
+    ]);
+    const webBundleRemoteInfo = release.assets.find(item =>
+      item.name.startsWith('web.bundle'),
+    );
 
-    if (await RNFS.exists(cachedWebBundlePath)) {
+    if (webBundleRemoteInfo) {
+      const webBundleDownloadUrl = webBundleRemoteInfo.browser_download_url;
+      const webBundleZipPath = `${RNFS.TemporaryDirectoryPath}/${webBundleRemoteInfo.name}`;
+
       // TODO: MD5 如何计算
       // const res = await fetch(webBundleDownloadUrl);
       // console.log(webBundleDownloadUrl, res.headers.get('content-md5'));
 
-      // 临时使用文件大小比较
-      const { size } = await RNFS.stat(cachedWebBundlePath);
-      needDownload = webBundleRemoteInfo.size !== size;
+      // TODO: 远程检查内容，后期替换为 MD5
+      const remoteCheckContent = String(webBundleRemoteInfo.size);
+      const needDownload = checkContent !== remoteCheckContent;
+
+      if (needDownload) {
+        await RNFS.downloadFile({
+          fromUrl: webBundleDownloadUrl,
+          toFile: webBundleZipPath,
+        }).promise;
+
+        if (await RNFS.exists(webBundlePath)) {
+          await RNFS.unlink(webBundlePath);
+        }
+
+        await unzip(webBundleZipPath, storageRootPath);
+        AsyncStorage.setItem(
+          AsyncStorageKey.WEB_BUNDLE_CHECK_CONTENT,
+          remoteCheckContent,
+        );
+      }
+    } else {
+      throw new Error('Remote Web Bundle Not Exist !');
     }
-
-    if (needDownload) {
-      if (!(await RNFS.exists(webBundleCachePath))) {
-        await RNFS.mkdir(webBundleCachePath);
-      }
-      await RNFS.downloadFile({
-        fromUrl: webBundleDownloadUrl,
-        toFile: cachedWebBundlePath,
-      }).promise;
-
-      if (await RNFS.exists(webBundlePath)) {
-        await RNFS.unlink(webBundlePath);
-      }
-
-      await unzip(cachedWebBundlePath, RNFS.DocumentDirectoryPath);
+  } catch (err) {
+    console.error(err);
+    if (!(await RNFS.exists(webBundlePath))) {
+      await RNFS.copyFile(`${RNFS.MainBundlePath}/web.bundle`, webBundlePath);
     }
   }
 }

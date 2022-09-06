@@ -1,0 +1,13 @@
+diff --git a/node_modules/@amap/amap-jsapi-types/index.d.ts b/node_modules/@amap/amap-jsapi-types/index.d.ts
+index dbc22a6..bc56b0a 100644
+--- a/node_modules/@amap/amap-jsapi-types/index.d.ts
++++ b/node_modules/@amap/amap-jsapi-types/index.d.ts
+@@ -7094,4 +7094,7 @@ declare global {
+         export {};
+     }
+ }
+-export {};
++
++type AMapType = typeof AMap;
++
++export type { AMapType };

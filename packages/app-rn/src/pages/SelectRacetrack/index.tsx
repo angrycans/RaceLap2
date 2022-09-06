@@ -1,27 +1,33 @@
 import type { HeaderBackButtonProps } from '@react-navigation/elements';
+import { type Racetrack } from '@race-lap/app-helper';
 import React, { type FC, useState, useRef, useMemo } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { Button, useTheme } from '@rneui/themed';
-import { useNavigation } from '@/hooks';
+import { useRequest } from 'ahooks';
+import { apis } from '@race-lap/app-helper/dist/native';
+import { useNavigation, useRoute } from '@/hooks';
+import { RouteName } from '@/constants';
 import { Navigator, Text, FocusAwareStatusBar } from '@/components';
 import { CheckmarkCircleFill } from '@/components/Icons/MonoIcons';
 
-const racetrackList = [
-  { name: '不选择赛道', key: 'none', address: '' },
-  ...Array.from({ length: 5 }, (_, idx) => ({
-    name: `南京荔湾赛车场南京荔湾赛车场南京荔湾赛车场${idx}`,
-    address: `江宁区梅龙路与马家塘路交叉路口往北约24江宁区梅龙路与马家塘路交叉路口往北约24${idx}米`,
-    key: `racetrack-${idx}`,
-  })),
-];
-
 export const SelectRacetrack: FC = () => {
+  const {
+    params: { id },
+  } = useRoute<RouteName.SELECT_RACETRACK>();
   const {
     theme: {
       colors: { primary },
     },
   } = useTheme();
-  const [racetrack, setRacetrack] = useState('none');
+  const [racetrackId, setRacetrackId] = useState<number | null>(id);
+  const { data: racetrackListRes } = useRequest(apis.racetrack.getList);
+  const racetrackList = useMemo(
+    () =>
+      [{ id: null, name: '不选择赛道' } as any as Racetrack].concat(
+        racetrackListRes?.data || [],
+      ),
+    [racetrackListRes],
+  );
   const navigationRef = useRef(useNavigation());
   const { HeaderLeft, HeaderRight } = useMemo(
     () => ({
@@ -38,16 +44,17 @@ export const SelectRacetrack: FC = () => {
         return (
           <Button
             type="clear"
-            disabled={!racetrack}
             title="完成"
-            onPress={() => {
-              console.log('racetrack -->', racetrack);
+            onPress={async () => {
+              if (racetrackId === null) {
+              } else {
+              }
             }}
           />
         );
       },
     }),
-    [racetrack],
+    [racetrackId],
   );
 
   return (
@@ -62,17 +69,17 @@ export const SelectRacetrack: FC = () => {
         <View style={styles.wrapper}>
           {racetrackList.map(item => (
             <Button
-              key={item.key}
+              key={item.id}
               type="clear"
               iconRight
               buttonStyle={styles.listItem}
               icon={
                 <CheckmarkCircleFill
-                  color={item.key === racetrack ? primary : '#D1D1D6'}
+                  color={item.id === racetrackId ? primary : '#D1D1D6'}
                   width={22}
                 />
               }
-              onPress={() => setRacetrack(item.key)}>
+              onPress={() => setRacetrackId(item.id)}>
               <View style={styles.info}>
                 <Text bold numberOfLines={1}>
                   {item.name}

@@ -2,14 +2,23 @@ import React, { type FC, useMemo, useRef, useState } from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
 import { Button, useTheme } from '@rneui/themed';
 import type { HeaderBackButtonProps } from '@react-navigation/elements';
+import { MapView, MapType, Marker, type LatLng } from 'react-native-amap3d';
+import { produce } from 'immer';
+import { useMount } from 'ahooks';
+import gcoord from 'gcoord';
+import ViewShot from 'react-native-view-shot';
+import RNFS from 'react-native-fs';
 import { useNavigation } from '@/hooks';
-// import { WebRouteName } from '@/constants';
-import { Navigator, Text, FocusAwareStatusBar, WebView } from '@/components';
+import { Navigator, Text, FocusAwareStatusBar } from '@/components';
+import { getStorageRootPath } from '@/utils';
 import {
   TrackEndLine,
   TrackSection1,
   TrackSection2,
 } from '@/components/Icons/MonoIcons';
+import { geo } from '@/apis';
+import MarkerLine from './components/MarkerLine';
+import { apis } from '@race-lap/app-helper/dist/native';
 
 const enum SelectionType {
   /** 默认空选项 */
@@ -34,15 +43,30 @@ const iconMap = {
   [SelectionType.SELECTION_2]: TrackSection2,
 };
 
+const storageRootPath = getStorageRootPath();
 export const NewRacetrack: FC = () => {
   const {
     theme: {
       colors: { primary },
     },
   } = useTheme();
+  const viewShotRef = useRef<ViewShot>(null);
   const [racetrackName, setRacetrackName] = useState('');
+  const [currentLocation, setCurrentLocation] = useState<LatLng | null>(null);
+  const [endLineSection, setEndLineSection] = useState<
+    [LatLng | null, LatLng | null]
+  >([null, null]);
+  const [section1, setSection1] = useState<[LatLng | null, LatLng | null]>([
+    null,
+    null,
+  ]);
+  const [section2, setSection2] = useState<[LatLng | null, LatLng | null]>([
+    null,
+    null,
+  ]);
   const [currentSelection, setCurrentSelection] = useState(SelectionType.NONE);
   const navigationRef = useRef(useNavigation());
+  const snapshotFilename = `${racetrackName}-snapshot-${Date.now()}`;
   const { HeaderLeft, HeaderRight } = useMemo(
     () => ({
       HeaderLeft() {
@@ -60,14 +84,46 @@ export const NewRacetrack: FC = () => {
             type="clear"
             disabled={!racetrackName.length}
             title="完成"
-            onPress={() => {
-              console.log('racetrackName -->', racetrackName);
+            onPress={async () => {
+              const sections = [endLineSection, section1, section2]
+                .filter(section => section.every(Boolean))
+                .map(section =>
+                  section.map(point =>
+                    gcoord.transform(
+                      [point!.longitude, point!.latitude],
+                      gcoord.GCJ02,
+                      gcoord.EPSG3857,
+                    ),
+                  ),
+                );
+              const snapshotTmpUrl = await viewShotRef.current!.capture!();
+              const racetrackRoot = `${storageRootPath}/racetrack`;
+              if (!(await RNFS.exists(racetrackRoot))) {
+                await RNFS.mkdir(racetrackRoot);
+              }
+              const snapshotUrl = snapshotTmpUrl.replace(
+                /[\s\S]*?\/([^/]+)$/,
+                `${racetrackRoot}/$1`,
+              );
+              await RNFS.copyFile(snapshotTmpUrl, snapshotUrl);
+              const { errCode } = await apis.racetrack.save({
+                name: racetrackName,
+                tracksector: sections
+                  .map(section =>
+                    section.map(point => point.join(',')).join(','),
+                  )
+                  .join(';'),
+                snapshot: snapshotUrl,
+              });
+              if (!errCode) {
+                navigationRef.current.goBack();
+              }
             }}
           />
         );
       },
     }),
-    [racetrackName],
+    [racetrackName, endLineSection, section1, section2],
   );
   const selectionsContent = useMemo(
     () => (
@@ -101,6 +157,13 @@ export const NewRacetrack: FC = () => {
     [currentSelection, primary],
   );
 
+  useMount(async () => {
+    const {
+      coords: { longitude, latitude },
+    } = await geo.getCurrentPosition();
+    setCurrentLocation({ longitude, latitude });
+  });
+
   return (
     <>
       <FocusAwareStatusBar barStyle="dark-content" />
@@ -117,8 +180,77 @@ export const NewRacetrack: FC = () => {
           value={racetrackName}
           onChangeText={setRacetrackName}
         />
-        {/* <WebView style={styles.map} page={WebRouteName.NEW_RACETRACK} /> */}
-        <WebView style={styles.map} page="" />
+        {currentLocation && (
+          <ViewShot
+            style={styles.map}
+            ref={viewShotRef}
+            options={{
+              fileName: snapshotFilename,
+              format: 'jpg',
+              quality: 0.5,
+            }}>
+            <MapView
+              style={styles.mapView}
+              mapType={MapType.Satellite}
+              initialCameraPosition={{
+                target: currentLocation,
+                zoom: 18,
+              }}
+              onPress={({ nativeEvent }) => {
+                const { longitude, latitude } = nativeEvent;
+                const sectionInfoMap = {
+                  [SelectionType.NONE]: null,
+                  [SelectionType.END_LINE]: {
+                    value: endLineSection,
+                    setValue: setEndLineSection,
+                  },
+                  [SelectionType.SELECTION_1]: {
+                    value: section1,
+                    setValue: setSection1,
+                  },
+                  [SelectionType.SELECTION_2]: {
+                    value: section2,
+                    setValue: setSection2,
+                  },
+                } as const;
+                const currentSectionInfo = sectionInfoMap[currentSelection];
+                if (currentSectionInfo) {
+                  let idx = currentSectionInfo.value.findIndex(
+                    section => !section,
+                  );
+                  idx = idx !== -1 ? idx : 1;
+                  currentSectionInfo.setValue(
+                    produce(currentSectionInfo.value, draft => {
+                      draft[idx] = { longitude, latitude };
+                    }),
+                  );
+                }
+              }}>
+              <Marker
+                position={currentLocation}
+                icon={require('@/assets/images/icon-location.png')}
+              />
+              <MarkerLine
+                editable={SelectionType.END_LINE === currentSelection}
+                icon={<TrackEndLine color="#ffffff" />}
+                points={endLineSection}
+                onChange={setEndLineSection}
+              />
+              <MarkerLine
+                editable={SelectionType.SELECTION_1 === currentSelection}
+                icon={<TrackSection1 color="#ffffff" />}
+                points={section1}
+                onChange={setSection1}
+              />
+              <MarkerLine
+                editable={SelectionType.SELECTION_2 === currentSelection}
+                icon={<TrackSection2 color="#ffffff" />}
+                points={section2}
+                onChange={setSection2}
+              />
+            </MapView>
+          </ViewShot>
+        )}
         {selectionsContent}
       </View>
     </>
@@ -138,10 +270,12 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   map: {
-    marginTop: 8,
-    backgroundColor: '#fff',
     flex: 1,
+    marginTop: 8,
     borderRadius: 12,
+  },
+  mapView: {
+    flex: 1,
   },
   selector: {
     flexDirection: 'row',

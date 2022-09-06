@@ -1,5 +1,6 @@
-import React, { type FC } from 'react';
+import React, { useEffect, useMemo, type FC } from 'react';
 import { View, ScrollView, ImageBackground, StyleSheet } from 'react-native';
+import { useRequest } from 'ahooks';
 import { useNavigation } from '@/hooks';
 import { Button } from '@rneui/themed';
 import { Text } from '@/components';
@@ -10,10 +11,38 @@ import {
   Timer,
   Bicycle,
 } from '@/components/Icons/MonoIcons';
+import { apis } from '@race-lap/app-helper/dist/native';
+import { useIsFocused } from '@react-navigation/native';
 import Title from './Title';
 
 export const RacetrackAndRecord: FC = () => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+  const { data: racetrackListRes, run: getRacetrackList } = useRequest(
+    apis.racetrack.getList,
+    {
+      manual: true,
+    },
+  );
+  const { data: recordListRes, run: getRecordList } = useRequest(
+    apis.record.getList,
+    {
+      manual: true,
+    },
+  );
+  const racetrackList = useMemo(
+    () => racetrackListRes?.data || [],
+    [racetrackListRes],
+  );
+  const recordList = useMemo(() => recordListRes?.data || [], [recordListRes]);
+
+  useEffect(() => {
+    if (isFocused) {
+      getRacetrackList();
+      getRecordList();
+    }
+  }, [isFocused, getRacetrackList, getRecordList]);
+
   return (
     <View style={styles.wrapper}>
       <Title title="赛道和记录" />
@@ -37,7 +66,7 @@ export const RacetrackAndRecord: FC = () => {
           />
         </View>
         <ScrollView horizontal style={styles.racetrackList}>
-          {Array.from({ length: 10 }).map((_, idx) => (
+          {racetrackList.map((racetrack, idx) => (
             <Button
               buttonStyle={[
                 styles.noStyleClearBtn,
@@ -48,13 +77,13 @@ export const RacetrackAndRecord: FC = () => {
               key={idx}
               onPress={() =>
                 navigation.navigate(RouteName.RACETRACK_DETAIL, {
-                  title: '南京励湾赛车场',
+                  title: racetrack.name || '',
                 })
               }>
               <ImageBackground
                 style={[styles.racetrackItemContentWrapper]}
                 source={{
-                  uri: 'https://www.kindacode.com/wp-content/uploads/2022/03/blue-sky.jpeg',
+                  uri: racetrack.snapshot,
                 }}>
                 {!idx ? (
                   <View style={styles.nearbyTag}>
@@ -64,14 +93,14 @@ export const RacetrackAndRecord: FC = () => {
                   <View />
                 )}
                 <Text numberOfLines={1} style={styles.racetrackName}>
-                  南京励湾赛车场
+                  {racetrack.name || '未知'}
                 </Text>
               </ImageBackground>
             </Button>
           ))}
         </ScrollView>
       </View>
-      {Array.from({ length: 10 }).map((_, idx) => (
+      {recordList.map((_, idx) => (
         <Button
           key={idx}
           buttonStyle={styles.noStyleClearBtn}

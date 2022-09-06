@@ -9,7 +9,6 @@ const PageHome: FC = () => {
     <div styleName="page-wrapper">
       <h1>test entry</h1>
       <Button onClick={async () => {
-        apis.racetrack
         const res = await apis.racetrack.getList();
         console.log(res)
       }}>Button</Button>

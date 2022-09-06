@@ -4,11 +4,11 @@
   "packages": [
     "packages/*"
   ],
-  "bootstrap": {
-    "npmClientArgs": [
-      "--no-package-lock"
-    ],
-    "forceLocal": true,
-    "ci": false
+  "command": {
+    "bootstrap": {
+      "npmClientArgs": [],
+      "forceLocal": true,
+      "ci": false
+    }
   }
 }

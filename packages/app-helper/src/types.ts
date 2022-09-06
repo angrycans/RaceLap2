@@ -45,6 +45,8 @@ export interface User {
   name: string;
   /** 载具 id */
   carrierId: number;
+  /** 赛道 id */
+  racetrackId: number;
 }
 
 /** 载具信息 */
@@ -67,6 +69,10 @@ export interface Racetrack {
   location: `${string},${string}`;
   /** 详细地址 */
   address: string;
+  /** 赛道分段 lng,lat,lng,lat;lng,lat,lng,lat... */
+  tracksector: string;
+  /** 赛道快照 (img url 地址) */
+  snapshot: string;
 }
 
 /** 纪录信息 */

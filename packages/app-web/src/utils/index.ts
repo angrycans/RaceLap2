@@ -1,1 +1,1 @@
-export {}
+export { getAMap } from './get-amap';

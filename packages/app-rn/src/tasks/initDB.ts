@@ -33,7 +33,8 @@ export async function initDB() {
         tx.executeSql(`CREATE TABLE IF NOT EXISTS ${DBTableName.USER} (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT,
-          carrierId INTEGER
+          carrierId INTEGER,
+          racetrackId INTEGER
         )`);
         // 创建载具表
         tx.executeSql(`CREATE TABLE IF NOT EXISTS ${DBTableName.CARRIER} (
@@ -46,7 +47,9 @@ export async function initDB() {
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT,
           location TEXT,
-          address TEXT
+          address TEXT,
+          tracksector TEXT,
+          snapshot TEXT
         )`);
         // 创建记录表
         tx.executeSql(`CREATE TABLE IF NOT EXISTS ${DBTableName.RECORD} (
