@@ -32,3 +32,36 @@ export function getPropertyByPath(path: string[]) {
 export function isErrorLike(errLikeObj: any): errLikeObj is Error {
   return 'message' in errLikeObj;
 }
+
+interface TimeStampFormat {
+  /** 是否自动清除值为0的区块 如：00:01:00.875 => 01:00.875 默认为 false */
+  autoClearZero?: boolean;
+}
+
+/**
+ * 格式化时间戳
+ * @param timestamp
+ * @param format
+ */
+export function timeStampFormat(timestamp: number, format: string, opts: TimeStampFormat = {}) {
+  const ms = timestamp % 1000;
+  const s = timestamp / 1000 % 60 | 0;
+  const m = timestamp / 1000 / 60 % 60 | 0;
+  const h = timestamp / 1000 / 60 / 60 % 60 | 0;
+
+  let result = format
+    .replaceAll(/S+/g, match => String(Math.round(ms / Math.pow(10, Math.max(3 - match.length, 0)))).padStart(match.length, '0'))
+    .replaceAll(/s+/g, match => String(s).padStart(match.length, '0'))
+    .replaceAll(/m+/g, match => String(m).padStart(match.length, '0'))
+    .replaceAll(/h+/gi, match => String(h).padStart(match.length, '0'))
+
+  if (opts.autoClearZero) {
+    let prev = result;
+    do {
+      prev = result;
+      result = result.replace(/^0+\D+/, '')
+    } while (result !== prev)
+  }
+
+  return result;
+}

@@ -22,16 +22,18 @@ export async function initDB() {
       location: 'default',
     });
 
+    // await db.executeSql(`DROP TABLE ${DBTableName.USER}`);
+
     const dbVersion = (
       await db.executeSql('PRAGMA user_version')
     )?.[0].rows.item(0).user_version;
 
-    if (!dbVersion) {
+    if (true || !dbVersion) {
       await db.transaction(tx => {
         // Create Table
         // 创建用户表
         tx.executeSql(`CREATE TABLE IF NOT EXISTS ${DBTableName.USER} (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id TEXT,
           name TEXT,
           carrierId INTEGER,
           racetrackId INTEGER
@@ -54,13 +56,24 @@ export async function initDB() {
         // 创建记录表
         tx.executeSql(`CREATE TABLE IF NOT EXISTS ${DBTableName.RECORD} (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
-          userId INTEGER,
           carrierId INTEGER,
           racetrackId INTEGER,
-          startTime INTEGER,
-          durationTime INTEGER,
-          trackNum INTEGER,
-          fileId TEXT
+          fileId TEXT,
+          fileSize INTEGER,
+          startDate INTEGER,
+          version TEXT,
+          userId TEXT,
+          username TEXT,
+          carrierName TEXT,
+          hardwareVersion TEXT,
+          firmwareVersion TEXT,
+          racetrackName TEXT,
+          totalTime INTEGER,
+          minCycleTime INTEGER,
+          maxSpeed TEXT,
+          avgSpeed TEXT,
+          avgCycleTime INTEGER,
+          cycleNum INTEGER
         )`);
         tx.executeSql(`PRAGMA user_version = ${CURRENT_DB_VERSION}`);
       });

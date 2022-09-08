@@ -16,6 +16,9 @@
 
 #import <react/config/ReactNativeConfig.h>
 
+// iOS 9.x or newer
+// #import <React/RCTLinkingManager.h>
+
 static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
 @interface AppDelegate () <RCTCxxBridgeDelegate, RCTTurboModuleManagerDelegate> {
@@ -28,6 +31,14 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 #endif
 
 @implementation AppDelegate
+
+// /// @see https://reactnative.dev/docs/linking
+// - (BOOL)application:(UIApplication *)application
+//    openURL:(NSURL *)url
+//    options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+// {
+//   return [RCTLinkingManager application:application openURL:url options:options];
+// }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {

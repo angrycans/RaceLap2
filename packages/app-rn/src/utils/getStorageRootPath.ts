@@ -6,7 +6,7 @@ import RNFS from 'react-native-fs';
  */
 export function getStorageRootPath() {
   return Platform.select({
-    ios: RNFS.CachesDirectoryPath,
+    ios: RNFS.LibraryDirectoryPath,
     android: RNFS.CachesDirectoryPath,
   })!;
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, type FC } from 'react';
 import { View, ScrollView, ImageBackground, StyleSheet } from 'react-native';
 import { useRequest } from 'ahooks';
+import dayjs from 'dayjs';
 import { useNavigation } from '@/hooks';
 import { Button } from '@rneui/themed';
 import { Text } from '@/components';
@@ -12,6 +13,7 @@ import {
   Bicycle,
 } from '@/components/Icons/MonoIcons';
 import { apis } from '@race-lap/app-helper/dist/native';
+import { utils } from '@race-lap/app-helper';
 import { useIsFocused } from '@react-navigation/native';
 import Title from './Title';
 
@@ -100,29 +102,40 @@ export const RacetrackAndRecord: FC = () => {
           ))}
         </ScrollView>
       </View>
-      {recordList.map((_, idx) => (
+      {recordList.map(record => (
         <Button
-          key={idx}
+          key={record.id}
           buttonStyle={styles.noStyleClearBtn}
           type="clear"
           onPress={() => navigation.navigate(RouteName.RECORD_DETAIL)}>
           <View style={[styles.cardWrapper, styles.recordItem]}>
             <View style={styles.row}>
-              <Text>9:41</Text>
+              <Text>
+                {dayjs(record.startDate).format('YYYY-MM-DD HH:mm:ss')}
+              </Text>
               <View style={styles.row}>
                 <Timer color="#FF9500" />
                 <Text bold color="#FF9500" style={styles.recordScore}>
-                  9:41
+                  {utils.timeStampFormat(record.totalTime, 'hh:mm:ss.SSS', {
+                    autoClearZero: true,
+                  })}
                 </Text>
               </View>
             </View>
             <View style={styles.row}>
               <View style={[styles.row, styles.alignCenter]}>
                 <Bicycle width={22} color="#000" />
-                <Text style={[styles.recordText, styles.carName]}>演示车</Text>
+                <Text style={[styles.recordText, styles.carName]}>
+                  {record.carrierName || '未知'}
+                </Text>
+                <Text style={[styles.recordText, styles.driverName]}>
+                  {record.username || ''}
+                </Text>
               </View>
               <View style={[styles.row, styles.alignCenter]}>
-                <Text style={[styles.recordText, styles.raceTrackNum]}>4</Text>
+                <Text style={[styles.recordText, styles.raceTrackNum]}>
+                  {record.cycleNum}
+                </Text>
                 <Text style={styles.raceTrackNumUnit}>圈</Text>
               </View>
             </View>
@@ -211,6 +224,11 @@ const styles = StyleSheet.create({
   carName: {
     fontWeight: '500',
     marginLeft: 4,
+  },
+  driverName: {
+    fontWeight: '500',
+    marginLeft: 4,
+    color: '#AEAEB2',
   },
   raceTrackNum: {
     fontWeight: '600',

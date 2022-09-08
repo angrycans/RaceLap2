@@ -17,13 +17,13 @@ export async function save(params: SaveRacetrackParam): Promise<ApiRes<void>> {
     const db = await getDB();
     if (racetrackInfoEntries.length) {
       if (typeof id === 'undefined') {
-        // 新增用户
+        // 新增信息
         await db.executeSql(
           `INSERT INTO ${DBTableName.RACETRACK} (${racetrackInfokeys.join(',')}) VALUES(${racetrackInfoValues.map(() => '?').join(',')})`,
           racetrackInfoValues
         );
       } else {
-        // 更新用户信息
+        // 更新信息
         await db.executeSql(
           `UPDATE ${DBTableName.RACETRACK} SET ${racetrackInfokeys.map(key => `${key} = ?`).join(',')} WHERE id = ${id}`,
           racetrackInfoValues
@@ -47,7 +47,7 @@ export async function save(params: SaveRacetrackParam): Promise<ApiRes<void>> {
   }
 }
 
-interface GetRacetrackListParam extends Partial<Pick<Racetrack, 'id'>> {
+interface GetRacetrackListParam extends Partial<Racetrack> {
 
 }
 

@@ -40,7 +40,7 @@ export interface ApiRes<T = unknown> {
 /** 用户信息 */
 export interface User {
   /** 唯一 id */
-  id: number;
+  id: string;
   /** 用户名 */
   name: string;
   /** 载具 id */
@@ -75,22 +75,53 @@ export interface Racetrack {
   snapshot: string;
 }
 
+/** 记录元数据 */
+export interface RecordMeta {
+  /** 文件格式版本 */
+  version: string;
+  /** 文件开始时间 */
+  startDate: string;
+  /** 用户ID */
+  userId: string;
+  /** 用户名称 */
+  username: string;
+  /** 载具名称 */
+  carrierName: string;
+  /** 硬件版本 */
+  hardwareVersion: string;
+  /** 固件版本 */
+  firmwareVersion: string;
+  /** 赛道名称 */
+  racetrackName: string;
+}
+
+export interface RecordDataOverview {
+  /** 总时间 */
+  totalTime: number;
+  /** 最短圈时 */
+  minCycleTime: number;
+  /** 最大速度 */
+  maxSpeed: string;
+  /** 平均速度 */
+  avgSpeed: string;
+  /** 平均圈时 */
+  avgCycleTime: number;
+  /** 圈数 */
+  cycleNum: number;
+}
+
 /** 纪录信息 */
-export interface Record {
+export interface Record extends Omit<RecordMeta, 'startDate'>, RecordDataOverview {
   /** 唯一 id */
   id: number;
-  /** 用户 id */
-  userId: number;
   /** 载具 id */
   carrierId: number;
   /** 赛道 id */
   racetrackId: number;
-  /** 开始时间 */
-  startTime: number;
-  /** 持续时间 */
-  durationTime: number;
-  /** 圈数 */
-  trackNum: number;
   /** 文件 ID (文件地址) */
   fileId: string;
+  /** 文件大小 */
+  fileSize: number;
+  /** 文件开始时间 */
+  startDate: number;
 }

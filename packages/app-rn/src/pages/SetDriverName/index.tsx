@@ -28,7 +28,9 @@ export const SetDriverName: FC = () => {
             disabled={!driverName.length}
             title="完成"
             onPress={async () => {
-              await apis.user.save({ name: driverName });
+              await apis.user.save({
+                name: driverName.trim(),
+              });
               await refresh();
               navigationRef.current.goBack();
             }}

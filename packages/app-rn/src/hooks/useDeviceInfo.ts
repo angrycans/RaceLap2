@@ -22,7 +22,7 @@ export function useDeviceInfo() {
     const name = currentWifiName.startsWith(DEVICE_PREFIX)
       ? currentWifiName
       : '';
-    return !name ? { name: 'RaceLaper-13u49af1', battery: 1, gps: 0.9, racetrackId: 1 } : null;
+    return name ? { name: 'RaceLaper-13u49af1', battery: 1, gps: 0.9, racetrackId: 1 } : null;
   }, [currentWifiName]);
 }
 

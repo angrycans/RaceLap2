@@ -1,5 +1,7 @@
 # react-native webview source
 web.bundle/
+web.bundle.zip
+dist
 
 # pnpm
 pnpm-lock.yaml

@@ -48,7 +48,7 @@ export async function save(params: SaveRecordParam): Promise<ApiRes<void>> {
   }
 }
 
-interface GetRecordListParam extends Partial<Pick<Record, 'id'>> { }
+interface GetRecordListParam extends Partial<Record> { }
 
 /**
  * 获取记录列表
@@ -62,7 +62,6 @@ export async function getList(params: GetRecordListParam = {}): Promise<ApiRes<R
     const hasCondition = !!recordInfokeys.length;
     const db = await getDB();
 
-    // 更新用户信息
     const [result] = await db.executeSql(
       `SELECT * FROM ${DBTableName.RECORD}${hasCondition ? ' WHERE' : ''} ${recordInfokeys.map(key => `${key} = ?`).join(' AND ')} `,
       recordInfoValues

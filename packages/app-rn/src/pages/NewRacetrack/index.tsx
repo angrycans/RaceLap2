@@ -79,10 +79,11 @@ export const NewRacetrack: FC = () => {
         );
       },
       HeaderRight(_: HeaderBackButtonProps) {
+        const validRacetrackName = racetrackName.trim();
         return (
           <Button
             type="clear"
-            disabled={!racetrackName.length}
+            disabled={!validRacetrackName.length}
             title="完成"
             onPress={async () => {
               const sections = [endLineSection, section1, section2]
@@ -107,7 +108,7 @@ export const NewRacetrack: FC = () => {
               );
               await RNFS.copyFile(snapshotTmpUrl, snapshotUrl);
               const { errCode } = await apis.racetrack.save({
-                name: racetrackName,
+                name: validRacetrackName,
                 tracksector: sections
                   .map(section =>
                     section.map(point => point.join(',')).join(','),

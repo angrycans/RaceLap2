@@ -26,8 +26,9 @@ export async function save(params: SaveUserParam): Promise<ApiRes<void>> {
       } else {
         // 更新用户信息
         await db.executeSql(
-          `UPDATE ${DBTableName.USER} SET ${userInfokeys.map(key => `${key} = ?`).join(',')} WHERE id = ${id}`,
-          userInfoValues
+          `UPDATE ${DBTableName.USER} SET id = ?,${userInfokeys.map(key => `${key} = ?`).join(',')} WHERE id = ${id}`,
+          // TODO: 后期改成线上
+          [`id-${Date.now()}`, ...userInfoValues]
         );
       }
     }
@@ -48,7 +49,7 @@ export async function save(params: SaveUserParam): Promise<ApiRes<void>> {
   }
 }
 
-interface GetUserListParam extends Partial<Pick<User, 'id'>> { }
+interface GetUserListParam extends Partial<User> { }
 
 /**
  * 获取用户列表

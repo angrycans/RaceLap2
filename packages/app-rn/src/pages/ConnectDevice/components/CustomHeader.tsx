@@ -9,8 +9,8 @@ export const CustomHeader: FC = () => {
   return (
     <View style={styles.wrapper}>
       <Button
-        containerStyle={styles.backBtn}
         type="clear"
+        containerStyle={styles.backBtn}
         title={<Text color="#fff">返回</Text>}
         icon={<Icon type="antdesign" color="#fff" name="left" size={22} />}
         onPress={() => navigation.goBack()}

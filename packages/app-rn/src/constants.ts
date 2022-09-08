@@ -39,8 +39,6 @@ export const enum RouteName {
 export const enum AsyncStorageKey {
   /** 是否已经同意用户协议 */
   IS_AGRESS_USER_AGREEMENT = 'ASYNC_STORAGE:IS_AGRESS_USER_AGREEMENT',
-  /** web 资源版本 */
-  // WEB_BUNDLE_VERSION = 'ASYNC_STORAGE:WEB_BUNDLE_VERSION',
   /** web 资源检查变更内容 */
   WEB_BUNDLE_CHECK_CONTENT = 'ASYNC_STORAGE:WEB_BUNDLE_CHECK_CONTENT',
 }
