@@ -26,4 +26,6 @@ export const enum EventName {
 export const enum WebRouteName {
   /** 新增赛道 */
   NEW_RACETRACK = 'new-racetrack',
+  /** 比赛记录详情柱状图 */
+  RECORD_DETAIL_BAR_CHART = 'record-detail-bar-chart',
 }

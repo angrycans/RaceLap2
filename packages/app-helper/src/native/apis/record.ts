@@ -9,23 +9,24 @@ interface SaveRecordParam extends Partial<Record> { }
  * 保存用户信息
  * @param params
  */
-export async function save(params: SaveRecordParam): Promise<ApiRes<void>> {
+export async function save(params: SaveRecordParam): Promise<ApiRes<number>> {
   try {
     const { id, ...rest } = params;
     const recordInfoEntries = Object.entries(rest).filter(([, value]) => typeof value !== 'undefined');
     const recordInfokeys = recordInfoEntries.map(([key]) => key);
     const recordInfoValues = recordInfoEntries.map(([, value]) => value);
     const db = await getDB();
+    let updateRowId: number | null = null;
     if (recordInfokeys.length) {
       if (typeof id === 'undefined') {
-        // 新增用户
-        await db.executeSql(
+        // 新增信息
+        [{ insertId: updateRowId }] = await db.executeSql(
           `INSERT INTO ${DBTableName.RECORD} (${recordInfokeys.join(',')}) VALUES(${recordInfoValues.map(() => '?').join(',')})`,
           recordInfoValues
         );
       } else {
-        // 更新用户信息
-        await db.executeSql(
+        // 更新信息
+        [{ insertId: updateRowId }] = await db.executeSql(
           `UPDATE ${DBTableName.RECORD} SET ${recordInfokeys.map(key => `${key} = ?`).join(',')} WHERE id = ${id}`,
           recordInfoValues
         );
@@ -34,7 +35,7 @@ export async function save(params: SaveRecordParam): Promise<ApiRes<void>> {
     return {
       errCode: 0,
       errMsg: '',
-      data: null,
+      data: updateRowId,
     };
   } catch (err) {
     console.log(err)

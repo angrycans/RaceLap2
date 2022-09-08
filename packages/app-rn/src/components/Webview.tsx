@@ -1,17 +1,18 @@
 import React, { type FC, useMemo, useRef, useEffect } from 'react';
 import type { WebViewSource } from 'react-native-webview/lib/WebViewTypes';
 import { WebView, WebViewProps } from 'react-native-webview';
-import RNFS from 'react-native-fs';
+// import RNFS from 'react-native-fs';
 import { WebRouteName } from '@/constants';
 import { getStorageRootPath } from '@/utils';
 import { enableWebview } from '@race-lap/app-helper/dist/native';
-import { Text } from '@/components';
+// import { Text } from '@/components';
 
 declare const WEBVIEW_BASE_URL: string;
 
 interface Props extends WebViewProps {
+  style: object;
   /** 页面名称 */
-  page: WebRouteName;
+  page: `${WebRouteName}${string}`;
 }
 
 const ORIGIN_WHITELIST = ['http://', 'https://', 'file://'];
@@ -63,8 +64,8 @@ export const Webview: FC<Props> = props => {
         }}
         {...rest}
       />
-      <Text>{source.uri}</Text>
-      <Text selectable>{storageRootPath}</Text>
+      {/* <Text>{source.uri}</Text> */}
+      {/* <Text selectable>{storageRootPath}</Text> */}
     </>
   );
 };

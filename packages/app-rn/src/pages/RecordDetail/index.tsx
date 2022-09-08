@@ -1,8 +1,15 @@
 import React, { type FC, useState, useMemo } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
-import { Text, Title, Table, FocusAwareStatusBar } from '@/components';
+import { useRequest, useAsyncEffect } from 'ahooks';
+import dayjs from 'dayjs';
+import RNFS from 'react-native-fs';
+import { apis } from '@race-lap/app-helper/dist/native';
+import { utils, WebRouteName } from '@race-lap/app-helper';
+import { Text, Title, Table, FocusAwareStatusBar, WebView } from '@/components';
+import { useRoute } from '@/hooks';
+import { RouteName } from '@/types';
 import type { Column, DataItemBase } from '@/components/Table';
-import Overview from './components/Overview';
+import Overview, { type OverviewInfo } from './components/Overview';
 
 interface DataItem extends DataItemBase {
   /** 唯一标识 */
@@ -20,51 +27,57 @@ interface DataItem extends DataItemBase {
 }
 
 export const RecordDetail: FC = () => {
-  const [data] = useState<DataItem[]>([
-    {
-      s1: '-',
-      s2: '-',
-      s3: '-',
-      sTime: '1:32.98',
-      delta: 0.34,
-      key: '1',
-    },
-    {
-      s1: '-',
-      s2: '-',
-      s3: '-',
-      delta: 0.34,
-      sTime: '1:32.98',
-      key: '2',
-    },
-    {
-      s1: '-',
-      s2: '-',
-      s3: '-',
-      delta: -1.34,
-      sTime: '1:32.98',
-      key: '3',
-    },
-    {
-      s1: '-',
-      s2: '-',
-      s3: '-',
-      delta: 0.34,
-      sTime: '1:32.98',
-      key: '4',
-    },
-  ]);
+  const {
+    params: { id },
+  } = useRoute<RouteName.RECORD_DETAIL>();
+  const [tableData, setTableData] = useState<DataItem[]>([]);
+  const { data: recordListRes } = useRequest(apis.record.getList, {
+    defaultParams: [{ id }],
+    refreshDeps: [id],
+  });
+
+  const record = recordListRes?.data?.[0];
+
+  const overviewInfo = useMemo<OverviewInfo>(() => {
+    if (!record) {
+      return {} as OverviewInfo;
+    } else {
+      const {
+        racetrackName,
+        username,
+        carrierName,
+        totalTime,
+        maxSpeed,
+        minCycleTime,
+        cycleNum,
+        avgSpeed,
+        avgCycleTime,
+      } = record;
+      return {
+        racetrackName,
+        username,
+        carrierName,
+        totalTime,
+        maxSpeed,
+        minCycleTime,
+        cycleNum,
+        avgSpeed,
+        avgCycleTime,
+      };
+    }
+  }, [record]);
+
   const columns = useMemo<Column<DataItem>[]>(
     () => [
       {
         title: '#',
         key: 'no',
         width: 20,
-        render: (_, record, idx) => (
+        render: (_, item, idx) => (
           <Text
             size={15}
             height={18}
-            color={record.delta < 0 ? '#FF9500' : '#000'}>
+            color={item.delta >= 0 ? '#000' : '#FF9500'}>
             {idx}
           </Text>
         ),
@@ -92,22 +105,25 @@ export const RecordDetail: FC = () => {
         key: 'sTime',
         width: 120,
         align: 'center',
-        render(val: string, record) {
+        render(val: string, item) {
+          const deltaFormat = utils.timeStampFormat(item.delta, 'hh:mm:ss.SS', {
+            autoClearZero: true,
+          });
           return (
             <>
               <Text
                 size={15}
                 height={18}
-                color={record.delta < 0 ? '#FF9500' : '#000'}>
+                color={item.delta < 0 ? '#FF9500' : '#000'}>
                 {val}
               </Text>
-              {!!record.delta && (
+              {!!item.delta && (
                 <Text
                   size={12}
                   height={18}
                   style={styles.deltaTips}
-                  color={record.delta < 0 ? '#34C759' : '#FF3B30'}>
-                  {record.delta > 0 ? `+${record.delta}` : record.delta}
+                  color={item.delta < 0 ? '#34C759' : '#FF3B30'}>
+                  {item.delta < 0 ? `-${deltaFormat}` : `+${deltaFormat}`}
                 </Text>
               )}
             </>
@@ -118,15 +134,59 @@ export const RecordDetail: FC = () => {
     [],
   );
 
+  const [startTime, startDate] = useMemo(
+    () =>
+      record?.startDate
+        ? [
+            dayjs(record.startDate).format('hh:mm'),
+            dayjs(record.startDate).format('YYYY.MM.DD'),
+          ]
+        : ['-', '-'],
+    [record?.startDate],
+  );
+
+  useAsyncEffect(async () => {
+    if (!record) {
+      return;
+    }
+    const { errCode, data: pathInfo } = await apis.path.getInfo();
+    if (errCode || !pathInfo) {
+      return;
+    }
+
+    const recordContentText = await RNFS.readFile(
+      `${pathInfo.recordRoot}/${record.fileId}`,
+    );
+
+    const { cycles } = utils.record.parseData(recordContentText);
+    let prevStime = cycles[0].timer;
+    setTableData(
+      cycles.map((cycle, idx) => ({
+        key: String(idx),
+        s1: '-',
+        s2: '-',
+        s3: '-',
+        delta: cycle.timer - prevStime,
+        sTime: utils.timeStampFormat(cycle.timer, 'hh:mm:ss.SS', {
+          autoClearZero: true,
+        }),
+      })),
+    );
+  }, [record]);
+
   return (
     <ScrollView>
       <FocusAwareStatusBar barStyle="dark-content" />
       <View style={styles.wrapper}>
-        <Title title="9:14" subtitle="2022.06.30" />
-        <Overview />
+        <Title title={startTime} subtitle={startDate} />
+        <Overview {...overviewInfo} />
         <Title title="详细数据" style={styles.title} />
-        <View style={styles.card} />
-        <Table columns={columns} data={data} />
+        <WebView
+          style={[styles.card, styles.barCharts]}
+          key={id}
+          page={`${WebRouteName.RECORD_DETAIL_BAR_CHART}/${id}`}
+        />
+        <Table columns={columns} data={tableData} />
         <Title title="回顾分析" style={styles.title} />
         <View style={styles.card} />
       </View>
@@ -148,6 +208,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginTop: 12,
     overflow: 'hidden',
+  },
+  barCharts: {
+    height: 180,
   },
   deltaTips: {
     position: 'absolute',

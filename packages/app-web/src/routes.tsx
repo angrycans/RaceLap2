@@ -40,6 +40,7 @@ const routeConfig: MyRouteConfig[] = [
   // 登录相关无需Layout 特殊处理
   { path: '/', name: '测试首页', component: () => import('./views/TestEntry'), },
   { path: `/${WebRouteName.NEW_RACETRACK}`, name: '测试首页', component: () => import('./views/NewRacetrack'), },
+  { path: `/${WebRouteName.RECORD_DETAIL_BAR_CHART}/:id`, name: '比赛记录详情柱状图', component: () => import('./views/RecordDetailBarChart'), },
   {
     element: <Layout />,
     children: [

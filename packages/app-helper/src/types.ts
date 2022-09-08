@@ -120,6 +120,8 @@ export interface Record extends Omit<RecordMeta, 'startDate'>, RecordDataOvervie
   racetrackId: number;
   /** 文件 ID (文件地址) */
   fileId: string;
+  /** 文件 hash */
+  fileHash: string;
   /** 文件大小 */
   fileSize: number;
   /** 文件开始时间 */

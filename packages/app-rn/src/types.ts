@@ -7,7 +7,7 @@ export interface RootStackParamList extends ParamListBase {
   [RouteName.USER_AGREEMENT]: undefined;
   [RouteName.HOME]: undefined;
   [RouteName.CONNECT_DEVICE]: undefined;
-  [RouteName.RECORD_DETAIL]: undefined;
+  [RouteName.RECORD_DETAIL]: { id: number };
   [RouteName.NEW_RACETRACK]: undefined;
   [RouteName.SET_DRIVER_NAME]: undefined;
   [RouteName.SELECT_CARRIER]: undefined;

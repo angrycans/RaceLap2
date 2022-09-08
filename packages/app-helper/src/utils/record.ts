@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import type { RecordMeta, RecordDataOverview } from '../types';
 import { parseLap } from './recordData/parseLap';
+dayjs.extend(customParseFormat);
 
 const metaShortKeyMap = {
   V: 'version',
@@ -11,6 +13,11 @@ const metaShortKeyMap = {
   H: 'hardwareVersion',
   B: 'firmwareVersion',
   T: 'racetrackName',
+  // sa
+  DID: 'userId',
+  SW: 'hardwareVersion',
+  S: 'racetrackName',
+  FMV: 'firmwareVersion'
 } as const;
 
 /**
@@ -52,24 +59,42 @@ interface RecordDataInfo extends RecordDataOverview {
  * @param content 对应记录文件内容
  */
 export function parseData(content: string): RecordDataInfo {
-  const pointContentText = content.match(/<point>([^<]+)<\/point>/)?.[1] || '';
+  let startDate = dayjs(content.match(/#D=([^=]+)=/)?.[1], 'MM-DD-YYYY HH:mm:ss');
+  // xld: <point>...<\/point>; sa: <trace #pt=6207>...</trace>
+  const pointContentText = (content.match(/<point>([^<]+)<\/point>/) || content.match(/<trace[^>]*>([^<]+)<\/trace>/))?.[1] || '';
   const data = pointContentText
+    .replaceAll(/[\r\n]+/g, ';')
     .split(';')
     .map(chunk => {
       chunk = chunk.trim();
       if (chunk) {
         const chunkItemList = chunk.split(',') as [number, ...string[]];
-        const rawTime = chunkItemList[0];
-        chunkItemList[0] = +dayjs(chunkItemList[0], 'YYYYMMDDHHmmssSSS', true)
-        chunkItemList.push(rawTime)
+        // xld col: 12; sa col: 11
+        if (chunkItemList.length < 12) {
+          // sa
+          chunkItemList.unshift(+startDate);
+          startDate = startDate.add(100, 'ms');
+        } else {
+          // xld
+          chunkItemList[0] = +dayjs(chunkItemList[0], 'YYYYMMDDHHmmssSSS', true);
+        }
         return chunkItemList
       }
     }).filter(Boolean) as [number, ...string[]][];
+  // xld: <tracksector>...<\/tracksector>; sa: <trackplan #sectors=8>...</trackplan>
+  const tracksectorContentText = (content.match(/<tracksector>([^<]+)<\/tracksector>/) || content.match(/<trackplan[^>]*>([^<]+)<\/trackplan>/))?.[1] || '';
 
-  const tracksectorContentText = content.match(/<tracksector>([^<]+)<\/tracksector>/)?.[1] || '';
   // parseLap 经纬度 反了
-  const [lat1, lng1, lat2, lng2] = tracksectorContentText.split(';').map(chunk => chunk.trim()).filter(Boolean)?.[0].split(',');
+  const [lat1, lng1, lat2, lng2] = tracksectorContentText
+    .replaceAll(/[\r\n]+/g, ';')
+    .split(';')
+    .map(chunk => chunk.trim())
+    .filter(Boolean)?.[0]
+    .split(',')
+    .slice(-4);
+
   const cycleInfoList: RaceCycle[] = parseLap(data, { lng1, lat1, lng2, lat2 });
+
   // 修复 经纬度 顺序
   cycleInfoList.forEach(cycle => cycle.intersectP.reverse())
   const totalTime = +dayjs(data[data.length - 1][0] - data[0][0]);
@@ -82,8 +107,8 @@ export function parseData(content: string): RecordDataInfo {
   return {
     totalTime,
     minCycleTime,
-    maxSpeed: String(maxSpeed),
-    avgSpeed: String(avgSpeed),
+    maxSpeed: String(+maxSpeed.toFixed(2)),
+    avgSpeed: String(+avgSpeed.toFixed(2)),
     avgCycleTime,
     cycleNum,
     cycles: cycleInfoList,

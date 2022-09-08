@@ -81,5 +81,42 @@
 	<true/>
 	<key>com.apple.developer.networking.wifi-info</key>
 	<true/>
+  <key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Text</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<!-- <string>public.text</string> -->
+				<string>public.sa</string>
+			</array>
+		</dict>
+	</array>
+  <key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>public.sa</string>
+			<key>UTTypeDescription</key>
+			<string>speedangle sa</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<!-- <string>public.text</string> -->
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>com.speedangle.filetype</key>
+				<string>sa</string>
+				<key>public.filename-extension</key>
+				<array>
+					<string>sa</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>

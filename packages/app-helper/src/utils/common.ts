@@ -44,6 +44,7 @@ interface TimeStampFormat {
  * @param format
  */
 export function timeStampFormat(timestamp: number, format: string, opts: TimeStampFormat = {}) {
+  timestamp = Math.abs(timestamp)
   const ms = timestamp % 1000;
   const s = timestamp / 1000 % 60 | 0;
   const m = timestamp / 1000 / 60 % 60 | 0;
@@ -59,8 +60,9 @@ export function timeStampFormat(timestamp: number, format: string, opts: TimeSta
     let prev = result;
     do {
       prev = result;
-      result = result.replace(/^0+\D+/, '')
+      result = result.replace(/^0+[^.\d]+/, '')
     } while (result !== prev)
+    result = result.replace(/^0{2,}/, '0').replace(/^0+([^0.]+)/, '$1');
   }
 
   return result;

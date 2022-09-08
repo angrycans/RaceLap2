@@ -38,6 +38,8 @@ export const RacetrackAndRecord: FC = () => {
   );
   const recordList = useMemo(() => recordListRes?.data || [], [recordListRes]);
 
+  console.log(recordList);
+
   useEffect(() => {
     if (isFocused) {
       getRacetrackList();
@@ -107,7 +109,9 @@ export const RacetrackAndRecord: FC = () => {
           key={record.id}
           buttonStyle={styles.noStyleClearBtn}
           type="clear"
-          onPress={() => navigation.navigate(RouteName.RECORD_DETAIL)}>
+          onPress={() =>
+            navigation.navigate(RouteName.RECORD_DETAIL, { id: record.id })
+          }>
           <View style={[styles.cardWrapper, styles.recordItem]}>
             <View style={styles.row}>
               <Text>

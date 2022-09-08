@@ -1,4 +1,5 @@
 import React, { type FC } from 'react';
+import { type Record, utils } from '@race-lap/app-helper';
 import {
   View,
   ImageBackground,
@@ -8,12 +9,37 @@ import {
 import { Text } from '@/components';
 import { PersonCropCircle, Bicycle } from '@/components/Icons/MonoIcons';
 
-interface Props {
+export interface OverviewInfo
+  extends Pick<
+    Record,
+    | 'racetrackName'
+    | 'username'
+    | 'carrierName'
+    | 'totalTime'
+    | 'maxSpeed'
+    | 'minCycleTime'
+    | 'cycleNum'
+    | 'avgSpeed'
+    | 'avgCycleTime'
+  > {}
+
+interface Props extends OverviewInfo {
   style?: ViewStyle;
 }
 
 export const Title: FC<Props> = props => {
-  const { style } = props;
+  const {
+    style,
+    racetrackName,
+    username,
+    carrierName,
+    totalTime,
+    maxSpeed,
+    minCycleTime,
+    cycleNum,
+    avgSpeed,
+    avgCycleTime,
+  } = props;
 
   return (
     <View style={[styles.wrapper, style]}>
@@ -24,7 +50,7 @@ export const Title: FC<Props> = props => {
             uri: 'https://www.kindacode.com/wp-content/uploads/2022/03/blue-sky.jpeg',
           }}>
           <Text numberOfLines={1} style={styles.racetrackName}>
-            聚宝山赛车场
+            {racetrackName || '未知'}
           </Text>
         </ImageBackground>
         <View style={styles.userInfo}>
@@ -35,7 +61,7 @@ export const Title: FC<Props> = props => {
               bold
               numberOfLines={1}
               style={styles.userInfoItemText}>
-              王大虫
+              {username || '未知'}
             </Text>
           </View>
           <View style={[styles.row, styles.userInfoItem]}>
@@ -45,7 +71,7 @@ export const Title: FC<Props> = props => {
               bold
               numberOfLines={1}
               style={styles.userInfoItemText}>
-              GX200
+              {carrierName || '未知'}
             </Text>
           </View>
         </View>
@@ -53,14 +79,14 @@ export const Title: FC<Props> = props => {
       <View style={[styles.row, styles.overview]}>
         <View style={styles.overviewItem}>
           <Text bold style={styles.overviewItemValue}>
-            00:08:23
+            {totalTime ? utils.timeStampFormat(totalTime, 'HH:mm:ss') : '-'}
           </Text>
           <Text style={styles.overviewItemLabel}>总成绩</Text>
         </View>
         <View style={styles.overviewItem}>
           <View style={[styles.row, styles.overviewItemValueWithUnit]}>
             <Text bold style={styles.overviewItemValue}>
-              89.9
+              {maxSpeed || '-'}
             </Text>
             <Text style={styles.overviewItemUnit}>mph</Text>
           </View>
@@ -68,7 +94,11 @@ export const Title: FC<Props> = props => {
         </View>
         <View style={styles.overviewItem}>
           <Text bold color="#FF9500" style={styles.overviewItemValue}>
-            00:08:23
+            {minCycleTime
+              ? utils.timeStampFormat(minCycleTime, 'HH:mm:ss.SSS', {
+                  autoClearZero: true,
+                })
+              : '-'}
           </Text>
           <Text style={styles.overviewItemLabel}>最短圈时</Text>
         </View>
@@ -76,14 +106,14 @@ export const Title: FC<Props> = props => {
       <View style={[styles.row, styles.overview]}>
         <View style={styles.overviewItem}>
           <Text bold style={styles.overviewItemValue}>
-            4
+            {cycleNum || '-'}
           </Text>
           <Text style={styles.overviewItemLabel}>圈数</Text>
         </View>
         <View style={styles.overviewItem}>
           <View style={[styles.row, styles.overviewItemValueWithUnit]}>
             <Text bold style={styles.overviewItemValue}>
-              50.1
+              {avgSpeed || '-'}
             </Text>
             <Text style={styles.overviewItemUnit}>mph</Text>
           </View>
@@ -91,7 +121,11 @@ export const Title: FC<Props> = props => {
         </View>
         <View style={styles.overviewItem}>
           <Text bold style={styles.overviewItemValue}>
-            1:32.98
+            {avgCycleTime
+              ? utils.timeStampFormat(avgCycleTime, 'HH:mm:ss.SSS', {
+                  autoClearZero: true,
+                })
+              : '-'}
           </Text>
           <Text style={styles.overviewItemLabel}>平均圈时</Text>
         </View>

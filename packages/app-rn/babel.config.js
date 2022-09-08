@@ -12,8 +12,8 @@ module.exports = {
     'react-native-reanimated/plugin',
     [
       "transform-define", {
-        // "WEBVIEW_BASE_URL": isDev ? `http://${address.ip()}:12345` : '/web.bundle/index.html',
-        "WEBVIEW_BASE_URL": '/web.bundle/index.html',
+        "WEBVIEW_BASE_URL": isDev ? `http://${address.ip()}:12345` : '/web.bundle/index.html',
+        // "WEBVIEW_BASE_URL": '/web.bundle/index.html',
         // "WEBVIEW_BASE_URL": `http://${address.ip()}:12345`,
       }
     ],
