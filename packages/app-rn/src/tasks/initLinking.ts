@@ -48,12 +48,8 @@ export function initLinking(opts: InitLinkingOptions) {
         avgCycleTime,
         cycleNum,
       } = utils.record.parseData(content);
-
-      await RNFS.copyFile(
-        urlInfo.filePath,
-        `${recordRoot}/${urlInfo.filename}`,
-      );
-
+      const filename = `${fileHash}.${urlInfo.ext}`;
+      await RNFS.copyFile(urlInfo.filePath, `${recordRoot}/${filename}`);
       const { errCode, data } = await apis.record.save({
         ...recordMeta,
         totalTime,
@@ -64,12 +60,12 @@ export function initLinking(opts: InitLinkingOptions) {
         cycleNum,
         fileHash,
         fileSize: size,
-        fileId: urlInfo.filename,
+        fileId: filename,
         racetrackId,
         startDate: +dayjs(startDate, 'MM-DD-YYYY HH:mm:ss'),
       });
 
-      if (!errCode) {
+      if (!errCode && data) {
         opts.navigateToDetail?.(data);
       }
     }

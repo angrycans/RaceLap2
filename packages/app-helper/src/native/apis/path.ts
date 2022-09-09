@@ -3,7 +3,9 @@ import { isErrorLike } from '../../utils';
 import { getFS } from '../utils';
 
 
-interface PathInfo {
+export interface PathInfo {
+  /** 文件存储根路径 */
+  root: string;
   /** 赛道文件根路径 */
   racetrackRoot: string;
   /** 比赛记录文件根路径 */
@@ -33,6 +35,7 @@ export async function getInfo(): Promise<ApiRes<PathInfo>> {
       errCode: 0,
       errMsg: '',
       data: {
+        root: storageRootPath,
         racetrackRoot,
         recordRoot
       }

@@ -10,15 +10,12 @@ import { useMount } from 'ahooks';
 import { apis } from '@race-lap/app-helper/dist/native';
 import { utils } from '@race-lap/app-helper';
 import { Text, FocusAwareStatusBar } from '@/components';
-import { getStorageRootPath } from '@/utils';
 import { device } from '@/apis';
 import { PersonalHotspotCircleFill } from '@/components/Icons/MonoIcons';
 import CustomHeader from './components/CustomHeader';
 import LoopCircle from './components/LoopCircle';
 
 interface Device {}
-
-const storageRootPath = getStorageRootPath();
 
 export const ConnectDevice: FC = () => {
   const navigation = useNavigation();
@@ -42,14 +39,11 @@ export const ConnectDevice: FC = () => {
           // 数据无变更
           return;
         }
-        const recordStorageRootPath = `${storageRootPath}/record`;
-        if (!(await RNFS.exists(recordStorageRootPath))) {
-          RNFS.mkdir(recordStorageRootPath);
-        }
+        const { data: pathInfo } = await apis.path.getInfo();
         const [, recordContent] = await Promise.all([
           RNFS.downloadFile({
             fromUrl: remoteRecordInfo.remotePath,
-            toFile: `${recordStorageRootPath}/${remoteRecordInfo.filename}`,
+            toFile: `${pathInfo!.recordRoot}/${remoteRecordInfo.filename}`,
           }).promise,
           fetch(remoteRecordInfo.remotePath).then(res => res.text()),
         ]);

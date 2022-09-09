@@ -10,7 +10,6 @@ import ViewShot from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
 import { useNavigation } from '@/hooks';
 import { Navigator, Text, FocusAwareStatusBar } from '@/components';
-import { getStorageRootPath } from '@/utils';
 import {
   TrackEndLine,
   TrackSection1,
@@ -43,7 +42,6 @@ const iconMap = {
   [SelectionType.SELECTION_2]: TrackSection2,
 };
 
-const storageRootPath = getStorageRootPath();
 export const NewRacetrack: FC = () => {
   const {
     theme: {
@@ -97,11 +95,10 @@ export const NewRacetrack: FC = () => {
                     ),
                   ),
                 );
-              const snapshotTmpUrl = await viewShotRef.current!.capture!();
-              const racetrackRoot = `${storageRootPath}/racetrack`;
-              if (!(await RNFS.exists(racetrackRoot))) {
-                await RNFS.mkdir(racetrackRoot);
-              }
+              const [snapshotTmpUrl, racetrackRoot] = await Promise.all([
+                viewShotRef.current!.capture!(),
+                apis.path.getInfo().then(res => res.data!.racetrackRoot),
+              ]);
               const snapshotUrl = snapshotTmpUrl.replace(
                 /[\s\S]*?\/([^/]+)$/,
                 `${racetrackRoot}/$1`,
@@ -114,7 +111,7 @@ export const NewRacetrack: FC = () => {
                     section.map(point => point.join(',')).join(','),
                   )
                   .join(';'),
-                snapshot: snapshotUrl,
+                snapshot: snapshotTmpUrl.replace(/[\s\S]*?\/([^/]+)$/, '$1'),
               });
               if (!errCode) {
                 navigationRef.current.goBack();

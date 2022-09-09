@@ -1,23 +1,25 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { unzip } from 'react-native-zip-archive';
 import RNFS from 'react-native-fs';
+import { apis } from '@race-lap/app-helper/dist/native';
 import { github } from '@/apis';
 import { AsyncStorageKey } from '@/constants';
-import { getStorageRootPath } from '@/utils';
-
-const storageRootPath = getStorageRootPath();
 
 /**
  * 同步 web.bundle
  */
 export async function syncWebBundle() {
+  const storageRootPath = (await apis.path.getInfo()).data?.root;
+  if (!storageRootPath) {
+    return;
+  }
   const webBundlePath = `${storageRootPath}/web.bundle`;
   try {
     const [release, checkContent] = await Promise.all([
       github.getLatestRelease(),
       AsyncStorage.getItem(AsyncStorageKey.WEB_BUNDLE_CHECK_CONTENT),
     ]);
-    const webBundleRemoteInfo = release.assets.find(item =>
+    const webBundleRemoteInfo = release.assets?.find(item =>
       item.name.startsWith('web.bundle'),
     );
 

@@ -1,8 +1,6 @@
 import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
 import type { RecordMeta, RecordDataOverview } from '../types';
 import { parseLap } from './recordData/parseLap';
-dayjs.extend(customParseFormat);
 
 const metaShortKeyMap = {
   V: 'version',

@@ -11,7 +11,11 @@ export function useInit() {
     initAMap();
     const unsubscribe = initLinking({
       navigateToDetail(id) {
-        navigationRef.current.navigate(RouteName.RECORD_DETAIL, { id });
+        navigationRef.current.navigate({
+          name: RouteName.RECORD_DETAIL,
+          params: { id },
+          key: `${RouteName.RECORD_DETAIL}-${Date.now()}-${id}`,
+        });
       },
     });
     return () => {

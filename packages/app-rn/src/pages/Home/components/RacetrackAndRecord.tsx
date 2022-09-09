@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, type FC } from 'react';
 import { View, ScrollView, ImageBackground, StyleSheet } from 'react-native';
 import { useRequest } from 'ahooks';
 import dayjs from 'dayjs';
-import { useNavigation } from '@/hooks';
+import { useNavigation, usePathInfo } from '@/hooks';
 import { Button } from '@rneui/themed';
 import { Text } from '@/components';
 import { RouteName } from '@/constants';
@@ -18,6 +18,7 @@ import { useIsFocused } from '@react-navigation/native';
 import Title from './Title';
 
 export const RacetrackAndRecord: FC = () => {
+  const pathInfo = usePathInfo();
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const { data: racetrackListRes, run: getRacetrackList } = useRequest(
@@ -37,8 +38,6 @@ export const RacetrackAndRecord: FC = () => {
     [racetrackListRes],
   );
   const recordList = useMemo(() => recordListRes?.data || [], [recordListRes]);
-
-  console.log(recordList);
 
   useEffect(() => {
     if (isFocused) {
@@ -87,7 +86,9 @@ export const RacetrackAndRecord: FC = () => {
               <ImageBackground
                 style={[styles.racetrackItemContentWrapper]}
                 source={{
-                  uri: racetrack.snapshot,
+                  uri:
+                    pathInfo?.racetrackRoot &&
+                    `${pathInfo.racetrackRoot}/${racetrack.snapshot}`,
                 }}>
                 {!idx ? (
                   <View style={styles.nearbyTag}>
