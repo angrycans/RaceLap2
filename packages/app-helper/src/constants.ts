@@ -28,4 +28,6 @@ export const enum WebRouteName {
   NEW_RACETRACK = 'new-racetrack',
   /** 比赛记录详情柱状图 */
   RECORD_DETAIL_BAR_CHART = 'record-detail-bar-chart',
+  /** 比赛记录详情回顾分析 */
+  RECORD_DETAIL_REVIEW_ANALYSIS = 'record-detail-review-analysis',
 }

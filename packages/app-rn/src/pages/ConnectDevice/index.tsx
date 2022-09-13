@@ -27,6 +27,7 @@ export const ConnectDevice: FC = () => {
     //   '88888888',
     //   false,
     // );
+    return;
 
     const remoteRecordInfoList = await device.getRecordInfoList();
     await Promise.all(

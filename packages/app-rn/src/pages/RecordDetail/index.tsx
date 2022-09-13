@@ -10,6 +10,7 @@ import { useRoute } from '@/hooks';
 import { RouteName } from '@/types';
 import type { Column, DataItemBase } from '@/components/Table';
 import Overview, { type OverviewInfo } from './components/Overview';
+import ReviewAnalysis from './components/ReviewAnalysis';
 
 interface DataItem extends DataItemBase {
   /** 唯一标识 */
@@ -175,22 +176,23 @@ export const RecordDetail: FC = () => {
   }, [record]);
 
   return (
-    <ScrollView>
+    <>
       <FocusAwareStatusBar barStyle="dark-content" />
-      <View style={styles.wrapper}>
-        <Title title={startTime} subtitle={startDate} />
-        <Overview {...overviewInfo} />
-        <Title title="详细数据" style={styles.title} />
-        <WebView
-          style={[styles.card, styles.barCharts]}
-          key={id}
-          page={`${WebRouteName.RECORD_DETAIL_BAR_CHART}/${id}`}
-        />
-        <Table columns={columns} data={tableData} />
-        <Title title="回顾分析" style={styles.title} />
-        <View style={styles.card} />
-      </View>
-    </ScrollView>
+      <ScrollView contentInsetAdjustmentBehavior="automatic">
+        <View style={styles.wrapper}>
+          <Title title={startTime} subtitle={startDate} />
+          <Overview {...overviewInfo} />
+          <Title title="详细数据" style={styles.title} />
+          <WebView
+            style={[styles.card, styles.barCharts]}
+            page={`${WebRouteName.RECORD_DETAIL_BAR_CHART}/${id}`}
+          />
+          <Table columns={columns} data={tableData} />
+          <Title title="回顾分析" style={styles.title} />
+          <ReviewAnalysis />
+        </View>
+      </ScrollView>
+    </>
   );
 };
 

@@ -7,11 +7,11 @@ import { readLocalFile } from '@/utils';
 import './index.module.less';
 
 const RecordDetailBarChart: FC = () => {
-  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const chartContainerRef = useRef<HTMLDivElement>(null);
   const { id } = useParams<Record<'id', string>>();
   useEffect(() => {
     if (!id) return;
-    const instance = echarts.init(mapContainerRef.current!);
+    const instance = echarts.init(chartContainerRef.current!);
     ;(async () => {
       instance.showLoading();
       const recordListRes = await apis.record.getList({ id: +id })
@@ -128,7 +128,7 @@ const RecordDetailBarChart: FC = () => {
 
   return (
     <div styleName="page-wrapper">
-      <div styleName="chart-container" ref={mapContainerRef} />
+      <div styleName="chart-container" ref={chartContainerRef} />
     </div>
   );
 };

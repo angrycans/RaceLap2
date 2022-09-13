@@ -9,7 +9,7 @@ import { enableWebview, apis } from '@race-lap/app-helper/dist/native';
 declare const WEBVIEW_BASE_URL: string;
 
 interface Props extends WebViewProps {
-  style: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
   /** 页面名称 */
   page: `${WebRouteName}${string}`;
 }
