@@ -189,7 +189,10 @@ export const RecordDetail: FC = () => {
           />
           <Table columns={columns} data={tableData} />
           <Title title="回顾分析" style={styles.title} />
-          <ReviewAnalysis />
+          <ReviewAnalysis
+            username={overviewInfo.username}
+            maxCycleNum={overviewInfo.cycleNum}
+          />
         </View>
       </ScrollView>
     </>

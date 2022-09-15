@@ -22,7 +22,7 @@ import {
 } from '@/components/Icons/MonoIcons';
 import { useNavigation, useAuth, useDeviceInfo } from '@/hooks';
 import { RouteName } from '@/constants';
-import { getNearestValue } from '@/utils';
+import { utils } from '@race-lap/app-helper';
 import Title from './Title';
 import { apis } from '@race-lap/app-helper/dist/native';
 
@@ -58,8 +58,9 @@ export const DriverAndDevice: FC = () => {
       return {
         battery: batteryVal,
         BatteryIcon:
-          batteryIconMap[getNearestValue(+batteryVal, [0, 25, 50, 75, 100])] ||
-          ClrBattery0,
+          batteryIconMap[
+            utils.getNearestValue(+batteryVal, [0, 25, 50, 75, 100])
+          ] || ClrBattery0,
       };
     } else {
       return {
@@ -72,7 +73,7 @@ export const DriverAndDevice: FC = () => {
   const { gpsStatusText, GPSIcon } = useMemo(() => {
     if (deviceInfo?.gps) {
       const gpsVal = (deviceInfo.gps * 100).toFixed(0);
-      const formatGPSVal = getNearestValue(+gpsVal, [33, 66, 100]);
+      const formatGPSVal = utils.getNearestValue(+gpsVal, [33, 66, 100]);
       return {
         gpsStatusText: gpsStatusTextMap[formatGPSVal],
         GPSIcon: gpsIconMap[formatGPSVal] || ClrWifi1,

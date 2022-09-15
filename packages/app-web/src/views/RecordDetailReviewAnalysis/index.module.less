@@ -3,5 +3,34 @@
   .map-wrapper {
     height: 100%;
     background-color: #fff;
+    :global {
+      // https://stackoverflow.com/questions/30320079/how-to-remove-mapbox-logo-from-bottom-left-corner
+      .mapbox-logo{
+        display: none;
+      }
+      .mapboxgl-ctrl-logo {
+        display: none !important;
+      }
+      .mapbox-improve-map {
+        display: none;
+      }
+      .mapboxgl-ctrl-compass {
+        display: none;
+      }
+    }
+    :global(.marker) {
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+  }
+  .map-slider-wrapper {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    .map-slider {
+
+    }
   }
 }

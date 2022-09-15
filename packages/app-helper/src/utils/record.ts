@@ -45,11 +45,13 @@ interface RaceCycle {
   timer: number;
 }
 
-interface RecordDataInfo extends RecordDataOverview {
+export interface RecordDataInfo extends RecordDataOverview {
   /** 圈信息 */
   cycles: RaceCycle[],
   /** 点信息 */
   data: [number, ...string[]][],
+  /** 赛道信息 */
+  racetracks: [number, number, number, number][],
 }
 
 /**
@@ -79,18 +81,9 @@ export function parseData(content: string): RecordDataInfo {
         return chunkItemList
       }
     }).filter(Boolean) as [number, ...string[]][];
-  // xld: <tracksector>...<\/tracksector>; sa: <trackplan #sectors=8>...</trackplan>
-  const tracksectorContentText = (content.match(/<tracksector>([^<]+)<\/tracksector>/) || content.match(/<trackplan[^>]*>([^<]+)<\/trackplan>/))?.[1] || '';
-
+  const racetracks = parseRacetrackData(content);
   // parseLap 经纬度 反了
-  const [lat1, lng1, lat2, lng2] = tracksectorContentText
-    .replaceAll(/[\r\n]+/g, ';')
-    .split(';')
-    .map(chunk => chunk.trim())
-    .filter(Boolean)?.[0]
-    .split(',')
-    .slice(-4);
-
+  const [lat1, lng1, lat2, lng2] = racetracks?.[racetracks.length - 1];
   const cycleInfoList: RaceCycle[] = parseLap(data, { lng1, lat1, lng2, lat2 });
 
   // 修复 经纬度 顺序
@@ -110,6 +103,22 @@ export function parseData(content: string): RecordDataInfo {
     avgCycleTime,
     cycleNum,
     cycles: cycleInfoList,
+    racetracks,
     data
   }
+}
+
+/**
+ * 解析赛道信息
+ * @param content
+ */
+export function parseRacetrackData(content: string) {
+  // xld: <tracksector>...<\/tracksector>; sa: <trackplan #sectors=8>...</trackplan>
+  const tracksectorContentText = (content.match(/<tracksector>([^<]+)<\/tracksector>/) || content.match(/<trackplan[^>]*>([^<]+)<\/trackplan>/))?.[1] || '';
+  return tracksectorContentText
+    .replaceAll(/[\r\n]+/g, ';')
+    .split(';')
+    .map(chunk => chunk.trim())
+    .filter(Boolean)
+    .map(chunk => chunk.split(',').slice(-4).map(Number) as [number, number, number, number]);
 }
