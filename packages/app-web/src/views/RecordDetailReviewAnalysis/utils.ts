@@ -5,8 +5,6 @@ import { utils } from '@race-lap/app-helper';
 import { range } from 'lodash';
 
 
-/** 极值扫描区域 */
-const EXTREME_SCAN_AREA = 1;
 const MAX_SPEED_SHAKE_IGNORE = 0.1;
 const MAX_COLOR_DEGREES = 120;
 const MAX_SPEED_SHAKE = 0.001;

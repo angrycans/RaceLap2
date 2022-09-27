@@ -1,10 +1,11 @@
-import { type FC, useEffect } from 'react';
+import { type FC, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { chunk } from 'lodash';
 import mapboxgl from 'mapbox-gl';
 import { Slider } from 'antd-mobile';
+import { Icon } from '@/components';
 import { generateSpeedColorGradient, generateBrakingColorGradient, getCenter, getLineGeoJSON, type ColorGradientInfo } from './utils';
-import { useInitMap, useGetData } from './hooks';
+import { useInitMap, useGetData, usePreventDefault } from './hooks';
 import './index.module.less';
 
 const colorGradientGeneratorMap: Record<string, (list: [number, ...string[]][]) => ColorGradientInfo> = {
@@ -20,6 +21,7 @@ const SOURCE_RACETRACK_ID = 'source-racetrack';
 const LAYER_RACETRACK_ID = 'layer-racetrack';
 
 const RecordDetailReviewAnalysis: FC = () => {
+  const mapSliderWrapperRef = usePreventDefault('touchmove');
   const { mapRef, mapContainerRef, loadPromise } = useInitMap();
   const { id, type, cycleNo } = useParams<Record<'id' | 'type' | 'cycleNo', string>>();
   const { data, racetrack } = useGetData(id, cycleNo);
@@ -97,8 +99,9 @@ const RecordDetailReviewAnalysis: FC = () => {
   return (
     <div styleName="page-wrapper">
       <div styleName="map-wrapper" ref={mapContainerRef} />
-      <div styleName="map-slider-wrapper">
-        
+      <div styleName="map-slider-wrapper" ref={mapSliderWrapperRef}>
+        <Icon name='play-circle-fill' fontSize={24} color='#fff' />
+        <Icon name='pause-circle-fill' fontSize={24} color='#fff' />
         <Slider
           styleName="map-slider"
           defaultValue={40}

@@ -1,6 +1,6 @@
 import { useContext, useRef, useCallback } from 'react';
 import { appContext } from '@/context';
-import { apis } from '@race-lap/app-helper/dist/native';
+import { getAuthInfo } from '@/utils';
 
 /** 获取当前用户的 auth */
 export function useAuth() {
@@ -9,18 +9,16 @@ export function useAuth() {
   updateRef.current = update;
 
   const refresh = useCallback(async () => {
-    const { errCode, errMsg, data } = await apis.user.getList();
-    if (errCode) {
-      console.error(errMsg);
-      return;
-    }
-
-    const nextAuthInfo = data?.[0];
-    if (nextAuthInfo) {
-      updateRef.current?.(appCtx => ({
-        ...appCtx,
-        auth: nextAuthInfo,
-      }));
+    try {
+      const nextAuth = await getAuthInfo();
+      if (nextAuth) {
+        updateRef.current?.(appCtx => ({
+          ...appCtx,
+          auth: nextAuth,
+        }));
+      }
+    } catch (err) {
+      console.log(err);
     }
   }, []);
 

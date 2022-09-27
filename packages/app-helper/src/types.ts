@@ -1,5 +1,6 @@
+import type { ObjAddStrKeyPrefix } from 'todash';
 import type NSSQLite from 'react-native-sqlite-storage';
-import type { EventName } from './constants';
+import type { EventName, CarrierType } from './constants';
 
 export { NSSQLite }
 
@@ -38,7 +39,7 @@ export interface ApiRes<T = unknown> {
 }
 
 /** 用户信息 */
-export interface User {
+export interface UserBase {
   /** 唯一 id */
   id: string;
   /** 用户名 */
@@ -49,6 +50,10 @@ export interface User {
   racetrackId: number;
 }
 
+export interface User extends UserBase, ObjAddStrKeyPrefix<Carrier, 'carrier'> {
+
+}
+
 /** 载具信息 */
 export interface Carrier {
   /** 唯一 id */
@@ -56,7 +61,7 @@ export interface Carrier {
   /** 载具名称 */
   name: string;
   /** 载具类型 */
-  type: string;
+  type: CarrierType;
 }
 
 /** 赛道信息 */

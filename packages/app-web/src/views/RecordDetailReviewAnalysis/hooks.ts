@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { TouchEventHandler, useEffect, useMemo, useRef, useState, } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { apis } from '@race-lap/app-helper/dist/web';
 import { utils } from '@race-lap/app-helper';
@@ -70,4 +70,28 @@ export function useGetData(id?: string, cycleNo?: string) {
       racetrack: dataInfo?.racetracks?.[dataInfo?.racetracks.length - 1]
     }
   }, [dataInfo, cycleNo])
+}
+
+/**
+ * 阻止指定节点的默认事件行为
+ * @param eventName 事件名称
+ */
+export function usePreventDefault<EventName extends keyof HTMLElementEventMap>(eventName: EventName) {
+  const elementRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!elementRef.current) throw new Error(`Mssing Element Node !`);
+    const eventHandle = (ev: HTMLElementEventMap[EventName]) => {
+      ev.preventDefault();
+    }
+
+    elementRef.current.addEventListener(eventName, eventHandle, { passive: false });
+
+    return () => {
+      elementRef.current?.removeEventListener(eventName, eventHandle);
+    }
+  }, [eventName]);
+
+  // 很神奇 HTMLElement HTMLDivElement 竟然不兼容
+  return elementRef as  React.RefObject<any>;
 }

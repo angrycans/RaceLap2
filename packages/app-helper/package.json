@@ -33,9 +33,11 @@
     "@turf/turf": "^6.5.0",
     "@types/react": "^18.0.18",
     "@types/react-native-sqlite-storage": "^5.0.2",
+    "change-case": "^4.1.2",
     "mitt": "^3.0.0",
     "react-native": "^0.69.5",
     "react-native-fs": "^2.20.0",
-    "react-native-webview": "^11.23.0"
+    "react-native-webview": "^11.23.0",
+    "todash": "^2.4.0"
   }
 }

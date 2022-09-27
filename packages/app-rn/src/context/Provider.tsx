@@ -5,7 +5,7 @@ import React, {
   useMemo,
 } from 'react';
 import { useMount } from 'ahooks';
-import { apis } from '@race-lap/app-helper/dist/native';
+import { getAuthInfo } from '@/utils';
 import { Provider, defaultContextValue } from './context';
 
 export const AppProvider: FC<PropsWithChildren> = props => {
@@ -19,18 +19,17 @@ export const AppProvider: FC<PropsWithChildren> = props => {
   );
 
   useMount(async () => {
-    const { errCode, errMsg, data } = await apis.user.getList();
-    if (errCode) {
-      console.error(errMsg);
-      return;
-    }
+    try {
+      const nextAuthInfo = await getAuthInfo();
 
-    const nextAuthInfo = data?.[0];
-    if (nextAuthInfo) {
-      setCtx(appCtx => ({
-        ...appCtx,
-        auth: nextAuthInfo,
-      }));
+      if (nextAuthInfo) {
+        setCtx(appCtx => ({
+          ...appCtx,
+          auth: nextAuthInfo,
+        }));
+      }
+    } catch (err) {
+      console.error(err);
     }
   });
 

@@ -1,9 +1,10 @@
-import type { User, ApiRes } from '../../types';
+import { camelCase } from "change-case";
+import type { UserBase, User, Carrier, ApiRes } from '../../types';
 import { getDB } from '../utils';
 import { isErrorLike } from '../../utils';
 import { DBTableName } from '../../constants';
 
-interface SaveUserParam extends Partial<User> { }
+interface SaveUserParam extends Partial<UserBase> { }
 
 /**
  * 保存用户信息
@@ -20,15 +21,15 @@ export async function save(params: SaveUserParam): Promise<ApiRes<void>> {
       if (typeof id === 'undefined') {
         // 新增用户
         await db.executeSql(
-          `INSERT INTO ${DBTableName.USER} (${userInfokeys.join(',')}) VALUES(${userInfoValues.map(() => '?').join(',')})`,
-          userInfoValues
+          `INSERT INTO ${DBTableName.USER} (id,${userInfokeys.join(',')}) VALUES(?,${userInfoValues.map(() => '?').join(',')})`,
+          [`id-${Date.now()}`, ...userInfoValues]
         );
       } else {
         // 更新用户信息
         await db.executeSql(
-          `UPDATE ${DBTableName.USER} SET id = ?,${userInfokeys.map(key => `${key} = ?`).join(',')} WHERE id = ${id}`,
+          `UPDATE ${DBTableName.USER} SET ${userInfokeys.map(key => `${key} = ?`).join(',')} WHERE id = ?`,
           // TODO: 后期改成线上
-          [`id-${Date.now()}`, ...userInfoValues]
+          [...userInfoValues, id]
         );
       }
     }
@@ -49,7 +50,7 @@ export async function save(params: SaveUserParam): Promise<ApiRes<void>> {
   }
 }
 
-interface GetUserListParam extends Partial<User> { }
+interface GetUserListParam extends Partial<UserBase> { }
 
 /**
  * 获取用户列表
@@ -63,9 +64,13 @@ export async function getList(params: GetUserListParam = {}): Promise<ApiRes<Use
     const hasCondition = !!userInfokeys.length;
     const db = await getDB();
 
-    // 更新用户信息
+    const carrierSelectSql = (['name', 'type'] as (keyof Carrier)[])
+      .map(key => `C.${key} AS ${camelCase(`${DBTableName.CARRIER}_${key}`)}`)
+      .join(',')
+
+    // 查询用户列表
     const [result] = await db.executeSql(
-      `SELECT * FROM ${DBTableName.USER}${hasCondition ? ' WHERE' : ''} ${userInfokeys.map(key => `${key} = ?`).join(' AND ')} `,
+      `SELECT U.*,${carrierSelectSql} FROM ${DBTableName.USER} AS U LEFT OUTER JOIN ${DBTableName.CARRIER} C ON U.carrierId = C.id ${hasCondition ? ' WHERE' : ''} ${userInfokeys.map(key => `U.${key} = ?`).join(' AND ')} `,
       userInfoValues
     );
 

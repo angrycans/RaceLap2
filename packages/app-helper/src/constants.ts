@@ -31,3 +31,21 @@ export const enum WebRouteName {
   /** 比赛记录详情回顾分析 */
   RECORD_DETAIL_REVIEW_ANALYSIS = 'record-detail-review-analysis',
 }
+
+/** 当前支持的载具类型 */
+export const enum CarrierType {
+  /** 未知 */
+  UNKNOWN = 'UNKNOWN',
+  /** 滑冰鞋 */
+  ROLLER_SKATING = 'ROLLER_SKATING',
+  /** 自行车 */
+  BICYCLE = 'BICYCLE',
+  /** 小型摩托车 */
+  SCOOTER = 'SCOOTER',
+  /** 小型赛车 */
+  KART = 'KART',
+  /** 野外摩托车 */
+  DIRT_BIKE = 'DIRT_BIKE',
+  /** 赛车 */
+  RACE_CAR = 'RACE_CAR',
+}

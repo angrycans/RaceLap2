@@ -122,7 +122,7 @@ export const DriverAndDevice: FC = () => {
             icon={<QuestionmarkCircle width={22} />}
             title={
               <Text style={styles.btnTitle} color="primary" bold>
-                未选择载具
+                {auth?.carrierName || '未选择载具'}
               </Text>
             }
             onPress={() => navigation.navigate(RouteName.SELECT_CARRIER)}

@@ -10,7 +10,8 @@
     "start": "cross-env PORT=12345 craco start",
     "build": "cross-env craco build",
     "clean": "rimraf build",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "figma:export": "cross-env FIGMA_TOKEN=figd_YBI2voGsIBTVHcUOhglyoz4BPNhN79rIwO4TtRj1 ts-node ./node_modules/@figma-export/cli/bin/run use-config .figmaexportrc.ts"
   },
   "keywords": [],
   "author": "OF3808",
@@ -47,6 +48,8 @@
     "@craco/craco": "^6.4.5",
     "@dr.pogodin/babel-plugin-react-css-modules": "6.8.0",
     "@dr2009/craco-less": "^1.21.3",
+    "@figma-export/cli": "^4.4.0",
+    "@figma-export/output-components-as-svgstore": "^4.4.0",
     "@types/color": "^3.0.3",
     "@types/fs-extra": "^9.0.13",
     "@types/lodash": "^4.14.185",
@@ -66,6 +69,7 @@
     "postcss-less": "6.0.0",
     "react-scripts": "^5.0.1",
     "rimraf": "^3.0.2",
+    "ts-node": "^10.9.1",
     "typescript": "^4.6.4"
   },
   "browserslist": {
