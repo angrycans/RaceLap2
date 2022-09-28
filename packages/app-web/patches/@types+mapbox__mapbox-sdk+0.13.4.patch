@@ -1,0 +1,13 @@
+diff --git a/node_modules/@types/mapbox__mapbox-sdk/index.d.ts b/node_modules/@types/mapbox__mapbox-sdk/index.d.ts
+index 4b30d2e..3d5670e 100755
+--- a/node_modules/@types/mapbox__mapbox-sdk/index.d.ts
++++ b/node_modules/@types/mapbox__mapbox-sdk/index.d.ts
+@@ -964,7 +964,7 @@ declare module '@mapbox/mapbox-sdk/services/geocoding' {
+         /**
+          * An array in the form [ longitude,latitude ] at the center of the specified  bbox .
+          */
+-        center: number[];
++        center: [number, number];
+         /**
+          * An object describing the spatial geometry of the returned feature
+          */

@@ -1,0 +1,51 @@
+.page-wrapper {
+  height: 100%;
+  .map-wrapper {
+    height: 100%;
+    background-color: #fff;
+    :global {
+      // https://stackoverflow.com/questions/30320079/how-to-remove-mapbox-logo-from-bottom-left-corner
+      .mapbox-logo{
+        display: none;
+      }
+      .mapboxgl-ctrl-logo {
+        display: none !important;
+      }
+      .mapbox-improve-map {
+        display: none;
+      }
+      .mapboxgl-ctrl-compass {
+        display: none;
+      }
+    }
+    :global(.marker) {
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+  }
+  .map-slider-wrapper {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    background-color: fade(#000, 50%);
+    border-radius: 8px;
+    padding: 5px 2px 5px 5px;
+    .map-slider {
+      flex: 1;
+      padding: 0 8px;
+      :global(.adm-slider-thumb-container) {
+        width: 18px;
+        height: 18px;
+        :global(.adm-slider-thumb) {
+          margin: 0;
+          width: 18px;
+          height: 18px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+name: iOS starter workflow
+
+on:
+  workflow_dispatch:
+  release:
+    type: [published]
+
+jobs:
+  ios-build:
+    name: IOS Production Build
+    runs-on: macos-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install && npx lerna bootstrap
+
+      - name: Setup Ruby (bundle)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+          bundler-cache: true
+
+      - name: Build IOS App
+        uses: yukiarrr/ios-build-action@v1.5.0
+        with:
+          project-path: packages/app-rn/ios/RaceLap.xcodeproj
+          p12-base64: ${{ secrets.IOS_P12_BASE64 }}
+          mobileprovision-base64: ${{ secrets.IOS_MOBILE_PROVISION_BASE64 }}
+          code-signing-identity: 'All Distribution'
+          team-id: ${{ secrets.IOS_TEAM_ID }}
+          certificate-password: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          workspace-path: packages/app-rn/ios/RaceLap.xcworkspace
+          scheme: RaceLap
+
+      - name: 'Upload app to TestFlight'
+        uses: apple-actions/upload-testflight-build@v1
+        with:
+          app-path: 'output.ipa'
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}

@@ -1,0 +1,13 @@
+diff --git a/node_modules/@figma-export/output-components-as-svgr/dist/index.js b/node_modules/@figma-export/output-components-as-svgr/dist/index.js
+index f19dd29..e46f425 100644
+--- a/node_modules/@figma-export/output-components-as-svgr/dist/index.js
++++ b/node_modules/@figma-export/output-components-as-svgr/dist/index.js
+@@ -39,7 +39,7 @@ module.exports = ({ output, getDirname = (options) => `${options.pageName}${path
+                 fs.writeFileSync(path.resolve(filePath, reactComponentFilename), jsCode);
+             });
+             Object.entries(indexFile).forEach(([filePath, index]) => {
+-                fs.writeFileSync(path.resolve(filePath, `index${index.ext}`), index.exports.join('\n'));
++                fs.writeFileSync(path.resolve(filePath, `index${index.ext}`), index.exports.concat('').join('\n'));
+             });
+         });
+     });
