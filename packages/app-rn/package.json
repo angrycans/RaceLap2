@@ -6,6 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "release": "cross-env RCT_NO_LAUNCH_PACKAGER=\"\" react-native run-ios --configuration Release",
+    "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'",
     "start": "react-native start --reset-cache",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "figma:export": "cross-env FIGMA_TOKEN=figd_YBI2voGsIBTVHcUOhglyoz4BPNhN79rIwO4TtRj1 ts-node ./node_modules/@figma-export/cli/bin/run use-config .figmaexportrc.ts",
