@@ -6,6 +6,23 @@
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>RaceLap</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Text</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.sa</string>
+			</array>
+		</dict>
+	</array>
+  <key>UISupportsDocumentBrowser</key>
+  <true/>
+  <key>LSSupportsOpeningDocumentsInPlace</key>
+  <true/>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -28,12 +45,12 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>localhost</key>
+			<key>172.19.8.106</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
 			</dict>
-      <key>172.19.8.106</key>
+			<key>localhost</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
@@ -77,36 +94,17 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>com.apple.developer.networking.HotspotConfiguration</key>
-	<true/>
-	<key>com.apple.developer.networking.wifi-info</key>
-	<true/>
-  <key>CFBundleDocumentTypes</key>
+	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
-			<key>CFBundleTypeName</key>
-			<string>Text</string>
-			<key>LSHandlerRank</key>
-			<string>Alternate</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<!-- <string>public.text</string> -->
-				<string>public.sa</string>
-			</array>
-		</dict>
-	</array>
-  <key>UTExportedTypeDeclarations</key>
-	<array>
-		<dict>
-			<key>UTTypeIdentifier</key>
-			<string>public.sa</string>
-			<key>UTTypeDescription</key>
-			<string>speedangle sa</string>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<!-- <string>public.text</string> -->
 				<string>public.data</string>
 			</array>
+			<key>UTTypeDescription</key>
+			<string>speedangle sa</string>
+			<key>UTTypeIdentifier</key>
+			<string>public.sa</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>com.speedangle.filetype</key>
@@ -118,5 +116,9 @@
 			</dict>
 		</dict>
 	</array>
+	<key>com.apple.developer.networking.HotspotConfiguration</key>
+	<true/>
+	<key>com.apple.developer.networking.wifi-info</key>
+	<true/>
 </dict>
 </plist>
