@@ -6,43 +6,86 @@ index 0000000..361f5fb
 @@ -0,0 +1 @@
 +export RCT_METRO_PORT=8081
 diff --git a/node_modules/react-native/scripts/react-native-xcode.sh b/node_modules/react-native/scripts/react-native-xcode.sh
-index 6f95a29..d28f50f 100755
+index 6f95a29..00e1e49 100755
 --- a/node_modules/react-native/scripts/react-native-xcode.sh
 +++ b/node_modules/react-native/scripts/react-native-xcode.sh
-@@ -148,6 +148,32 @@ if [[ $USE_HERMES == true && $DEV == false ]]; then
+@@ -32,29 +32,31 @@ if [[ "$SKIP_BUNDLING" ]]; then
+   exit 0;
+ fi
+ 
+-case "$CONFIGURATION" in
+-  *Debug*)
+-    if [[ "$PLATFORM_NAME" == *simulator ]]; then
+-      if [[ "$FORCE_BUNDLING" ]]; then
+-        echo "FORCE_BUNDLING enabled; continuing to bundle."
+-      else
+-        echo "Skipping bundling in Debug for the Simulator (since the packager bundles for you). Use the FORCE_BUNDLING flag to change this behavior."
+-        exit 0;
+-      fi
+-    else
+-      echo "Bundling for physical device. Use the SKIP_BUNDLING flag to change this behavior."
+-    fi
+-
+-    DEV=true
+-    ;;
+-  "")
+-    echo "$0 must be invoked by Xcode"
+-    exit 1
+-    ;;
+-  *)
+-    DEV=false
+-    ;;
+-esac
++echo "CONFIGURATION->> $CONFIGURATION"
++
++# case "$CONFIGURATION" in
++#   *Debug*)
++#     if [[ "$PLATFORM_NAME" == *simulator ]]; then
++#       if [[ "$FORCE_BUNDLING" ]]; then
++#         echo "FORCE_BUNDLING enabled; continuing to bundle."
++#       else
++#         echo "Skipping bundling in Debug for the Simulator (since the packager bundles for you). Use the FORCE_BUNDLING flag to change this behavior."
++#         exit 0;
++#       fi
++#     else
++#       echo "Bundling for physical device. Use the SKIP_BUNDLING flag to change this behavior."
++#     fi
++
++#     DEV=true
++#     ;;
++#   "")
++#     echo "$0 must be invoked by Xcode"
++#     exit 1
++#     ;;
++#   *)
++#     DEV=false
++#     ;;
++# esac
+ 
+ # Path to react-native folder inside node_modules
+ REACT_NATIVE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+@@ -148,6 +150,20 @@ if [[ $USE_HERMES == true && $DEV == false ]]; then
    EXTRA_ARGS="$EXTRA_ARGS --minify false"
  fi
  
-+echo "NODE_BINARY-> $NODE_BINARY";
-+echo "NODE_ARGS-> $NODE_ARGS";
-+echo "CLI_PATH-> $CLI_PATH";
-+echo "BUNDLE_COMMAND-> $BUNDLE_COMMAND";
-+echo "CONFIG_ARG-> $CONFIG_ARG";
-+echo "ENTRY_FILE-> $ENTRY_FILE";
-+echo "BUNDLE_PLATFORM-> $BUNDLE_PLATFORM";
-+echo "DEV-> $DEV";
-+echo "BUNDLE_FILE-> $BUNDLE_FILE";
-+echo "DEST-> $DEST";
-+echo "EXTRA_ARGS-> $EXTRA_ARGS";
-+echo "EXTRA_PACKAGER_ARGS-> $EXTRA_PACKAGER_ARGS";
-+
-+exit 2;
-+
-+"$NODE_BINARY" $NODE_ARGS "$CLI_PATH" $BUNDLE_COMMAND \
-+  $CONFIG_ARG \
-+  --entry-file "$ENTRY_FILE" \
-+  --platform "$BUNDLE_PLATFORM" \
-+  --dev $DEV \
-+  --reset-cache \
-+  --bundle-output "$BUNDLE_FILE" \
-+  --assets-dest "$DEST" \
-+  $EXTRA_ARGS \
-+  $EXTRA_PACKAGER_ARGS;
++# echo "NODE_BINARY-> $NODE_BINARY";
++# echo "NODE_ARGS-> $NODE_ARGS";
++# echo "CLI_PATH-> $CLI_PATH";
++# echo "BUNDLE_COMMAND-> $BUNDLE_COMMAND";
++# echo "CONFIG_ARG-> $CONFIG_ARG";
++# echo "ENTRY_FILE-> $ENTRY_FILE";
++# echo "BUNDLE_PLATFORM-> $BUNDLE_PLATFORM";
++# echo "DEV-> $DEV";
++# echo "BUNDLE_FILE-> $BUNDLE_FILE";
++# echo "DEST-> $DEST";
++# echo "EXTRA_ARGS-> $EXTRA_ARGS";
++# echo "EXTRA_PACKAGER_ARGS-> $EXTRA_PACKAGER_ARGS";
++# exit 2;
 +
  "$NODE_BINARY" $NODE_ARGS "$CLI_PATH" $BUNDLE_COMMAND \
    $CONFIG_ARG \
    --entry-file "$ENTRY_FILE" \
-@@ -157,7 +183,7 @@ fi
+@@ -157,7 +173,7 @@ fi
    --bundle-output "$BUNDLE_FILE" \
    --assets-dest "$DEST" \
    $EXTRA_ARGS \
