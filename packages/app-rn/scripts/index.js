@@ -1,5 +1,5 @@
-console.log('Test: env -------------->');
+console.error('Test: env -------------->');
 
-console.log(process.env);
+console.error('process.env --->', process.env);
 
-console.log('Test: env: end -------------->');
+console.error('Test: env: end -------------->');
