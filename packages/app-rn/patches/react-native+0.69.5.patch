@@ -6,13 +6,18 @@ index 0000000..361f5fb
 @@ -0,0 +1 @@
 +export RCT_METRO_PORT=8081
 diff --git a/node_modules/react-native/scripts/react-native-xcode.sh b/node_modules/react-native/scripts/react-native-xcode.sh
-index 6f95a29..00e1e49 100755
+index 6f95a29..475bece 100755
 --- a/node_modules/react-native/scripts/react-native-xcode.sh
 +++ b/node_modules/react-native/scripts/react-native-xcode.sh
-@@ -32,29 +32,31 @@ if [[ "$SKIP_BUNDLING" ]]; then
-   exit 0;
+@@ -27,34 +27,36 @@ if [[ "$CONFIGURATION" = *Debug* && ! "$PLATFORM_NAME" == *simulator ]]; then
+   echo "$IP" > "$DEST/ip.txt"
  fi
  
+-if [[ "$SKIP_BUNDLING" ]]; then
+-  echo "SKIP_BUNDLING enabled; skipping."
+-  exit 0;
+-fi
+-
 -case "$CONFIGURATION" in
 -  *Debug*)
 -    if [[ "$PLATFORM_NAME" == *simulator ]]; then
@@ -36,6 +41,11 @@ index 6f95a29..00e1e49 100755
 -    DEV=false
 -    ;;
 -esac
++# if [[ "$SKIP_BUNDLING" ]]; then
++#   echo "SKIP_BUNDLING enabled; skipping."
++#   exit 0;
++# fi
++
 +echo "CONFIGURATION->> $CONFIGURATION"
 +
 +# case "$CONFIGURATION" in
@@ -64,6 +74,40 @@ index 6f95a29..00e1e49 100755
  
  # Path to react-native folder inside node_modules
  REACT_NATIVE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+@@ -74,10 +76,10 @@ else
+   ENTRY_FILE=${1:-index.js}
+ fi
+ 
+-if [[ $DEV != true && ! -f "$ENTRY_FILE" ]]; then
+-  echo "error: Entry file $ENTRY_FILE does not exist. If you use another file as your entry point, pass ENTRY_FILE=myindex.js" >&2
+-  exit 2
+-fi
++# if [[ $DEV != true && ! -f "$ENTRY_FILE" ]]; then
++#   echo "error: Entry file $ENTRY_FILE does not exist. If you use another file as your entry point, pass ENTRY_FILE=myindex.js" >&2
++#   exit 2
++# fi
+ 
+ # check and assign NODE_BINARY env
+ # shellcheck source=/dev/null
+@@ -90,12 +92,12 @@ if [[ -z "$USE_HERMES" && -f "$HERMES_CLI_PATH" ]]; then
+   USE_HERMES=true
+ fi
+ 
+-if [[ $USE_HERMES == true && ! -f "$HERMES_CLI_PATH" ]]; then
+-  echo "error: USE_HERMES is set to true but the hermesc binary could not be " \
+-       "found at ${HERMES_CLI_PATH}. Perhaps you need to run 'bundle exec pod install' or otherwise " \
+-       "point the HERMES_CLI_PATH variable to your custom location." >&2
+-  exit 2
+-fi
++# if [[ $USE_HERMES == true && ! -f "$HERMES_CLI_PATH" ]]; then
++#   echo "error: USE_HERMES is set to true but the hermesc binary could not be " \
++#        "found at ${HERMES_CLI_PATH}. Perhaps you need to run 'bundle exec pod install' or otherwise " \
++#        "point the HERMES_CLI_PATH variable to your custom location." >&2
++#   exit 2
++# fi
+ 
+ [ -z "$NODE_ARGS" ] && export NODE_ARGS=""
+ 
 @@ -148,6 +150,20 @@ if [[ $USE_HERMES == true && $DEV == false ]]; then
    EXTRA_ARGS="$EXTRA_ARGS --minify false"
  fi
