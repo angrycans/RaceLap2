@@ -6,7 +6,7 @@ index 0000000..361f5fb
 @@ -0,0 +1 @@
 +export RCT_METRO_PORT=8081
 diff --git a/node_modules/react-native/scripts/react-native-xcode.sh b/node_modules/react-native/scripts/react-native-xcode.sh
-index 6f95a29..b521446 100755
+index 6f95a29..14f91eb 100755
 --- a/node_modules/react-native/scripts/react-native-xcode.sh
 +++ b/node_modules/react-native/scripts/react-native-xcode.sh
 @@ -27,34 +27,36 @@ if [[ "$CONFIGURATION" = *Debug* && ! "$PLATFORM_NAME" == *simulator ]]; then
@@ -108,7 +108,7 @@ index 6f95a29..b521446 100755
  
  [ -z "$NODE_ARGS" ] && export NODE_ARGS=""
  
-@@ -148,6 +150,20 @@ if [[ $USE_HERMES == true && $DEV == false ]]; then
+@@ -148,6 +150,22 @@ if [[ $USE_HERMES == true && $DEV == false ]]; then
    EXTRA_ARGS="$EXTRA_ARGS --minify false"
  fi
  
@@ -126,10 +126,12 @@ index 6f95a29..b521446 100755
 +# echo "EXTRA_PACKAGER_ARGS-> $EXTRA_PACKAGER_ARGS";
 +# exit 2;
 +
++"$NODE_BINARY" "../scripts/index.js";
++
  "$NODE_BINARY" $NODE_ARGS "$CLI_PATH" $BUNDLE_COMMAND \
    $CONFIG_ARG \
    --entry-file "$ENTRY_FILE" \
-@@ -157,7 +173,7 @@ fi
+@@ -157,7 +175,7 @@ fi
    --bundle-output "$BUNDLE_FILE" \
    --assets-dest "$DEST" \
    $EXTRA_ARGS \
@@ -138,17 +140,12 @@ index 6f95a29..b521446 100755
  
  if [[ $USE_HERMES != true ]]; then
    cp "$BUNDLE_FILE" "$DEST/"
-@@ -180,8 +196,8 @@ else
+@@ -180,6 +198,8 @@ else
    BUNDLE_FILE="$DEST/main.jsbundle"
  fi
  
--if [[ $DEV != true && ! -f "$BUNDLE_FILE" ]]; then
--  echo "error: File $BUNDLE_FILE does not exist. This must be a bug with" >&2
--  echo "React Native, please report it here: https://github.com/facebook/react-native/issues"
--  exit 2
--fi
-+# if [[ $DEV != true && ! -f "$BUNDLE_FILE" ]]; then
-+#   echo "error: File $BUNDLE_FILE does not exist. This must be a bug with" >&2
-+#   echo "React Native, please report it here: https://github.com/facebook/react-native/issues"
-+#   exit 2
-+# fi
++
++
+ if [[ $DEV != true && ! -f "$BUNDLE_FILE" ]]; then
+   echo "error: File $BUNDLE_FILE does not exist. This must be a bug with" >&2
+   echo "React Native, please report it here: https://github.com/facebook/react-native/issues"
