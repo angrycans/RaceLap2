@@ -1,7 +1,17 @@
-console.error('Test: env -------------->');
+// @ts-check
 
-console.error('process.env --->', process.env);
+const execa = require('execa');
+const fs = require('fs');
 
-console.error('Test: env: end -------------->');
+const DEST = `${process.env.CONFIGURATION_BUILD_DIR}/${process.env.UNLOCALIZED_RESOURCES_FOLDER_PATH}`
+// const DEST = `${process.env.CONFIGURATION_BUILD_DIR}/test`
+execa.sync(`npx react-native bundle --entry-file='index.js' --bundle-output='${DEST}/main.jsbundle' --dev=false --platform='ios' --assets-dest='${DEST}'`, { shell: true, stdio: 'inherit' });
 
-throw new Error(`Test Error !`)
+if (!fs.existsSync(`${DEST}/main.jsbundle`)) {
+  throw new Error(`main.jsbundle Missing !`)
+}
+
+// throw new Error(DEST);
+// console.error('DEST ==>', DEST)
+
+
