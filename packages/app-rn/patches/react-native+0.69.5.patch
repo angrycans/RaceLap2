@@ -1,0 +1,53 @@
+diff --git a/node_modules/react-native/scripts/.packager.env b/node_modules/react-native/scripts/.packager.env
+new file mode 100644
+index 0000000..361f5fb
+--- /dev/null
++++ b/node_modules/react-native/scripts/.packager.env
+@@ -0,0 +1 @@
++export RCT_METRO_PORT=8081
+diff --git a/node_modules/react-native/scripts/react-native-xcode.sh b/node_modules/react-native/scripts/react-native-xcode.sh
+index 6f95a29..d28f50f 100755
+--- a/node_modules/react-native/scripts/react-native-xcode.sh
++++ b/node_modules/react-native/scripts/react-native-xcode.sh
+@@ -148,6 +148,32 @@ if [[ $USE_HERMES == true && $DEV == false ]]; then
+   EXTRA_ARGS="$EXTRA_ARGS --minify false"
+ fi
+ 
++echo "NODE_BINARY-> $NODE_BINARY";
++echo "NODE_ARGS-> $NODE_ARGS";
++echo "CLI_PATH-> $CLI_PATH";
++echo "BUNDLE_COMMAND-> $BUNDLE_COMMAND";
++echo "CONFIG_ARG-> $CONFIG_ARG";
++echo "ENTRY_FILE-> $ENTRY_FILE";
++echo "BUNDLE_PLATFORM-> $BUNDLE_PLATFORM";
++echo "DEV-> $DEV";
++echo "BUNDLE_FILE-> $BUNDLE_FILE";
++echo "DEST-> $DEST";
++echo "EXTRA_ARGS-> $EXTRA_ARGS";
++echo "EXTRA_PACKAGER_ARGS-> $EXTRA_PACKAGER_ARGS";
++
++exit 2;
++
++"$NODE_BINARY" $NODE_ARGS "$CLI_PATH" $BUNDLE_COMMAND \
++  $CONFIG_ARG \
++  --entry-file "$ENTRY_FILE" \
++  --platform "$BUNDLE_PLATFORM" \
++  --dev $DEV \
++  --reset-cache \
++  --bundle-output "$BUNDLE_FILE" \
++  --assets-dest "$DEST" \
++  $EXTRA_ARGS \
++  $EXTRA_PACKAGER_ARGS;
++
+ "$NODE_BINARY" $NODE_ARGS "$CLI_PATH" $BUNDLE_COMMAND \
+   $CONFIG_ARG \
+   --entry-file "$ENTRY_FILE" \
+@@ -157,7 +183,7 @@ fi
+   --bundle-output "$BUNDLE_FILE" \
+   --assets-dest "$DEST" \
+   $EXTRA_ARGS \
+-  $EXTRA_PACKAGER_ARGS
++  $EXTRA_PACKAGER_ARGS;
+ 
+ if [[ $USE_HERMES != true ]]; then
+   cp "$BUNDLE_FILE" "$DEST/"
