@@ -33,7 +33,6 @@
 		E69787862892267700E85AD6 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E69787762892267700E85AD6 /* Octicons.ttf */; };
 		E69787872892267700E85AD6 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E69787772892267700E85AD6 /* SimpleLineIcons.ttf */; };
 		E69787882892267700E85AD6 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E69787782892267700E85AD6 /* FontAwesome5_Regular.ttf */; };
-		E6E736A928E469A90028D650 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = E6E736A828E469A90028D650 /* main.jsbundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -314,7 +313,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6E736A928E469A90028D650 /* main.jsbundle in Resources */,
 				E69787852892267700E85AD6 /* FontAwesome5_Solid.ttf in Resources */,
 				E6640E3C28A362E80066D00C /* web.bundle in Resources */,
 				E69787792892267700E85AD6 /* AntDesign.ttf in Resources */,

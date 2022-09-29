@@ -37,8 +37,8 @@ jobs:
           certificate-password: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
           workspace-path: packages/app-rn/ios/RaceLap.xcworkspace
           scheme: RaceLap
-        env:
-          RCT_NO_LAUNCH_PACKAGER: ''
+        # env:
+        #   RCT_NO_LAUNCH_PACKAGER: ''
 
       - name: 'Upload app to TestFlight'
         uses: apple-actions/upload-testflight-build@v1
