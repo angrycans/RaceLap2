@@ -1,7 +1,6 @@
 name: iOS starter workflow
 
-on:
-  workflow_dispatch
+on: workflow_dispatch
 
 jobs:
   ios-build:

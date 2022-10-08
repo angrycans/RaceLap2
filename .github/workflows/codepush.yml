@@ -1,7 +1,6 @@
 name: codepush IOS starter workflow
 
-on:
-  workflow_dispatch
+on: workflow_dispatch
 
 jobs:
   build:
@@ -19,7 +18,7 @@ jobs:
         run: npx lerna run build --scope="@race-lap/app-helper"
 
       - name: Codepush ios
-        run: lerna run code-push --scope @race-lap/app-rn -- -- --appName racelap/racelap-ios --extraArgs=--plist-file\ ios/RaceLap/Info.plist
+        run: npx lerna run code-push --scope @race-lap/app-rn -- -- --appName racelap/racelap-ios --extraArgs=--plist-file\ ios/RaceLap/Info.plist
         env:
           APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN_IOS }}
 
