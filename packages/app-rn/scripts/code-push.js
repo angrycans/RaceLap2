@@ -4,7 +4,7 @@ const execa = require('execa');
 const path = require('path');
 const { appName, extraArgs } = require('minimist')(process.argv.slice(2));
 
-if (appName) {
+if (!appName) {
   throw new Error(`Arg appName missing !`);
 }
 
