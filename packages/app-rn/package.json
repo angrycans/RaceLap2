@@ -10,6 +10,7 @@
     "start": "react-native start --reset-cache",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "figma:export": "cross-env FIGMA_TOKEN=figd_YBI2voGsIBTVHcUOhglyoz4BPNhN79rIwO4TtRj1 ts-node ./node_modules/@figma-export/cli/bin/run use-config .figmaexportrc.ts",
+    "code-push": "node ./scripts/code-push.js",
     "postinstall": "pod-install && patch-package"
   },
   "dependencies": {
@@ -69,6 +70,7 @@
     "@typescript-eslint/eslint-plugin": "^5.29.0",
     "@typescript-eslint/parser": "^5.29.0",
     "address": "^1.2.0",
+    "appcenter-cli": "^2.11.0",
     "babel-jest": "^26.6.3",
     "babel-plugin-module-resolver": "^4.1.0",
     "babel-plugin-transform-define": "^2.0.1",
