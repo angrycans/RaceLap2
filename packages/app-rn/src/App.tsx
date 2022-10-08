@@ -13,6 +13,7 @@ import {
   DefaultTheme,
   type Theme,
 } from '@react-navigation/native';
+import codePush from 'react-native-code-push';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ThemeProvider, createTheme, Icon, Button } from '@rneui/themed';
@@ -188,8 +189,10 @@ const App: FC = () => {
   );
 };
 
-export default () => (
+export default codePush({
+  checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
+})(() => (
   <NavigationContainer theme={navigationTheme}>
     <App />
   </NavigationContainer>
-);
+));
