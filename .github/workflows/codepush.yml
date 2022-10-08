@@ -3,8 +3,8 @@ name: codepush IOS starter workflow
 on: workflow_dispatch
 
 jobs:
-  build:
-    name: Build Bundle & Codepush Update
+  codepush-build:
+    name: Build Bundle And Codepush Update
     runs-on: ubuntu-latest
 
     steps:
