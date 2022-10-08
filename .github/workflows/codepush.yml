@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Check out Git repository
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install dependencies
         run: npm install && npx lerna bootstrap --scope="@race-lap/app-helper" --scope="@race-lap/app-rn
