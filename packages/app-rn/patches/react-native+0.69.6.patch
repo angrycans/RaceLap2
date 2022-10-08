@@ -6,17 +6,24 @@ index 0000000..361f5fb
 @@ -0,0 +1 @@
 +export RCT_METRO_PORT=8081
 diff --git a/node_modules/react-native/scripts/react-native-xcode.sh b/node_modules/react-native/scripts/react-native-xcode.sh
-index 6f95a29..6213b85 100755
+index 6f95a29..19e70cc 100755
 --- a/node_modules/react-native/scripts/react-native-xcode.sh
 +++ b/node_modules/react-native/scripts/react-native-xcode.sh
-@@ -155,9 +155,9 @@ fi
-   --dev $DEV \
-   --reset-cache \
-   --bundle-output "$BUNDLE_FILE" \
+@@ -148,16 +148,9 @@ if [[ $USE_HERMES == true && $DEV == false ]]; then
+   EXTRA_ARGS="$EXTRA_ARGS --minify false"
+ fi
+ 
+-"$NODE_BINARY" $NODE_ARGS "$CLI_PATH" $BUNDLE_COMMAND \
+-  $CONFIG_ARG \
+-  --entry-file "$ENTRY_FILE" \
+-  --platform "$BUNDLE_PLATFORM" \
+-  --dev $DEV \
+-  --reset-cache \
+-  --bundle-output "$BUNDLE_FILE" \
 -  --assets-dest "$DEST" \
 -  $EXTRA_ARGS \
 -  $EXTRA_PACKAGER_ARGS
-+  --assets-dest "$DEST"
++"$NODE_BINARY" $NODE_ARGS "$CLI_PATH" $BUNDLE_COMMAND $CONFIG_ARG --entry-file "$ENTRY_FILE" --platform "$BUNDLE_PLATFORM" --dev $DEV --reset-cache --bundle-output "$BUNDLE_FILE" --assets-dest "$DEST"
 +#  $EXTRA_ARGS \
 +#  $EXTRA_PACKAGER_ARGS
  
