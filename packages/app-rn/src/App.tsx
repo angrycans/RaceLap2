@@ -88,7 +88,7 @@ const App: FC = () => {
               />
               <Stack.Screen
                 options={{
-                  title: '用户协议',
+                  title: '用户协议1',
                   headerShadowVisible: true,
                   headerStyle: {
                     backgroundColor: '#fff',
