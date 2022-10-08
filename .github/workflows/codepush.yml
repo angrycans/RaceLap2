@@ -1,4 +1,4 @@
-name: Codepush IOS starter workflow
+name: Codepush Starter Workflow
 
 on: workflow_dispatch
 
