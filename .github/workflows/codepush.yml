@@ -1,4 +1,4 @@
-name: codepush IOS starter workflow
+name: Codepush IOS starter workflow
 
 on: workflow_dispatch
 
@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install dependencies
-        run: npm install && npx lerna bootstrap --scope="@race-lap/app-helper" --scope="@race-lap/app-rn
+        run: npm install && npx lerna bootstrap --scope={@race-lap/app-helper,@race-lap/app-rn}
 
       - name: Monorepo pre-build
         run: npx lerna run build --scope="@race-lap/app-helper"
