@@ -18,8 +18,6 @@ jobs:
         run: npx lerna run build --scope="@race-lap/app-helper"
 
       - name: Codepush ios
-        run: npx lerna run code-push --scope @race-lap/app-rn -- -- --appName racelap/racelap-ios --extraArgs=--plist-file\ ios/RaceLap/Info.plist
+        run: cd packages/app-rn && npx appcenter codepush release-react -a racelap/racelap-ios -d Production --plist-file ios/RaceLap/Info.plist
         env:
           APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN_IOS }}
-
-

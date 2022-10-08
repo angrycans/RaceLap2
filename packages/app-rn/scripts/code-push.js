@@ -8,9 +8,13 @@ if (!appName) {
   throw new Error(`Arg appName missing !`);
 }
 
-execa.sync(`appcenter release-react -a '${appName}' -d Production ${extraArgs || ''}`, {
+
+console.log(`npx appcenter codepush release-react -a ${appName} -d Production ${extraArgs || ''}`)
+
+execa.sync(`npx appcenter codepush release-react -a ${appName} -d Production ${extraArgs || ''}`, {
   stdio: 'inherit',
   cwd: path.join(__dirname, '..'),
+  shell: true,
   env: {
     APPCENTER_ACCESS_TOKEN: process.env.APPCENTER_ACCESS_TOKEN
   }
