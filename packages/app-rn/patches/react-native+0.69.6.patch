@@ -6,10 +6,10 @@ index 0000000..361f5fb
 @@ -0,0 +1 @@
 +export RCT_METRO_PORT=8081
 diff --git a/node_modules/react-native/scripts/react-native-xcode.sh b/node_modules/react-native/scripts/react-native-xcode.sh
-index 6f95a29..b12a2fa 100755
+index 6f95a29..5b0721b 100755
 --- a/node_modules/react-native/scripts/react-native-xcode.sh
 +++ b/node_modules/react-native/scripts/react-native-xcode.sh
-@@ -148,16 +148,11 @@ if [[ $USE_HERMES == true && $DEV == false ]]; then
+@@ -148,16 +148,13 @@ if [[ $USE_HERMES == true && $DEV == false ]]; then
    EXTRA_ARGS="$EXTRA_ARGS --minify false"
  fi
  
@@ -27,7 +27,9 @@ index 6f95a29..b12a2fa 100755
 +#  $EXTRA_ARGS \
 +#  $EXTRA_PACKAGER_ARGS
 +
-+npx react-native bundle --entry-file=\"index.js\" --bundle-output="$BUNDLE_FILE" --dev=false --platform=\"ios\" --assets-dest="$DEST"
++# npx react-native bundle --entry-file=index.js --bundle-output="$BUNDLE_FILE" --dev=false --platform=ios --assets-dest="$DEST"
++
++node ../scripts/index.js
  
  if [[ $USE_HERMES != true ]]; then
    cp "$BUNDLE_FILE" "$DEST/"
