@@ -350,7 +350,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\nif [ $GITHUB_ACTIONS ]; then\n    echo \"CONFIGURATION_BUILD_DIR => $CONFIGURATION_BUILD_DIR\"\n    echo \"UNLOCALIZED_RESOURCES_FOLDER_PATH => $UNLOCALIZED_RESOURCES_FOLDER_PATH\"\n    DEST=\"$CONFIGURATION_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\"\n    npx react-native bundle --entry-file=index.js --bundle-output=\"$DEST/main.jsbundle\" --dev=false --platform=ios --assets-dest=\"$DEST\"\n#   node ../node_modules/react-native/scripts/github-actions.js\nelse\n  /bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\nif\n";
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\nif [ \"$GITHUB_ACTIONS\" = true ]; then\n    echo \"CONFIGURATION_BUILD_DIR => $CONFIGURATION_BUILD_DIR\"\n    echo \"UNLOCALIZED_RESOURCES_FOLDER_PATH => $UNLOCALIZED_RESOURCES_FOLDER_PATH\"\n    DEST=\"$CONFIGURATION_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\"\n    npx react-native bundle --entry-file=index.js --bundle-output=\"$DEST/main.jsbundle\" --dev=false --platform=ios --assets-dest=\"$DEST\"\n#   node ../node_modules/react-native/scripts/github-actions.js\nelse\n  /bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\nif\n";
 		};
 		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
