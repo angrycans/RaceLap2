@@ -1,0 +1,31 @@
+name: Web Build
+
+on: workflow_dispatch
+
+jobs:
+  web-build:
+    name: Web Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm install && npx lerna bootstrap --scope={@race-lap/app-helper,@race-lap/app-web}
+
+      - name: Monorepo build
+        run: npx lerna run build --scope="@race-lap/app-helper" && npx lerna run build --scope="@race-lap/app-web"
+
+      - name: 'Upload To Github Release'
+        uses: xresloader/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: "packages/app-web/web.bundle.zip"
+          overwrite: true
