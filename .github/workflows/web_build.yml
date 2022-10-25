@@ -30,3 +30,4 @@ jobs:
           file: "packages/app-web/web.bundle.zip"
           update_latest_release: true
           overwrite: true
+          draft: false
