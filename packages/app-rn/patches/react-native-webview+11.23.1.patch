@@ -1,0 +1,23 @@
+diff --git a/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManager.java b/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManager.java
+index c285684..06decd8 100644
+--- a/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManager.java
++++ b/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManager.java
+@@ -199,13 +199,13 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
+     settings.setDomStorageEnabled(true);
+     settings.setSupportMultipleWindows(true);
+ 
+-    settings.setAllowFileAccess(false);
+-    settings.setAllowContentAccess(false);
++    settings.setAllowFileAccess(true);
++    settings.setAllowContentAccess(true);
+     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+-      settings.setAllowFileAccessFromFileURLs(false);
+-      setAllowUniversalAccessFromFileURLs(webView, false);
++      settings.setAllowFileAccessFromFileURLs(true);
++      setAllowUniversalAccessFromFileURLs(webView, true);
+     }
+-    setMixedContentMode(webView, "never");
++    setMixedContentMode(webView, "always");
+ 
+     // Fixes broken full-screen modals/galleries due to body height being 0.
+     webView.setLayoutParams(

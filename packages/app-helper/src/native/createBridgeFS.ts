@@ -1,6 +1,6 @@
 import type { RNFS } from './types';
 import type { ApiRes } from '../types';
-import { getFS } from './utils';
+import { getFS, getFSReadyTask } from './utils';
 import { isErrorLike } from '../utils';
 
 type BridgeFSKeys = {
@@ -20,6 +20,7 @@ export interface BridgeFS extends BaseBridgeFS<BridgeFSKeys> {
  */
 export function createBridgeFS(): BridgeFS {
   const fs = getFS()!;
+  const fsReadyTask = getFSReadyTask();
   return Object.keys(fs!).reduce((acc, funcName) => {
     const rawFunc = fs[funcName as keyof RNFS] as Function;
     // TODO: 非标准返回需要特殊处理
@@ -30,7 +31,7 @@ export function createBridgeFS(): BridgeFS {
           return {
             errCode: 0,
             errMsg: '',
-            data: await rawFunc(...args)
+            data: await fsReadyTask.then(() => rawFunc(...args))
           } as ApiRes
         } catch (err) {
           console.error(err);

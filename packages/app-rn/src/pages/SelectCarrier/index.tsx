@@ -1,7 +1,7 @@
 import type { HeaderBackButtonProps } from '@react-navigation/elements';
 import React, { type FC, useState, useRef, useMemo } from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
-import { Button } from '@rneui/themed';
+import { Button, useTheme } from '@rneui/themed';
 import { CarrierType } from '@race-lap/app-helper';
 import { apis } from '@race-lap/app-helper/dist/native';
 import { useNavigation, useAuth } from '@/hooks';
@@ -48,6 +48,11 @@ const carrierTypeSelections = [
 ];
 
 export const SetDriverName: FC = () => {
+  const {
+    theme: {
+      colors: { primary: primaryColor },
+    },
+  } = useTheme();
   const [carrierName, setCarrierName] = useState('');
   const [currentCarrierType, setCurrentCarrierType] = useState(
     CarrierType.UNKNOWN,
@@ -132,7 +137,7 @@ export const SetDriverName: FC = () => {
               <Icon
                 width={30}
                 height={30}
-                color={currentCarrierType !== type ? '#C4C4C4' : void 0}
+                color={currentCarrierType !== type ? '#C4C4C4' : primaryColor}
               />
             }
           />

@@ -50,9 +50,15 @@ export const LoopCircle: FC = () => {
       {anims.map((anim, idx) => (
         <Animated.View
           key={idx}
-          style={[styles.circleWrapper, { transform: [{ scale: anim }] }]}>
+          style={[
+            styles.circleWrapper,
+            { transform: [{ scale: anim }, { perspective: 1000 }] },
+          ]}>
           <View
-            style={[styles.circle, { transform: [{ scale: 1 - idx * 0.2 }] }]}
+            style={[
+              styles.circle,
+              { transform: [{ scale: 1 - idx * 0.2 }, { perspective: 1000 }] },
+            ]}
           />
         </Animated.View>
       ))}

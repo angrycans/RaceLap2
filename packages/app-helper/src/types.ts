@@ -8,6 +8,8 @@ export { NSSQLite }
 export interface EventBusEventMap {
   /** 数据库初始化完毕 */
   [EventName.DB_INIT_READY]: NSSQLite.SQLiteDatabase;
+  /** 通用权限请求完毕 */
+  [EventName.COMMON_PERMISSIONS_REQUEST_READY]: void;
 }
 
 export interface BridgeMsgReq {

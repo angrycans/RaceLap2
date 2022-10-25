@@ -2,6 +2,7 @@ import type { NSSQLite, RNFS } from './types';
 
 let initDBTask: Promise<NSSQLite.SQLiteDatabase> | null = null;
 let fs: RNFS | null = null;
+let fsReadyRask = Promise.resolve();
 
 /**
  * 初始化 DB
@@ -18,7 +19,7 @@ export async function getDB() {
 }
 
 /**
- * 初始化 DB
+ * 初始化 FS
  * @param sqliteInstance
  */
 export function initNativeFS(rnfs: RNFS) {
@@ -29,4 +30,20 @@ export function initNativeFS(rnfs: RNFS) {
 export function getFS() {
   if (!fs) throw new Error(`Have To Call initialize Before !`);
   if (fs) return fs;
+}
+
+/**
+ * 保存 FS Ready Task
+ * @param readyTask
+ */
+export function saveFSReadyTask(readyTask: Promise<void>) {
+  fsReadyRask = readyTask;
+}
+
+/**
+ * 获取 FS Ready Task
+ * @param readyTask
+ */
+export function getFSReadyTask() {
+  return fsReadyRask;
 }

@@ -1,5 +1,6 @@
-import { Platform, Linking } from 'react-native';
-import RNFS from 'react-native-fs';
+import { Linking } from 'react-native';
+import { FileSystem } from 'react-native-file-access';
+// import RNFS from 'react-native-fs';
 import dayjs from 'dayjs';
 import { utils } from '@race-lap/app-helper';
 import { apis } from '@race-lap/app-helper/dist/native';
@@ -16,11 +17,12 @@ export function initLinking(opts: InitLinkingOptions) {
   const eventHandle = async (param: { url: string } | string | null) => {
     const url = typeof param === 'string' ? param : param?.url;
     const urlInfo = parseLinkingFileUrl(url);
+
     if (urlInfo) {
       const [content, fileHash, { size }] = await Promise.all([
-        RNFS.readFile(urlInfo.filePath),
-        RNFS.hash(urlInfo.filePath, 'md5'),
-        RNFS.stat(urlInfo.filePath),
+        FileSystem.readFile(urlInfo.remoteUrl),
+        FileSystem.hash(urlInfo.remoteUrl, 'MD5'),
+        FileSystem.stat(urlInfo.remoteUrl),
       ]);
 
       const recordListRes = await apis.record.getList({ fileHash });
@@ -49,7 +51,8 @@ export function initLinking(opts: InitLinkingOptions) {
         cycleNum,
       } = utils.record.parseData(content);
       const filename = `${fileHash}.${urlInfo.ext}`;
-      await RNFS.copyFile(urlInfo.filePath, `${recordRoot}/${filename}`);
+
+      await FileSystem.cp(urlInfo.remoteUrl, `${recordRoot}/${filename}`);
       const { errCode, data } = await apis.record.save({
         ...recordMeta,
         totalTime,
@@ -71,17 +74,11 @@ export function initLinking(opts: InitLinkingOptions) {
     }
   };
 
-  if (Platform.OS === 'ios') {
-    Linking.getInitialURL().then(eventHandle);
-    const subscription = Linking.addEventListener('url', eventHandle);
-    return () => {
-      subscription.remove();
-    };
-  } else {
-    return () => {
-      // TODO: android
-    };
-  }
+  Linking.getInitialURL().then(eventHandle);
+  const subscription = Linking.addEventListener('url', eventHandle);
+  return () => {
+    subscription.remove();
+  };
 }
 
 const supportFileTypeList = ['sa', 'xld'];
@@ -90,23 +87,24 @@ export function parseLinkingFileUrl(url?: string | null) {
   if (
     !url ||
     typeof url !== 'string' ||
-    !url.startsWith('file://') ||
+    !['file:', 'content:'].some(protocol => url.startsWith(`${protocol}//`)) ||
     !supportFileTypeList.some(type => url.endsWith(`.${type}`))
   ) {
     return null;
   }
 
-  const matches = decodeURI(url).match(
-    /file:\/\/([\s\S]+?\/(([^/]+?)\.([^.]+)))$/,
+  const matches = url.match(
+    /^(file:|content:)\/\/([\s\S]+?\/(([^/]+?)\.([^.]+)))$/,
   );
 
   if (!matches) {
     return null;
   }
 
-  const [remoteUrl, filePath, filename, baseFilename, ext] = matches;
+  const [remoteUrl, protocol, filePath, filename, baseFilename, ext] = matches;
 
   return {
+    protocol,
     remoteUrl,
     filePath,
     filename,

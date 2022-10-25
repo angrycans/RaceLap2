@@ -1,14 +1,29 @@
 import { useEffect, useRef } from 'react';
-import { syncWebBundle, initDB, initAMap, initLinking } from '../tasks';
+import { BackHandler, Platform } from 'react-native';
+import {
+  syncWebBundle,
+  initDB,
+  initAMap,
+  initLinking,
+  requestCommonPermissions,
+} from '../tasks';
 import { useNavigation } from './useNavigation';
 import { RouteName } from '../constants';
 
 export function useInit() {
   const navigationRef = useRef(useNavigation());
   useEffect(() => {
-    syncWebBundle();
-    initDB();
-    initAMap();
+    requestCommonPermissions()
+      .then(() => {
+        syncWebBundle();
+        initDB();
+        initAMap();
+      })
+      .catch(() => {
+        if (Platform.OS === 'android') {
+          BackHandler.exitApp();
+        }
+      });
     const unsubscribe = initLinking({
       navigateToDetail(id) {
         navigationRef.current.navigate({

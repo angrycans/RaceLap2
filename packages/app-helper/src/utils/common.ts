@@ -51,10 +51,10 @@ export function timeStampFormat(timestamp: number, format: string, opts: TimeSta
   const h = timestamp / 1000 / 60 / 60 % 60 | 0;
 
   let result = format
-    .replaceAll(/S+/g, match => String(Math.round(ms / Math.pow(10, Math.max(3 - match.length, 0)))).padStart(match.length, '0'))
-    .replaceAll(/s+/g, match => String(s).padStart(match.length, '0'))
-    .replaceAll(/m+/g, match => String(m).padStart(match.length, '0'))
-    .replaceAll(/h+/gi, match => String(h).padStart(match.length, '0'))
+    ?.replaceAll(/S+/g, match => String(Math.round(ms / Math.pow(10, Math.max(3 - match.length, 0)))).padStart(match.length, '0'))
+    ?.replaceAll(/s+/g, match => String(s).padStart(match.length, '0'))
+    ?.replaceAll(/m+/g, match => String(m).padStart(match.length, '0'))
+    ?.replaceAll(/h+/gi, match => String(h).padStart(match.length, '0'))
 
   if (opts.autoClearZero) {
     let prev = result;

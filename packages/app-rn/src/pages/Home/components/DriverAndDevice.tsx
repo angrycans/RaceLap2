@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, type FC } from 'react';
 import { View, StyleSheet, ActionSheetIOS } from 'react-native';
-import { Icon, Button } from '@rneui/themed';
+import { Icon, Button, useTheme } from '@rneui/themed';
 import WifiManager from 'react-native-wifi-reborn';
 import { useRequest } from 'ahooks';
 import { Text, Row } from '@/components';
@@ -49,6 +49,11 @@ const batteryIconMap = {
 };
 
 export const DriverAndDevice: FC = () => {
+  const {
+    theme: {
+      colors: { primary: primaryColor },
+    },
+  } = useTheme();
   const navigation = useNavigation();
   const deviceInfo = useDeviceInfo();
   const { auth } = useAuth();
@@ -106,7 +111,7 @@ export const DriverAndDevice: FC = () => {
           <Button
             containerStyle={styles.btn}
             color="#F2F2F7"
-            icon={<PersonCropCircle width={22} />}
+            icon={<PersonCropCircle color={primaryColor} width={22} />}
             title={
               <Text style={styles.btnTitle} color="primary" bold>
                 {auth?.name || '未命名车手'}
@@ -119,7 +124,7 @@ export const DriverAndDevice: FC = () => {
           <Button
             containerStyle={[styles.btn, styles.btnNotFirst]}
             color="#F2F2F7"
-            icon={<QuestionmarkCircle width={22} />}
+            icon={<QuestionmarkCircle color={primaryColor} width={22} />}
             title={
               <Text style={styles.btnTitle} color="primary" bold>
                 {auth?.carrierName || '未选择载具'}
@@ -219,7 +224,7 @@ export const DriverAndDevice: FC = () => {
           <View style={[styles.row, styles.connectDeviceBtnWrapper]}>
             <Button
               color="#F2F2F7"
-              icon={<PlusCircle width={20} />}
+              icon={<PlusCircle color={primaryColor} width={20} />}
               title={
                 <Text style={styles.connectDeviceBtnTitle} color="primary">
                   连接设备

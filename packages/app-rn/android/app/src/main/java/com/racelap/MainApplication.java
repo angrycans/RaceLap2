@@ -12,6 +12,8 @@ import com.facebook.soloader.SoLoader;
 import com.racelap.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+// https://learn.microsoft.com/en-us/appcenter/distribution/codepush/rn-get-started#plugin-installation-and-configuration-for-react-native-060-version-and-above-android
+import com.microsoft.codepush.react.CodePush;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -20,6 +22,15 @@ public class MainApplication extends Application implements ReactApplication {
         @Override
         public boolean getUseDeveloperSupport() {
           return BuildConfig.DEBUG;
+        }
+
+        // https://learn.microsoft.com/en-us/appcenter/distribution/codepush/rn-get-started#plugin-installation-and-configuration-for-react-native-060-version-and-above-android
+        // Override the getJSBundleFile method to let
+        // the CodePush runtime determine where to get the JS
+        // bundle location from on each app start
+        @Override
+        protected String getJSBundleFile() {
+          return CodePush.getJSBundleFile();
         }
 
         @Override

@@ -18,6 +18,8 @@ export const enum DBTableName {
 
 /** EventBus 中的事件名称 */
 export const enum EventName {
+  /** 通用权限请求完毕 */
+  COMMON_PERMISSIONS_REQUEST_READY = 'EVENTBUS:COMMON_PERMISSIONS_REQUEST_READY',
   /** 数据库初始化完毕 */
   DB_INIT_READY = 'EVENTBUS:DB_INIT_READY',
 }

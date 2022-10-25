@@ -104,7 +104,7 @@ export const RecordDetail: FC = () => {
       {
         title: '圈时',
         key: 'sTime',
-        width: 120,
+        width: 'auto-rest',
         align: 'center',
         render(val: string, item) {
           const deltaFormat = utils.timeStampFormat(item.delta, 'hh:mm:ss.SS', {
@@ -178,7 +178,10 @@ export const RecordDetail: FC = () => {
   return (
     <>
       <FocusAwareStatusBar barStyle="dark-content" />
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
+      <ScrollView
+        // https://github.com/react-native-webview/react-native-webview/issues/2364#issuecomment-1231649893
+        removeClippedSubviews
+        contentInsetAdjustmentBehavior="automatic">
         <View style={styles.wrapper}>
           <Title title={startTime} subtitle={startDate} />
           <Overview {...overviewInfo} />

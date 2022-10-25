@@ -34,11 +34,11 @@ import SelectCarrier from './pages/SelectCarrier';
 import SelectRacetrack from './pages/SelectRacetrack';
 import Setting from './pages/Setting';
 import { AppProvider } from './context';
-import { initDBTask } from './tasks';
+import { initDBTask, commonPermissionsRequestReady } from './tasks';
 import { useInit } from './hooks';
 dayjs.extend(customParseFormat);
 
-initialize({ initDBTask, fs: RNFS });
+initialize({ commonPermissionsRequestReady, initDBTask, fs: RNFS });
 const backgroundColor = '#f2f2f7';
 
 const navigationTheme: Theme = {

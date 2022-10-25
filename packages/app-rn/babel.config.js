@@ -9,7 +9,7 @@ module.exports = {
   presets: ['module:metro-react-native-babel-preset'],
   plugins: [
     '@babel/plugin-proposal-export-namespace-from',
-    'react-native-reanimated/plugin',
+    // 'react-native-reanimated/plugin',
     [
       "transform-define", {
         "WEBVIEW_BASE_URL": isDev ? `http://${address.ip()}:12345` : '/web.bundle/index.html',

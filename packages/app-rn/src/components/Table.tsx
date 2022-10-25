@@ -1,4 +1,4 @@
-import React, { cloneElement, isValidElement, useMemo } from 'react';
+import React, { cloneElement, isValidElement, useMemo, useState } from 'react';
 import { View, StyleSheet, type ViewStyle } from 'react-native';
 import { Text } from './Text';
 
@@ -14,7 +14,7 @@ export interface Column<DataItem extends DataItemBase> {
   title: React.ReactNode;
   /** 唯一键 */
   key: string;
-  /** 列单元样式 */
+  /** 列单元样式 'auto-rest' 会自动填满剩下的区域 */
   width?: ViewStyle['flexBasis'];
   /** 设置列的对齐方式	 */
   align?: 'left' | 'right' | 'center';
@@ -41,6 +41,8 @@ const alignMap: Record<Align, ViewStyle['justifyContent']> = {
 
 export function Table<DataItem extends DataItemBase>(props: Props<DataItem>) {
   const { columns, data, style } = props;
+  const [totalWidth, setTotalWidth] = useState(0);
+
   const columnMap = useMemo(
     () =>
       columns.reduce(
@@ -52,14 +54,26 @@ export function Table<DataItem extends DataItemBase>(props: Props<DataItem>) {
 
   const thead = useMemo(
     () => (
-      <View style={[styles.thead]}>
+      <View
+        style={[styles.thead]}
+        onLayout={e => setTotalWidth(e.nativeEvent.layout.width)}>
         {columns.map(col => (
           <View
             key={col.key}
             style={[
               styles.th,
               {
-                flexBasis: col.width || 'auto',
+                flexBasis:
+                  col.width === 'auto-rest'
+                    ? Math.max(
+                        0,
+                        totalWidth -
+                          columns.reduce(
+                            (acc, c) => (Number(c.width) || 0) + acc,
+                            17,
+                          ),
+                      ) || 'auto'
+                    : col.width || 'auto',
                 justifyContent: alignMap[col.align!],
               },
             ]}>
@@ -74,7 +88,7 @@ export function Table<DataItem extends DataItemBase>(props: Props<DataItem>) {
         ))}
       </View>
     ),
-    [columns],
+    [columns, totalWidth],
   );
 
   const tbody = useMemo(
@@ -96,7 +110,17 @@ export function Table<DataItem extends DataItemBase>(props: Props<DataItem>) {
                     styles.td,
                     columnMap[col.key].style,
                     {
-                      flexBasis: col.width || 'auto',
+                      flexBasis:
+                        col.width === 'auto-rest'
+                          ? Math.max(
+                              0,
+                              totalWidth -
+                                columns.reduce(
+                                  (acc, c) => (Number(c.width) || 0) + acc,
+                                  17,
+                                ),
+                            ) || 'auto'
+                          : col.width || 'auto',
                       justifyContent: alignMap[col.align!],
                     },
                   ]}>
@@ -115,7 +139,7 @@ export function Table<DataItem extends DataItemBase>(props: Props<DataItem>) {
         ))}
       </View>
     ),
-    [columns, columnMap, data],
+    [columns, columnMap, data, totalWidth],
   );
 
   return (
@@ -144,6 +168,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexGrow: 1,
     flexShrink: 0,
+    backgroundColor: '#f0f',
   },
   tbody: {},
   tr: {

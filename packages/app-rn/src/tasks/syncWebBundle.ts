@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { unzip } from 'react-native-zip-archive';
 import RNFS from 'react-native-fs';
+import { Dirs, FileSystem } from 'react-native-file-access';
 import { apis } from '@race-lap/app-helper/dist/native';
 import { github } from '@/apis';
 import { AsyncStorageKey } from '@/constants';
@@ -15,6 +16,7 @@ export async function syncWebBundle() {
   }
   const webBundlePath = `${storageRootPath}/web.bundle`;
   try {
+    throw new Error('test');
     const [release, checkContent] = await Promise.all([
       github.getLatestRelease(),
       AsyncStorage.getItem(AsyncStorageKey.WEB_BUNDLE_CHECK_CONTENT),
@@ -55,9 +57,18 @@ export async function syncWebBundle() {
       throw new Error('Remote Web Bundle Not Exist !');
     }
   } catch (err) {
-    console.error(err);
-    if (!(await RNFS.exists(webBundlePath))) {
-      await RNFS.copyFile(`${RNFS.MainBundlePath}/web.bundle`, webBundlePath);
+    // console.error(err);
+    if (!(await FileSystem.exists(`${Dirs.DocumentDir}/web.bundle`))) {
+      await FileSystem.cpAsset(
+        'web.bundle.zip',
+        `${Dirs.CacheDir}/web.bundle.zip`,
+      );
+      await unzip(
+        `${Dirs.CacheDir}/web.bundle.zip`,
+        `${Dirs.DocumentDir}/web.bundle`,
+      );
     }
+
+    console.log('cpAsset success !!!');
   }
 }

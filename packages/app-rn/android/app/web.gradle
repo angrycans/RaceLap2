@@ -1,0 +1,25 @@
+def mainTaskName = 'copyWebBundle'
+def destDir = "$buildDir/intermediates/webBundle"
+
+/**
+ * Register web.bundle asset source folder
+ */
+android.sourceSets.main.assets.srcDirs += file(destDir)
+
+/**
+ * Task to web bundle files
+ */
+afterEvaluate {
+    def webBundleDir = "../../../app-web/web.bundle.zip"
+
+    tasks.register(mainTaskName, Copy) {
+      from webBundleDir
+      into destDir
+    }
+
+    android.applicationVariants.all { def variant ->
+        def targetName = variant.name.capitalize()
+        def generateAssetsTask = tasks.findByName("generate${targetName}Assets")
+        generateAssetsTask.dependsOn(mainTaskName)
+    }
+}

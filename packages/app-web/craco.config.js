@@ -12,6 +12,7 @@ const path = require('path');
 const webpack = require('webpack');
 const { whenProd, whenDev } = require('@craco/craco');
 const CSS_MODULE_LOCAL_IDENT_NAME = '[local]___[hash:base64:5]';
+const ZipPlugin = require('zip-webpack-plugin');
 
 module.exports = () => {
   if (process.env.NODE_ENV === 'production') {
@@ -30,7 +31,13 @@ module.exports = () => {
       },
       plugins: [
         ...whenDev(() => [new webpack.DefinePlugin({ __DEV__: true })], []),
-        ...whenProd(() => [new webpack.DefinePlugin({ __DEV__: false })], []),
+        ...whenProd(() => [
+          new webpack.DefinePlugin({ __DEV__: false }),
+          new ZipPlugin({
+            path: '..',
+            filename: 'web.bundle.zip'
+          })
+        ], []),
       ],
       /** @type { (webpackConfig: Configuration, opts: { env: string, paths: import('react-scripts/config/paths') }) => Configuration } */
       configure: (webpackConfig, { env, paths }) => {

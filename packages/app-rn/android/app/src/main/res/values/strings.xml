@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">RaceLap</string>
+  <string name="app_name">RaceLap</string>
+  <string moduleConfig="true" name="CodePushDeploymentKey">gGz3hZDqmAX46l8scCLSQUweVBeSJTQ24bLje</string>
 </resources>
