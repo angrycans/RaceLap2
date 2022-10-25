@@ -28,4 +28,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           file: "packages/app-web/web.bundle.zip"
+          update_latest_release: true
           overwrite: true
