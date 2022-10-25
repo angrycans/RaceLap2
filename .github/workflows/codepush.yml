@@ -21,3 +21,8 @@ jobs:
         run: cd packages/app-rn && npx appcenter codepush release-react -a racelap/racelap-ios -d Production --plist-file ios/RaceLap/Info.plist
         env:
           APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN_IOS }}
+
+      - name: Codepush android
+        run: cd packages/app-rn && npx appcenter codepush release-react -a racelap/racelap-android -d Production --gradle-file android/app/build.gradle
+        env:
+          APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN_ANDROID }}

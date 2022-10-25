@@ -139,7 +139,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1 // increment with every release
-        versionName "1.0.0" // change with every release
+        versionName "1.0.0"
         setProperty("archivesBaseName", "racelap-$versionName")
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
