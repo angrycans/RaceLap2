@@ -16,7 +16,6 @@ export async function syncWebBundle() {
   }
   const webBundlePath = `${storageRootPath}/web.bundle`;
   try {
-    throw new Error('test');
     const [release, checkContent] = await Promise.all([
       github.getLatestRelease(),
       AsyncStorage.getItem(AsyncStorageKey.WEB_BUNDLE_CHECK_CONTENT),

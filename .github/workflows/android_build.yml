@@ -1,0 +1,38 @@
+name: Android Build
+
+on: workflow_dispatch
+
+jobs:
+  android-build:
+    name: Android Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Set up our JDK environment
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+
+      - name: Install dependencies
+        run: npm install && npx lerna bootstrap
+
+      - name: Monorepo pre-build
+        run: npx lerna run build --scope="@race-lap/app-helper" && npx lerna run build --scope="@race-lap/app-web"
+
+      - name: Make Gradlew Executable
+        run: cd packages/app-rn/android && chmod +x ./gradlew
+
+      - name: Generate App APK
+        run: |
+          cd packages/app-rn/android && ./gradlew assembleRelease --no-daemon
+
+      - name: ''
+        uses: xresloader/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: "packages/app-rn/android/app/build/outputs/apk/release/*.apk"
+          overwrite: true
