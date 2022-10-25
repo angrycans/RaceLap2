@@ -53,5 +53,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           file: "*.ipa"
+          update_latest_release: true
           overwrite: true
+          draft: false
 

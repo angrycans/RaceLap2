@@ -36,4 +36,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           file: "packages/app-rn/android/app/build/outputs/apk/release/*.apk"
+          update_latest_release: true
           overwrite: true
+          draft: false
