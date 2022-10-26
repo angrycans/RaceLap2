@@ -1,4 +1,4 @@
-name: Codepush Starter Workflow
+name: React Native Bundle Build
 
 on: workflow_dispatch
 
