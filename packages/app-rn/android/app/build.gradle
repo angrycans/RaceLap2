@@ -138,9 +138,9 @@ android {
         applicationId "com.racelap"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1 // increment with every release
+        versionCode 1
         versionName "1.0.0"
-        setProperty("archivesBaseName", "racelap")
+        // setProperty("archivesBaseName", "racelap")
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {
