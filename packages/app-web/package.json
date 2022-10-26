@@ -1,6 +1,6 @@
 {
   "name": "@race-lap/app-web",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "web 组件",
   "private": true,
   "main": "index.js",
@@ -11,7 +11,8 @@
     "build": "cross-env craco build",
     "clean": "rimraf build",
     "postinstall": "patch-package",
-    "figma:export": "cross-env FIGMA_TOKEN=figd_YBI2voGsIBTVHcUOhglyoz4BPNhN79rIwO4TtRj1 ts-node ./node_modules/@figma-export/cli/bin/run use-config .figmaexportrc.ts"
+    "figma:export": "cross-env FIGMA_TOKEN=figd_YBI2voGsIBTVHcUOhglyoz4BPNhN79rIwO4TtRj1 ts-node ./node_modules/@figma-export/cli/bin/run use-config .figmaexportrc.ts",
+    "publish:appcenter": "node ./scripts/publish.js"
   },
   "keywords": [],
   "author": "OF3808",
@@ -60,6 +61,7 @@
     "@types/react-dom": "^18.0.4",
     "@types/react-redux": "7.1.24",
     "ali-oss": "6.17.1",
+    "appcenter-cli": "^2.11.0",
     "autoprefixer": "10.4.7",
     "babel-plugin-import": "^1.13.5",
     "cross-env": "^7.0.3",

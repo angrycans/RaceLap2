@@ -31,3 +31,8 @@ jobs:
           update_latest_release: true
           overwrite: true
           draft: false
+
+      - name: Publish to Appcenter
+        run: npx lerna run publish:appcenter --scope="@race-lap/app-web"
+        env:
+          APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN_WEB }}
