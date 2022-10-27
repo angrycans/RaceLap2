@@ -11,6 +11,8 @@ npm install
 
 ### Install Native Container
 
+Before you exec `npm run ios/android`, ensure that you already build both [app-helper](../app-helper) and [app-web](../app-web/).
+
 #### IOS
 
 ```bash
@@ -47,4 +49,3 @@ Using [Github Actions CI Manually](https://docs.github.com/cn/actions/managing-w
 + [IOS Native](https://github.com/angrycans/RaceLap2/actions/workflows/ios_build.yml)
 + [Android Native](https://github.com/angrycans/RaceLap2/actions/workflows/android_build.yml)
 + [React Native Bundle](https://github.com/angrycans/RaceLap2/actions/workflows/codepush.yml)
-+ [Web](https://github.com/angrycans/RaceLap2/actions/workflows/web_build.yml)
