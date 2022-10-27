@@ -2,6 +2,7 @@
   "name": "@race-lap/app-rn",
   "version": "0.0.1",
   "private": true,
+  "author": "hannq <18112417530@163.com>",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",

@@ -71,7 +71,7 @@ import { WebView } from 'react-native-webview';
 
 export const MyWebview: FC = () => {
   const webviewBridgeRef = useRef(null);
-    const webviewInstanceRef = useRef(null);
+  const webviewInstanceRef = useRef(null);
 
   useEffect(() => {
     if (webviewInstanceRef.current) {

@@ -15,7 +15,7 @@
     "publish:appcenter": "node ./scripts/publish.js"
   },
   "keywords": [],
-  "author": "OF3808",
+  "author": "hannq <18112417530@163.com>",
   "license": "ISC",
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
