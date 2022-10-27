@@ -29,6 +29,6 @@ Using [Github Actions CI Manually](https://docs.github.com/cn/actions/managing-w
 
 ## Packages Tree
 
-+ [app-rn](./packages/app-rn/README.MD)
-+ [app-web](./packages/app-web/README.MD)
-
++ [app-rn](./packages/app-rn/README.MD) IOS & Android Native.
++ [app-web](./packages/app-web/README.MD) Internal Webview Components.
++ [app-helper](./packages/app-helper/README.MD) Common Utils/Tools both for [app-rn](./packages/app-rn/README.MD) and [app-web](./packages/app-web/README.MD).

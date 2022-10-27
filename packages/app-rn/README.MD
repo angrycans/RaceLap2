@@ -6,8 +6,6 @@
 # install deps
 npm install
 
-# install native deps
-cd ./ios && pod install
 ```
 
 ## Dev
@@ -19,3 +17,5 @@ npm run start
 # show in device
 npm run ios
 ```
+
+
