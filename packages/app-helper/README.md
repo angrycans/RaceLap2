@@ -1,6 +1,6 @@
 # `@race-lap/app-helper`
 
-> Common Utils/Tools both for [app-rn](../app-rn/README.MD) and [app-web](../app-web/README.MD).
+> Common Utils/Tools both for [app-rn](../app-rn) and [app-web](../app-web).
 
 ## Install
 
