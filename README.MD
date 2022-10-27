@@ -18,7 +18,16 @@ npx lerna bootstrap
 npx lerna run start --stream
 ```
 
-## Packages
+## Publish
+
+Using [Github Actions CI Manually](https://docs.github.com/cn/actions/managing-workflow-runs/manually-running-a-workflow).
+
++ [IOS Native](https://github.com/angrycans/RaceLap2/actions/workflows/ios_build.yml)
++ [Android Native](https://github.com/angrycans/RaceLap2/actions/workflows/android_build.yml)
++ [React Native Bundle](https://github.com/angrycans/RaceLap2/actions/workflows/codepush.yml)
++ [Web](https://github.com/angrycans/RaceLap2/actions/workflows/web_build.yml)
+
+## Packages Tree
 
 + [app-rn](./packages/app-rn/README.MD)
 + [app-web](./packages/app-web/README.MD)
