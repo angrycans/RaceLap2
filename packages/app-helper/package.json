@@ -44,6 +44,7 @@
     "change-case": "^4.1.2",
     "mitt": "^3.0.0",
     "react-native": "^0.69.5",
+    "react-native-ble-manager": "^8.5.0",
     "react-native-fs": "^2.20.0",
     "react-native-webview": "^11.23.0",
     "todash": "^2.4.0"

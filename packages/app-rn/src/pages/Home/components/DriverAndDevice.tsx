@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo, type FC } from 'react';
 import { View, StyleSheet, ActionSheetIOS } from 'react-native';
 import { Icon, Button, useTheme } from '@rneui/themed';
-import WifiManager from 'react-native-wifi-reborn';
+import BleManager from 'react-native-ble-manager';
 import { useRequest } from 'ahooks';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AsyncStorageKey } from '@/constants';
 import { Text, Row } from '@/components';
 import {
   ClrWifi1,
@@ -166,17 +168,21 @@ export const DriverAndDevice: FC = () => {
                     title: '请选择操作',
                   },
                   async idx => {
+                    if ([0, 1].includes(idx)) {
+                      await AsyncStorage.removeItem(
+                        AsyncStorageKey.LAST_CONNECTED_BLE_DEVICE_ID,
+                      );
+                      await BleManager.disconnect(deviceInfo.id);
+                    }
+
                     if (idx === 0) {
                       // 关机
-                    } else if (idx === 1) {
-                      // TODO: 目前无效 是否 只能关闭app内连接的 wifi
-                      await WifiManager.disconnectFromSSID(deviceInfo.name);
                     }
                   },
                 );
               }}>
               <Text color="#D1D1D6" style={styles.recorderName}>
-                {deviceInfo.name}
+                {deviceInfo.name || '未知'}
               </Text>
               <Icon color="#34C759" type="feather" name="power" size={17} />
             </Button>

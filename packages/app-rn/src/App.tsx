@@ -40,7 +40,6 @@ dayjs.extend(customParseFormat);
 
 initialize({ commonPermissionsRequestReady, initDBTask, fs: RNFS });
 const backgroundColor = '#f2f2f7';
-
 const navigationTheme: Theme = {
   ...DefaultTheme,
   colors: {

@@ -1,10 +1,11 @@
-import { useMemo } from 'react';
-import { useCurrentWifiName } from './useCurrentWifiName';
-import { DEVICE_PREFIX } from '@/constants';
+import { useEffect, useMemo, useState } from 'react';
+import { EventName, type Device } from '@race-lap/app-helper';
+import { eventBus } from '@race-lap/app-helper/dist/native';
+import { NativeModules, NativeEventEmitter } from 'react-native';
+const BleManagerModule = NativeModules.BleManager;
+const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
-interface DeviceInfo {
-  /** 设备名称 */
-  name: string;
+interface DeviceInfo extends Device {
   /** 电池电量 */
   battery: number;
   /** gps 信号 */
@@ -17,13 +18,29 @@ interface DeviceInfo {
  * 获取当前设备信息
  */
 export function useDeviceInfo() {
-  const currentWifiName = useCurrentWifiName();
+  const [device, setDevice] = useState<Device | null>(null);
+
+  useEffect(() => {
+    const bleDeviceConnectedHandle = (newConnectedDevice: Device) => {
+      newConnectedDevice && setDevice(newConnectedDevice);
+    };
+    eventBus.on(EventName.BLE_DEVICE_CONNECTED, bleDeviceConnectedHandle);
+    const disconnectedSubscription = bleManagerEmitter.addListener(
+      'BleManagerDisconnectPeripheral',
+      () => {
+        // TODO: 增加定时器监听硬件状态
+        setDevice(null);
+      },
+    );
+    return () => {
+      disconnectedSubscription.remove();
+      eventBus.off(EventName.BLE_DEVICE_CONNECTED, bleDeviceConnectedHandle);
+    };
+  }, []);
+
   return useMemo<DeviceInfo | null>(() => {
-    const name = currentWifiName.startsWith(DEVICE_PREFIX)
-      ? currentWifiName
-      : '';
-    return name ? { name: 'RaceLaper-13u49af1', battery: 1, gps: 0.9, racetrackId: 1 } : null;
-  }, [currentWifiName]);
+    return device ? { ...device, battery: 1, gps: 0.9, racetrackId: 1 } : null;
+  }, [device]);
 }
 
 export default useDeviceInfo;

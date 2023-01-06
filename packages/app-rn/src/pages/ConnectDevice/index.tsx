@@ -1,61 +1,86 @@
-import React, { type FC, useState, useEffect } from 'react';
-import { View, StyleSheet, SafeAreaView, Platform } from 'react-native';
-import { Button } from '@rneui/themed';
+import React, { type FC, useState, useEffect, useRef } from 'react';
+import {
+  View,
+  StyleSheet,
+  SafeAreaView,
+  NativeModules,
+  NativeEventEmitter,
+} from 'react-native';
+import BleManager from 'react-native-ble-manager';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AsyncStorageKey, BLE_SERVICE_UUID } from '@/constants';
+import { Button, useTheme } from '@rneui/themed';
 import LinearGradient from 'react-native-linear-gradient';
+// import { FileSystem } from 'react-native-file-access';
 // import RNFS from 'react-native-fs';
 // import dayjs from 'dayjs';
-import WifiManager from 'react-native-wifi-reborn';
+import { useThrottleFn } from 'ahooks';
+import { EventName, Device } from '@race-lap/app-helper';
+import { eventBus } from '@race-lap/app-helper/dist/native';
 import { useNavigation } from '@react-navigation/native';
 // import { apis } from '@race-lap/app-helper/dist/native';
 // import { utils } from '@race-lap/app-helper';
 import { Text, FocusAwareStatusBar } from '@/components';
-// import { device } from '@/apis';
+// import { device as deviceApi } from '@/apis';
 import { PersonalHotspotCircleFill } from '@/components/Icons/MonoIcons';
 import CustomHeader from './components/CustomHeader';
 import LoopCircle from './components/LoopCircle';
 
-interface Device extends WifiManager.WifiEntry {}
+const BleManagerModule = NativeModules.BleManager;
+const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 export const ConnectDevice: FC = () => {
+  const deviceMap = useRef<Record<string, Device>>({});
+  const {
+    theme: {
+      colors: { primary: primaryColor },
+    },
+  } = useTheme();
   const navigation = useNavigation();
   const [deviceList, setDeviceList] = useState<Device[]>([]);
+  const { run: updateDeviceList } = useThrottleFn(
+    async (newDevice?: Device) => {
+      const connectedPeripherals = await BleManager.getConnectedPeripherals([
+        BLE_SERVICE_UUID,
+      ]);
+      connectedPeripherals.forEach(peripheral => {
+        deviceMap.current[peripheral.id] =
+          deviceMap.current[peripheral.id] || peripheral;
+        deviceMap.current[peripheral.id].connected = true;
+      });
+      if (newDevice) {
+        deviceMap.current[newDevice.id] = newDevice;
+      }
+      setDeviceList(Object.values(deviceMap.current));
+    },
+  );
+
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
+    updateDeviceList();
+    const subscription = bleManagerEmitter.addListener(
+      'BleManagerDiscoverPeripheral',
+      updateDeviceList,
+    );
     (async () => {
       try {
         // 连接设备
-        if (Platform.OS === 'ios') {
-          await WifiManager.connectToProtectedSSIDPrefix(
-            'RaceLap',
-            '88888888',
-            false,
-          );
-        } else if (Platform.OS === 'android') {
-          async function reScanAndLoadWifiListLoop() {
-            clearTimeout(timeoutId);
-            const wifiEntryList = await WifiManager.reScanAndLoadWifiList();
-            setDeviceList(
-              wifiEntryList
-                .filter(wifiEntry => wifiEntry.SSID.startsWith('RaceLap'))
-                .slice(0, 3),
-            );
-            timeoutId = setTimeout(reScanAndLoadWifiListLoop, 1000);
-          }
-          await reScanAndLoadWifiListLoop();
-        } else {
-        }
+        setTimeout(() => BleManager.scan([BLE_SERVICE_UUID], 3, true), 100);
       } catch (err) {
         console.error(err);
       }
 
-      // const remoteRecordInfoList = await device.getRecordInfoList();
+      // const remoteRecordInfoList = await deviceApi.getRecordInfoList();
+      // console.log('remoteRecordInfoList ==>', remoteRecordInfoList);
       // await Promise.all(
       //   remoteRecordInfoList.map(async remoteRecordInfo => {
       //     const recordListRes = await apis.record.getList({
       //       fileId: remoteRecordInfo.filename,
       //     });
       //     const localRecord = recordListRes.data?.[0];
-      //     if (localRecord && localRecord.fileSize === remoteRecordInfo.fileSize) {
+      //     if (
+      //       localRecord &&
+      //       localRecord.fileSize === remoteRecordInfo.fileSize
+      //     ) {
       //       // 数据无变更
       //       return;
       //     }
@@ -99,10 +124,70 @@ export const ConnectDevice: FC = () => {
       //     });
       //   }),
       // );
+
+      // await Promise.all(
+      //   remoteRecordInfoList.map(async remoteRecordInfo => {
+      //     const { fileSize, remotePath } = remoteRecordInfo;
+      //     const [content] = await Promise.all([
+      //       fetch(remotePath).then(res => res.text()),
+      //     ]);
+
+      //     const recordListRes = await apis.record.getList({ fileSize });
+      //     const localRecord = recordListRes.data?.[0];
+      //     if (localRecord) {
+      //       // 重复导入
+      //       return;
+      //     }
+
+      //     const { startDate, ...recordMeta } = utils.record.parseMeta(content);
+      //     const [racetrackId, { recordRoot }] = await Promise.all([
+      //       apis.racetrack
+      //         .getList({ name: recordMeta.racetrackName })
+      //         .then(res => res?.data?.[0]?.id),
+      //       // TODO 查询载具
+      //       apis.path.getInfo().then(res => res.data!),
+      //     ]);
+
+      //     const {
+      //       totalTime,
+      //       minCycleTime,
+      //       maxSpeed,
+      //       avgSpeed,
+      //       avgCycleTime,
+      //       cycleNum,
+      //     } = utils.record.parseData(content);
+      //     const filename = `${fileSize}.xld`;
+
+      //     await FileSystem.writeFile(`${recordRoot}/${filename}`, content);
+      //     const fileHash = await FileSystem.hash(
+      //       `${recordRoot}/${filename}`,
+      //       'MD5',
+      //     );
+
+      //     const { errCode, data } = await apis.record.save({
+      //       ...recordMeta,
+      //       totalTime,
+      //       minCycleTime,
+      //       maxSpeed,
+      //       avgSpeed,
+      //       avgCycleTime,
+      //       cycleNum,
+      //       fileHash,
+      //       fileSize,
+      //       fileId: filename,
+      //       racetrackId,
+      //       startDate: +dayjs(startDate, 'MM-DD-YYYY HH:mm:ss'),
+      //     });
+
+      //     if (!errCode && data) {
+      //       console.log(data);
+      //     }
+      //   }),
+      // );
     })();
 
     return () => {
-      clearTimeout(timeoutId);
+      subscription.remove();
     };
   }, []);
 
@@ -131,7 +216,7 @@ export const ConnectDevice: FC = () => {
           <View style={styles.deviceListWrapper}>
             {deviceList.map((device, idx) => (
               <Button
-                key={device.BSSID}
+                key={device.id}
                 iconRight
                 size="lg"
                 color="#fff"
@@ -139,24 +224,24 @@ export const ConnectDevice: FC = () => {
                   styles.deviceItem,
                   !!idx && styles.deviceItemNotFirst,
                 ]}
-                // RaceLaper-13u49af
-                title={<Text>{device.SSID}</Text>}
+                title={<Text>{device.name}</Text>}
                 icon={
                   <PersonalHotspotCircleFill
-                    color="#D1D1D6"
+                    color={device.connected ? primaryColor : '#D1D1D6'}
                     style={styles.deviceItemIcon}
                   />
                 }
                 onPress={async () => {
                   try {
-                    if (Platform.OS === 'android') {
-                      await WifiManager.connectToProtectedSSID(
-                        device.SSID,
-                        '88888888',
-                        false,
+                    if (!device.connected) {
+                      await BleManager.connect(device.id);
+                      await AsyncStorage.setItem(
+                        AsyncStorageKey.LAST_CONNECTED_BLE_DEVICE_ID,
+                        device.id,
                       );
-                      navigation.goBack();
                     }
+                    eventBus.emit(EventName.BLE_DEVICE_CONNECTED, device);
+                    navigation.goBack();
                   } catch (err) {
                     console.error(err);
                   }

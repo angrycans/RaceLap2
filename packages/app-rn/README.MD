@@ -20,7 +20,7 @@ Before you exec `npm run ios/android`, ensure that you already build both [app-h
 npm run ios
 
 # install in device
-npm run ios -- -device "xxxxx"
+npm run ios -- --device "xxxxx"
 ```
 
 #### Android

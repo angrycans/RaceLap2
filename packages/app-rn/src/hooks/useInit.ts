@@ -5,6 +5,7 @@ import {
   initDB,
   initAMap,
   initLinking,
+  initBle,
   requestCommonPermissions,
 } from '../tasks';
 import { useNavigation } from './useNavigation';
@@ -33,8 +34,10 @@ export function useInit() {
         });
       },
     });
+    const initBleUnsubscribe = initBle();
     return () => {
       unsubscribe();
+      initBleUnsubscribe();
     };
   }, []);
 }

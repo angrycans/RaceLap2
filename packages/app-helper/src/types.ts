@@ -1,5 +1,6 @@
 import type { ObjAddStrKeyPrefix } from 'todash';
 import type NSSQLite from 'react-native-sqlite-storage';
+import type { Peripheral } from 'react-native-ble-manager';
 import type { EventName, CarrierType } from './constants';
 
 export { NSSQLite }
@@ -10,6 +11,8 @@ export interface EventBusEventMap {
   [EventName.DB_INIT_READY]: NSSQLite.SQLiteDatabase;
   /** 通用权限请求完毕 */
   [EventName.COMMON_PERMISSIONS_REQUEST_READY]: void;
+  /** 蓝牙设备已连接 */
+  [EventName.BLE_DEVICE_CONNECTED]: Device;
 }
 
 export interface BridgeMsgReq {
@@ -133,4 +136,9 @@ export interface Record extends Omit<RecordMeta, 'startDate'>, RecordDataOvervie
   fileSize: number;
   /** 文件开始时间 */
   startDate: number;
+}
+
+export interface Device extends Pick<Peripheral, 'name' | 'id'> {
+  /** 是否已连接 */
+  connected?: boolean;
 }

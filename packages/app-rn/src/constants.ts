@@ -5,10 +5,6 @@ export const enum AMapKey {
   IOS = '1a927c759ae3cec15eb83f2f0a57de0c',
   ANDROID = '',
 }
-
-/** 记录仪设备前缀 */
-export const DEVICE_PREFIX = 'RaceLap';
-
 /** 路由名称 */
 export const enum RouteName {
   /** 启动页 */
@@ -37,8 +33,13 @@ export const enum RouteName {
 
 /** 本地持久化缓存键名 */
 export const enum AsyncStorageKey {
+  /** 最后一次连接的蓝牙设备的ID */
+  LAST_CONNECTED_BLE_DEVICE_ID = 'ASYNC_STORAGE:LAST_CONNECTED_BLE_DEVICE_ID',
   /** 是否已经同意用户协议 */
   IS_AGRESS_USER_AGREEMENT = 'ASYNC_STORAGE:IS_AGRESS_USER_AGREEMENT',
   /** web 资源检查变更内容 */
   WEB_BUNDLE_CHECK_CONTENT = 'ASYNC_STORAGE:WEB_BUNDLE_CHECK_CONTENT',
 }
+
+/** 蓝牙 service uuid */
+export const BLE_SERVICE_UUID = '6182d488-0000-4889-bb3d-d90c8e351edd';
