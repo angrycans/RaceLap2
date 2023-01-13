@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { EventName, type Device } from '@race-lap/app-helper';
 import { eventBus } from '@race-lap/app-helper/dist/native';
 import { NativeModules, NativeEventEmitter } from 'react-native';
+// import BleManager from 'react-native-ble-manager';
+// import { Ble } from '@/constants';
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
@@ -19,11 +21,15 @@ interface DeviceInfo extends Device {
  */
 export function useDeviceInfo() {
   const [device, setDevice] = useState<Device | null>(null);
-
   useEffect(() => {
-    const bleDeviceConnectedHandle = (newConnectedDevice: Device) => {
+    const bleDeviceConnectedHandle = (newConnectedDevice: Device | Device) => {
       newConnectedDevice && setDevice(newConnectedDevice);
     };
+    // BleManager.getConnectedPeripherals([Ble.SERVICE_UUID]).then(devices => {
+    //   console.log('devices11112 ===>', devices);
+    //   bleDeviceConnectedHandle(devices?.[0]);
+    // });
+
     eventBus.on(EventName.BLE_DEVICE_CONNECTED, bleDeviceConnectedHandle);
     const disconnectedSubscription = bleManagerEmitter.addListener(
       'BleManagerDisconnectPeripheral',

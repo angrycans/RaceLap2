@@ -11,8 +11,16 @@ export interface EventBusEventMap {
   [EventName.DB_INIT_READY]: NSSQLite.SQLiteDatabase;
   /** 通用权限请求完毕 */
   [EventName.COMMON_PERMISSIONS_REQUEST_READY]: void;
-  /** 蓝牙设备已连接 */
+  /** 蓝牙 设备已连接 */
   [EventName.BLE_DEVICE_CONNECTED]: Device;
+  /** 蓝牙 设备已连接后准备工作就绪 */
+  [EventName.BLE_DEVICE_READY]: void;
+  /** 蓝牙 展示文件列表 */
+  [EventName.BLE_LIST_DIR]: string;
+  /** 蓝牙 删除文件 */
+  [EventName.BLE_DEL_FILE]: string;
+  /** 蓝牙 下载文件 */
+  [EventName.BLE_DOWNLOAD_FILE]: string;
 }
 
 export interface BridgeMsgReq {

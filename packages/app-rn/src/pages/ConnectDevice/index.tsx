@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AsyncStorageKey, BLE_SERVICE_UUID } from '@/constants';
+import { AsyncStorageKey, Ble } from '@/constants';
 import { Button, useTheme } from '@rneui/themed';
 import LinearGradient from 'react-native-linear-gradient';
 // import { FileSystem } from 'react-native-file-access';
@@ -41,7 +41,7 @@ export const ConnectDevice: FC = () => {
   const { run: updateDeviceList } = useThrottleFn(
     async (newDevice?: Device) => {
       const connectedPeripherals = await BleManager.getConnectedPeripherals([
-        BLE_SERVICE_UUID,
+        Ble.SERVICE_UUID,
       ]);
       connectedPeripherals.forEach(peripheral => {
         deviceMap.current[peripheral.id] =
@@ -64,7 +64,7 @@ export const ConnectDevice: FC = () => {
     (async () => {
       try {
         // 连接设备
-        setTimeout(() => BleManager.scan([BLE_SERVICE_UUID], 3, true), 100);
+        setTimeout(() => BleManager.scan([Ble.SERVICE_UUID], 3, true), 100);
       } catch (err) {
         console.error(err);
       }

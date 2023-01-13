@@ -41,5 +41,14 @@ export const enum AsyncStorageKey {
   WEB_BUNDLE_CHECK_CONTENT = 'ASYNC_STORAGE:WEB_BUNDLE_CHECK_CONTENT',
 }
 
-/** 蓝牙 service uuid */
-export const BLE_SERVICE_UUID = '6182d488-0000-4889-bb3d-d90c8e351edd';
+/** 蓝牙相关 */
+export const enum Ble {
+  /** 蓝牙 service uuid */
+  SERVICE_UUID = '6182D488-0000-4889-BB3D-D90C8E351EDD',
+  /** 命令发送通道 */
+  CHARACTERISTIC_CMD = '6182D488-0001-4889-BB3D-D90C8E351EDD',
+  /** 文件列表接收入通道 */
+  CHARACTERISTIC_LIST_DIR = '6182D488-0003-4889-BB3D-D90C8E351EDD',
+  /** 下载文件接收入通道 */
+  CHARACTERISTIC_DOWNLOAD_FILE = '6182D488-0004-4889-BB3D-D90C8E351EDD',
+}

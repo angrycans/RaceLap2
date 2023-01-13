@@ -24,6 +24,14 @@ export const enum EventName {
   DB_INIT_READY = 'EVENTBUS:DB_INIT_READY',
   /** 蓝牙设备已连接 */
   BLE_DEVICE_CONNECTED = 'EVENTBUS:BLE_DEVICE_CONNECTED',
+  /** 蓝牙设备已连接后准备工作就绪 */
+  BLE_DEVICE_READY = 'EVENTBUS:BLE_DEVICE_READY',
+  /** 蓝牙展示文件列表 */
+  BLE_LIST_DIR = 'EVENTBUS:BLE_LIST_DIR',
+  /** 蓝牙下载文件 */
+  BLE_DOWNLOAD_FILE = 'EVENTBUS:BLE_DOWNLOAD_FILE',
+  /** 蓝牙删除文件 */
+  BLE_DEL_FILE = 'EVENTBUS:BLE_DEL_FILE',
 }
 
 /** web 路由名称 */
