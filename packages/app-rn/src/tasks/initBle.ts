@@ -2,10 +2,10 @@ import { type Device, EventName } from '@race-lap/app-helper';
 import { eventBus } from '@race-lap/app-helper/dist/native';
 import BleManager from 'react-native-ble-manager';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { initDBTask } from '@/tasks';
 import { AsyncStorageKey, Ble } from '@/constants';
 import { device } from '@/apis';
-// import * as crc32 from 'crc-32';
-// import { initDBTask } from './initDB';
+import { saveFile } from '@/utils';
 import { NativeModules, NativeEventEmitter } from 'react-native';
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
@@ -92,14 +92,23 @@ export function initBle() {
     },
   );
   const bleDeviceReadyHandle = async () => {
-    // const recordList = await device.getRecordList();
-    // console.log(recordList[1]);
-    const record = await device.getRecord('/XLAPDATA/20230110101335.xld'); // '/XLAPDATA/20230110101335.xld'
-    // const record = await device.getRecord('/XLAPDATA/20230110103252.xld');
-    // const mycrc32 = crc32.str(record!.content);
-    console.log('record ==>', record);
-    // await device.delRecord(recordList[0]);
-    // console.log('del success');
+    const recordList = await device.getRecordList();
+    await initDBTask;
+    await Promise.all(
+      recordList
+        // TODO: 目前只有 .sa 文件能正常解析
+        .filter(filePath => filePath.endsWith('.sa'))
+        .map(async recordPath => {
+          const record = await device.getRecord(recordPath); // '/XLAPDATA/20230110101335.xld'
+          if (record) {
+            const { crc32, content } = record;
+            const { 1: fileExt } = recordPath.match(/[^.]+\.([^.]+)$/) || [''];
+            await saveFile({ crc32, content, fileExt });
+            await device.delRecord(recordPath);
+          }
+        }),
+    );
+    eventBus.emit(EventName.REFRESH_RECORD_LIST);
   };
   eventBus.on(EventName.BLE_DEVICE_READY, bleDeviceReadyHandle);
   return () => {

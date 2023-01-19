@@ -21,6 +21,8 @@ export interface EventBusEventMap {
   [EventName.BLE_DEL_FILE]: string;
   /** 蓝牙 下载文件 */
   [EventName.BLE_DOWNLOAD_FILE]: string;
+  /** 更新记录列表 */
+  [EventName.REFRESH_RECORD_LIST]: void;
 }
 
 export interface BridgeMsgReq {
@@ -138,10 +140,8 @@ export interface Record extends Omit<RecordMeta, 'startDate'>, RecordDataOvervie
   racetrackId: number;
   /** 文件 ID (文件地址) */
   fileId: string;
-  /** 文件 hash */
-  fileHash: string;
-  /** 文件大小 */
-  fileSize: number;
+  /** 文件 crc32 */
+  crc32: number;
   /** 文件开始时间 */
   startDate: number;
 }

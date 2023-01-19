@@ -32,6 +32,8 @@ export const enum EventName {
   BLE_DOWNLOAD_FILE = 'EVENTBUS:BLE_DOWNLOAD_FILE',
   /** 蓝牙删除文件 */
   BLE_DEL_FILE = 'EVENTBUS:BLE_DEL_FILE',
+  /** 更新记录列表 */
+  REFRESH_RECORD_LIST = 'EVENTBUS:REFRESH_RECORD_LIST',
 }
 
 /** web 路由名称 */

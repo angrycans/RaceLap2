@@ -22,7 +22,7 @@ export async function initDB() {
       location: 'default',
     });
 
-    // await db.executeSql(`DROP TABLE ${DBTableName.USER}`);
+    // await db.executeSql(`DROP TABLE ${DBTableName.RECORD}`);
 
     const dbVersion = (
       await db.executeSql('PRAGMA user_version')
@@ -58,9 +58,8 @@ export async function initDB() {
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           carrierId INTEGER,
           racetrackId INTEGER,
-          fileHash TEXT,
+          crc32 INTEGER,
           fileId TEXT,
-          fileSize INTEGER,
           startDate INTEGER,
           version TEXT,
           userId TEXT,

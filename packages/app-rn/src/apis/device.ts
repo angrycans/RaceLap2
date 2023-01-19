@@ -2,14 +2,15 @@ import BleManager from 'react-native-ble-manager';
 import { eventBus } from '@race-lap/app-helper/dist/native';
 import { type Device as DeviceType, EventName } from '@race-lap/app-helper';
 import { Ble } from '@/constants';
-// import * as crc32 from 'crc-32';
+import * as crc32 from 'crc-32';
 
 interface Record {
   /** 文件名称 */
   filename: string;
+  /** 【远程】文件内容 crc32 */
+  remoteCrc32: number;
   /** 文件内容 crc32 */
-  crc32: string;
-  mycrc32: number;
+  crc32: number;
   /** 文件内容 */
   content: string;
   count: number;
@@ -184,8 +185,8 @@ export class Device {
         const record: Record = {
           content: '',
           filename: '',
-          crc32: '',
-          mycrc32: 0,
+          remoteCrc32: 0,
+          crc32: 0,
           count: 0,
         };
         const getRecordContentTaskChain = Device.getRecordContentTaskChain;
@@ -199,9 +200,14 @@ export class Device {
                 eventBus.off(EventName.BLE_DOWNLOAD_FILE, eventHandle);
                 const match = chunk.match(/^downloadfile:[^:]+:crc32:(\w+)/);
                 if (match) {
-                  record.crc32 = match[1];
+                  record.remoteCrc32 = +match[1];
                   record.filename = path.split('/').pop()!;
-                  // record.mycrc32 = record.mycrc32 >>> 0;
+                  record.crc32 = record.crc32 >>> 0;
+                  if (record.remoteCrc32 !== record.crc32) {
+                    throw new Error(
+                      `download file: ${path} failed, file broken !`,
+                    );
+                  }
                   resolve(record);
                 } else {
                   reject(new Error('invalid end line !'));
@@ -210,7 +216,7 @@ export class Device {
                 record.count++;
                 record.content += chunk;
                 this.sendDownloadRes(lineCount++);
-                // record.mycrc32 = crc32.str(chunk, record.mycrc32);
+                record.crc32 = crc32.str(chunk, record.crc32);
               }
             };
             eventBus.on(EventName.BLE_DOWNLOAD_FILE, eventHandle);

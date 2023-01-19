@@ -12,8 +12,8 @@ import {
   Timer,
   Bicycle,
 } from '@/components/Icons/MonoIcons';
-import { apis } from '@race-lap/app-helper/dist/native';
-import { utils } from '@race-lap/app-helper';
+import { apis, eventBus } from '@race-lap/app-helper/dist/native';
+import { utils, EventName } from '@race-lap/app-helper';
 import { useIsFocused } from '@react-navigation/native';
 import Title from './Title';
 
@@ -38,6 +38,12 @@ export const RacetrackAndRecord: FC = () => {
     [racetrackListRes],
   );
   const recordList = useMemo(() => recordListRes?.data || [], [recordListRes]);
+
+  useEffect(() => {
+    const eventHandle = () => getRacetrackList();
+    eventBus.on(EventName.REFRESH_RECORD_LIST, eventHandle);
+    return () => eventBus.off(EventName.REFRESH_RECORD_LIST, eventHandle);
+  }, [getRacetrackList]);
 
   useEffect(() => {
     if (isFocused) {
