@@ -64,9 +64,9 @@
 		</dict>
 	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Gather location updates to get SSID information</string>
+	<string>Gather location to set map location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Gather location updates to get SSID information</string>
+	<string>Gather location to set map location</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
