@@ -40,10 +40,10 @@ export const RacetrackAndRecord: FC = () => {
   const recordList = useMemo(() => recordListRes?.data || [], [recordListRes]);
 
   useEffect(() => {
-    const eventHandle = () => getRacetrackList();
+    const eventHandle = () => getRecordList();
     eventBus.on(EventName.REFRESH_RECORD_LIST, eventHandle);
     return () => eventBus.off(EventName.REFRESH_RECORD_LIST, eventHandle);
-  }, [getRacetrackList]);
+  }, [getRecordList]);
 
   useEffect(() => {
     if (isFocused) {

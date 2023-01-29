@@ -104,7 +104,7 @@ export function initBle() {
             const { crc32, content } = record;
             const { 1: fileExt } = recordPath.match(/[^.]+\.([^.]+)$/) || [''];
             await saveFile({ crc32, content, fileExt });
-            await device.delRecord(recordPath);
+           // await device.delRecord(recordPath);
           }
         }),
     );
