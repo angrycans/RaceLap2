@@ -126,7 +126,7 @@ export function generateSpeedColorGradient(list: [number, ...string[]][]): Color
     });
   const markers = extremePoints.map(sample => {
     const el = document.createElement('div');
-    el.innerHTML = `${sample[7]} mph`;
+    el.innerHTML = `${sample[7]} KMH`;
     el.className = 'marker';
     el.style.backgroundColor = Color(sample[12]).fade(0.5).hexa();
     el.style.border = `1px solid ${Color(sample[12]).darken(0.5).hexa()}`;

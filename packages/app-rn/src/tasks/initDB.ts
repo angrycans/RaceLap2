@@ -22,7 +22,7 @@ export async function initDB() {
       location: 'default',
     });
 
-   await db.executeSql(`DROP TABLE ${DBTableName.RECORD}`);
+   //await db.executeSql(`DROP TABLE ${DBTableName.RECORD}`);
 
     const dbVersion = (
       await db.executeSql('PRAGMA user_version')
