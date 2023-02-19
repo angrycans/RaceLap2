@@ -6,6 +6,8 @@ import { apis } from '@race-lap/app-helper/dist/native';
 import { useNavigation, useAuth } from '@/hooks';
 import { Navigator, FocusAwareStatusBar } from '@/components';
 
+//import { setName } from './api';
+
 export const SetDriverName: FC = () => {
   const [driverName, setDriverName] = useState('');
   const navigationRef = useRef(useNavigation());
@@ -31,6 +33,8 @@ export const SetDriverName: FC = () => {
               await apis.user.save({
                 name: driverName.trim(),
               });
+
+              await setName(driverName.trim());
               await refresh();
               navigationRef.current.goBack();
             }}

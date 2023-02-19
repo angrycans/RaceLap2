@@ -120,7 +120,8 @@ export const DriverAndDevice: FC = () => {
               </Text>
             }
             onPress={() =>
-              !auth && navigation.navigate(RouteName.SET_DRIVER_NAME)
+             // !auth && navigation.navigate(RouteName.SET_DRIVER_NAME)
+             navigation.navigate(RouteName.SET_DRIVER_NAME)
             }
           />
           <Button
